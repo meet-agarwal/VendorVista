@@ -1,3 +1,5 @@
+import { setupDropdownSelection, createDropdownOptions } from './priceFilter'
+
 // Function to generate a unique ID
 function generateUniqueId(prefix) {
     return `${prefix}-${Math.random().toString(36).substring(2, 9)}`;
@@ -67,7 +69,7 @@ class ScrollableFilter {
 }
 
 // Function to create filter blocks from API data
-function createFilterBlocks(filterData) {
+function renderFilter(masterFilterDataDict ,parentFiltervalues ) {
     const filtersContainer = document.querySelector('.filters');
     
     // Clear any existing filters
@@ -161,13 +163,24 @@ document.addEventListener('DOMContentLoaded', function() {
     fetch('/api/filters')
         .then(response => response.json())
         .then(data => {
-            createFilterBlocks(data);
+
+            const masterFilterDataDict = data[0]; // conatains nested dict parent_values as keys and value as (child_keys and their values)
+            const parentFiltervalues = data[1];   // contains the data for the parent_values 
+
+
+            // createFilterBlocks will first populate the parentFiltervalues as single seection radio and when 
+            // - the selection is done based on selection value the corrosponding filters will be populated 
+            renderFilter(masterFilterDataDict , parentFiltervalues );
+            
         })
         .catch(error => {
             console.error('Error fetching filter data:', error);
         });
 
-    // Price filter functionality
+
+
+    // Price-filter functionality 
+
     const priceRangeSlider = document.getElementById('price-range');
     const minPriceToggle = document.getElementById('min-price-toggle');
     const maxPriceToggle = document.getElementById('max-price-toggle');
@@ -180,34 +193,7 @@ document.addEventListener('DOMContentLoaded', function() {
         750, 1000, 1500, 2000, 2500, 3000
     ];
     
-    // Create dropdown options
-    function createDropdownOptions(menu, isMaxMenu = false) {
-        menu.innerHTML = '';
-        
-        if (isMaxMenu) {
-            const anyItem = document.createElement('div');
-            anyItem.className = 'price-dropdown-item';
-            anyItem.textContent = 'Any';
-            anyItem.dataset.value = '';
-            menu.appendChild(anyItem);
-        }
-        
-        priceOptions.forEach(price => {
-            const item = document.createElement('div');
-            item.className = 'price-dropdown-item';
-            item.textContent = `₹${price}`;
-            item.dataset.value = price;
-            menu.appendChild(item);
-        });
-        
-        if (isMaxMenu) {
-            const plusItem = document.createElement('div');
-            plusItem.className = 'price-dropdown-item';
-            plusItem.textContent = '₹3000+';
-            plusItem.dataset.value = '3000+';
-            menu.appendChild(plusItem);
-        }
-    }
+    
     
     // Initialize dropdowns
     createDropdownOptions(minPriceMenu);
@@ -232,23 +218,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     });
-    
-    // Handle dropdown item selection
-    function setupDropdownSelection(toggle, menu) {
-        menu.addEventListener('click', function(e) {
-            if (e.target.classList.contains('price-dropdown-item')) {
-                const value = e.target.dataset.value;
-                const displayText = value === '' ? (toggle === minPriceToggle ? 'Min' : 'Max') : 
-                                    value === '3000+' ? '₹3000+' : `₹${value}`;
-                
-                toggle.textContent = displayText;
-                toggle.dataset.value = value;
-                this.classList.remove('show');
-                updateSliderFromDropdowns();
-            }
-        });
-    }
-    
+
     setupDropdownSelection(minPriceToggle, minPriceMenu);
     setupDropdownSelection(maxPriceToggle, maxPriceMenu);
     
@@ -262,15 +232,7 @@ document.addEventListener('DOMContentLoaded', function() {
         maxPriceToggle.textContent = `₹${nextOption}`;
         maxPriceToggle.dataset.value = nextOption;
     });
-    
-    // Update slider from dropdowns
-    function updateSliderFromDropdowns() {
-        const minValue = minPriceToggle.dataset.value ? 
-                         (minPriceToggle.dataset.value === '3000+' ? 3000 : 
-                          parseInt(minPriceToggle.dataset.value)) : 0;
-        priceRangeSlider.value = minValue;
-    }
-    
+
     // Handle apply button click
     applyBtn.addEventListener('click', function() {
         const minPrice = minPriceToggle.dataset.value ? 
@@ -289,4 +251,8 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log(`Applying price filter: ₹${minPrice} to ${maxPrice ? '₹' + maxPrice : 'Any'}`);
         // Here you would typically filter your product list
     });
+
+    // price functionality ends 
+
+
 });

@@ -4,15 +4,16 @@ import os
 class GetFilter:
     def __init__(self):
         self.filterData = None
+       
 
     def loadFilterDictData(self , filePath):
         try:
             # Load the Excel file, specifying the 'filters' sheet
             df = pd.read_excel(filePath, sheet_name='filters')
             
-            # Assuming the filter names are in column A (index 0)
-            # Drop any empty rows and convert to list
-            self.filterData = df.iloc[:, 0].dropna().tolist()
+            # Create a dictionary from the two columns
+            # First column (Filters) as keys, second column (Type) as values
+            self.filterData = dict(zip(df.iloc[:, 0], df.iloc[:, 1]))
             
 
             
@@ -29,6 +30,7 @@ class GetFilter:
         self.loadFilterDictData(filePath)
 
 
-    def getFilternames(self):
+    def getFilterData(self):
+        print("filterData:",self.filterData)
         return self.filterData
 

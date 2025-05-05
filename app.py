@@ -12,11 +12,12 @@ def home():
 def get_filters():
     gf = getFilter.GetFilter()
     gf.getFilterDict()
-    filters = gf.getFilternames()
-    db = getDataBase.GetDataBase(filters)
+    filtersData = gf.getFilterData()
+    db = getDataBase.GetDataBase(filtersData)
     db.getDataBaseDict()
-    database = db.getDataBaseFilterValue()
-    return jsonify(database)
+    masterFilterDataDict = db.masterFilterDataDictMethod()
+    parentFiltervalues = db.parentFilterDictMethod()
+    return jsonify( masterFilterDataDict, parentFiltervalues)
 
 if __name__ == '__main__':
     app.run(debug=True)
