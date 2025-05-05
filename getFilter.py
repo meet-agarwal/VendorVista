@@ -14,6 +14,8 @@ class GetFilter:
             # Drop any empty rows and convert to list
             self.filterData = df.iloc[:, 0].dropna().tolist()
             
+
+            
         except FileNotFoundError:
             print(f"Error: File not found at {filePath}")
           

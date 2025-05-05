@@ -4,6 +4,7 @@ import os
 class GetDataBase:
     def __init__(self , filters):
         self.filters = filters
+        self.filters = [col.strip() for col in self.filters]
         self.filterDataDictValues = None
 
     def loadDataBaseDictData(self , filePath):
@@ -11,6 +12,8 @@ class GetDataBase:
             # Load the Excel file, specifying the 'filters' sheet
               # Load only the specified columns (filters) from the 'filters' sheet
             df = pd.read_excel(filePath, sheet_name='filters', usecols=self.filters)
+            # df = pd.read_excel(filePath, sheet_name="filters", nrows=0)
+            # print(df.columns.tolist())
         
         # Convert each column to a list of unique values and store in a dictionary
             filter_dict = {}

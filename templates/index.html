@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Filter System</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <!-- Header with logo and title -->
+    <header>
+        <img src="https://listingbot.in/images/logo.png" alt="ListingBot Logo">
+       
+    </header>
+
+    <!-- Main container with filters and product listing -->
+    <div class="container">   
+        <!-- Left column: Filter panel -->
+        <div class="filter-panel">
+            <div class="price-filter">
+                <div class="price-filter-header">PRICE</div>
+                
+                <div class="price-slider-container">
+                    <input type="range" min="0" max="3000" value="0" class="price-slider" id="price-range">
+                    <div class="price-slider-labels">
+                        <span>₹0</span>
+                        <span>₹3000+</span>
+                    </div>
+                </div>
+                
+                <div class="price-inputs">
+                    <div class="price-dropdown">
+                        <button class="price-dropdown-toggle" id="min-price-toggle">Min</button>
+                        <div class="price-dropdown-menu" id="min-price-menu">
+                            <!-- Options will be added by JavaScript -->
+                        </div>
+                    </div>
+                    <span class="price-divider">to</span>
+                    <div class="price-dropdown">
+                        <button class="price-dropdown-toggle" id="max-price-toggle">Max</button>
+                        <div class="price-dropdown-menu" id="max-price-menu">
+                            <!-- Options will be added by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+                <button class="price-apply-btn" id="apply-price">Apply</button>
+            </div>
+            <!-- Filters will be dynamically inserted here -->
+            <div class="filters"></div>
+        </div>
+
+        <!-- Right column: Product listing -->
+        <div class="product-listing">
+            <div class="product-grid">
+                No products to show. Apply filters to see results.
+            </div>
+        </div>
+    </div>
+
+    <script src="../static/script.js"></script>
+</body>
+</html>
