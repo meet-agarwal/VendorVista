@@ -355,3 +355,13 @@
 .scrollable-content::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+
+/* Add to style.css */
+.filter-item-counter {
+    font-size: 0.8rem;
+    color: blue;
+    text-align: right;
+    padding: 5px 10px;
+    border-top: 1px dashed #e0e0e0;
+    margin-top: -1px; /* Aligns with content box */
+}

@@ -54,9 +54,14 @@ class ScrollableFilter {
             optionElement.appendChild(optionLabel);
             contentElement.appendChild(optionElement);
         });
+
+        const counterElement = document.createElement('div');
+        counterElement.className = 'filter-item-counter';
+        counterElement.textContent = `${this.filterOptions.length} items`;
         
         filterBlock.appendChild(labelElement);
         filterBlock.appendChild(contentElement);
+        filterBlock.appendChild(counterElement);
         this.container.appendChild(filterBlock);
     }
 }
