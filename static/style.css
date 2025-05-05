@@ -337,3 +337,21 @@
             color: #878787;
         }
 
+/* Custom scrollable content */
+.scrollable-content {
+    max-height: 10rem; /* fixed height */
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+/* Custom scrollbar styling */
+.scrollable-content::-webkit-scrollbar {
+    width: 6px;
+}
+.scrollable-content::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 4px;
+}
+.scrollable-content::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
