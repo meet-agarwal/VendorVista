@@ -180,7 +180,7 @@ function renderFilter(masterFilterDataDict, parentFiltervalues) {
     
     // First, render parent filters as radio buttons
     Object.entries(parentFiltervalues).forEach(([parentLabel, parentOptions]) => {
-    if (parentOptions.length > 10) {
+    if (parentOptions.length > 6) {
         new ScrollableFilter(filtersContainer, parentLabel, parentOptions, "parentType" , masterFilterDataDict);
     } else {
         const parentFilterId = generateUniqueId('parent-filter');
@@ -255,6 +255,9 @@ function renderChildFilters(parentValue, childFilters) {
     
     // Render each child filter category
     Object.entries(childFilters).forEach(([childLabel, childOptions]) => {
+    if (childOptions.length > 6) {
+        new ScrollableFilter(filtersContainer, childLabel, childOptions, "childType" , childFilters);
+    } else {
         const childFilterId = generateUniqueId('child-filter');
         
         // Create child filter block
@@ -295,7 +298,9 @@ function renderChildFilters(parentValue, childFilters) {
         childFilterBlock.appendChild(childLabelElement);
         childFilterBlock.appendChild(childContentElement);
         filtersContainer.appendChild(childFilterBlock);
+    }
     });
+
     
     // Add toggle event listeners to the new child filters
     addToggleEventListeners();
