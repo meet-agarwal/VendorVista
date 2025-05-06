@@ -1,4 +1,6 @@
-import { setupDropdownSelection, createDropdownOptions } from './priceFilter'
+
+
+
 
 // Function to generate a unique ID
 function generateUniqueId(prefix) {
@@ -7,9 +9,11 @@ function generateUniqueId(prefix) {
 
 // ScrollableFilter class for filters with many options
 class ScrollableFilter {
-    constructor(container, filterLabel, filterOptions) {
+    constructor(container, filterLabel, filterOptions, typediv , masterFilterDataDict) {
+        this.masterFilterDataDict = masterFilterDataDict
         this.container = container;
         this.filterLabel = filterLabel;
+        this.typediv = typediv
         this.filterOptions = filterOptions;
         this.createFilterBlock();
     }
@@ -35,7 +39,38 @@ class ScrollableFilter {
         contentElement.id = filterId;
         contentElement.className = 'filter-content scrollable-content';
         
-        // Create filter options
+        if(this.typediv === "parentType"){
+            // Create radio options for parent values
+        this.filterOptions.forEach(option => {
+            const radioId = generateUniqueId(`${this.filterLabel.toLowerCase().replace(/\s+/g, '-')}`);
+            
+            const optionElement = document.createElement('div');
+            optionElement.className = 'filter-option';
+            
+            const radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.id = radioId;
+            radio.name = this.filterLabel.toLowerCase().replace(/\s+/g, '-');
+            radio.value = option.toLowerCase().replace(/\s+/g, '-');
+            
+            // Add event listener to show child filters when selected
+            radio.addEventListener('change', () => {
+                if (radio.checked) {
+                    renderChildFilters(option, this.masterFilterDataDict[option]);
+                }
+            });
+            
+            const optionLabel = document.createElement('label');
+            optionLabel.setAttribute('for', radioId);
+            optionLabel.textContent = option;
+            
+            optionElement.appendChild(radio);
+            optionElement.appendChild(optionLabel);
+            contentElement.appendChild(optionElement);
+        });
+
+        }else{
+            // Create filter options
         this.filterOptions.forEach(option => {
             const checkboxId = generateUniqueId(`${this.filterLabel.toLowerCase().replace(/\s+/g, '-')}`);
             
@@ -56,6 +91,9 @@ class ScrollableFilter {
             optionElement.appendChild(optionLabel);
             contentElement.appendChild(optionElement);
         });
+        }
+
+        
 
         const counterElement = document.createElement('div');
         counterElement.className = 'filter-item-counter';
@@ -68,71 +106,201 @@ class ScrollableFilter {
     }
 }
 
-// Function to create filter blocks from API data
-function renderFilter(masterFilterDataDict ,parentFiltervalues ) {
+// // Function to create filter blocks from API data
+// function renderFilter(masterFilterDataDict ,parentFiltervalues ) {
+//     const filtersContainer = document.querySelector('.filters');
+    
+//     // Clear any existing filters
+//     filtersContainer.innerHTML = '';
+    
+//     // Loop through each filter category in the API response
+//     Object.entries(filterData).forEach(([filterLabel, filterOptions]) => {
+//         // Use ScrollableFilter for categories with more than 10 options
+//         if (filterOptions.length > 10) {
+//             new ScrollableFilter(filtersContainer, filterLabel, filterOptions);
+//         } else {
+//             // Create a unique ID for this filter block
+//             const filterId = generateUniqueId('filter');
+            
+//             // Create the filter block container
+//             const filterBlock = document.createElement('div');
+//             filterBlock.className = 'filter-block';
+            
+//             // Create the filter label
+//             const labelElement = document.createElement('div');
+//             labelElement.className = 'filter-label';
+//             labelElement.textContent = filterLabel;
+//             labelElement.setAttribute('role', 'button');
+//             labelElement.setAttribute('tabindex', '0');
+//             labelElement.setAttribute('aria-expanded', 'true');
+//             labelElement.setAttribute('aria-controls', filterId);
+            
+//             // Create the filter content container
+//             const contentElement = document.createElement('div');
+//             contentElement.id = filterId;
+//             contentElement.className = 'filter-content';
+            
+//             // Create filter options
+//             filterOptions.forEach(option => {
+//                 const checkboxId = generateUniqueId(`${filterLabel.toLowerCase().replace(/\s+/g, '-')}`);
+                
+//                 const optionElement = document.createElement('div');
+//                 optionElement.className = 'filter-option';
+                
+//                 const checkbox = document.createElement('input');
+//                 checkbox.type = 'checkbox';
+//                 checkbox.id = checkboxId;
+//                 checkbox.name = filterLabel.toLowerCase().replace(/\s+/g, '-');
+//                 checkbox.value = option.toLowerCase().replace(/\s+/g, '-');
+                
+//                 const optionLabel = document.createElement('label');
+//                 optionLabel.setAttribute('for', checkboxId);
+//                 optionLabel.textContent = option;
+                
+//                 optionElement.appendChild(checkbox);
+//                 optionElement.appendChild(optionLabel);
+//                 contentElement.appendChild(optionElement);
+//             });
+            
+//             filterBlock.appendChild(labelElement);
+//             filterBlock.appendChild(contentElement);
+//             filtersContainer.appendChild(filterBlock);
+//         }
+//     });
+    
+//     // Add event listeners to the newly created filter labels
+//     addToggleEventListeners();
+// }
+
+function renderFilter(masterFilterDataDict, parentFiltervalues) {
     const filtersContainer = document.querySelector('.filters');
     
     // Clear any existing filters
     filtersContainer.innerHTML = '';
     
-    // Loop through each filter category in the API response
-    Object.entries(filterData).forEach(([filterLabel, filterOptions]) => {
-        // Use ScrollableFilter for categories with more than 10 options
-        if (filterOptions.length > 10) {
-            new ScrollableFilter(filtersContainer, filterLabel, filterOptions);
-        } else {
-            // Create a unique ID for this filter block
-            const filterId = generateUniqueId('filter');
+    // First, render parent filters as radio buttons
+    Object.entries(parentFiltervalues).forEach(([parentLabel, parentOptions]) => {
+    if (parentOptions.length > 10) {
+        new ScrollableFilter(filtersContainer, parentLabel, parentOptions, "parentType" , masterFilterDataDict);
+    } else {
+        const parentFilterId = generateUniqueId('parent-filter');
+        
+        // Create parent filter block
+        const parentFilterBlock = document.createElement('div');
+        parentFilterBlock.className = 'filter-block parent-filter';
+        
+        // Create parent filter label
+        const parentLabelElement = document.createElement('div');
+        parentLabelElement.className = 'filter-label';
+        parentLabelElement.textContent = parentLabel;
+        
+        // Create parent filter content
+        const parentContentElement = document.createElement('div');
+        parentContentElement.className = 'filter-content';
+        
+        // Create radio options for parent values
+        parentOptions.forEach(option => {
+            const radioId = generateUniqueId(`${parentLabel.toLowerCase().replace(/\s+/g, '-')}`);
             
-            // Create the filter block container
-            const filterBlock = document.createElement('div');
-            filterBlock.className = 'filter-block';
+            const optionElement = document.createElement('div');
+            optionElement.className = 'filter-option';
             
-            // Create the filter label
-            const labelElement = document.createElement('div');
-            labelElement.className = 'filter-label';
-            labelElement.textContent = filterLabel;
-            labelElement.setAttribute('role', 'button');
-            labelElement.setAttribute('tabindex', '0');
-            labelElement.setAttribute('aria-expanded', 'true');
-            labelElement.setAttribute('aria-controls', filterId);
+            const radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.id = radioId;
+            radio.name = parentLabel.toLowerCase().replace(/\s+/g, '-');
+            radio.value = option;
             
-            // Create the filter content container
-            const contentElement = document.createElement('div');
-            contentElement.id = filterId;
-            contentElement.className = 'filter-content';
-            
-            // Create filter options
-            filterOptions.forEach(option => {
-                const checkboxId = generateUniqueId(`${filterLabel.toLowerCase().replace(/\s+/g, '-')}`);
-                
-                const optionElement = document.createElement('div');
-                optionElement.className = 'filter-option';
-                
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.id = checkboxId;
-                checkbox.name = filterLabel.toLowerCase().replace(/\s+/g, '-');
-                checkbox.value = option.toLowerCase().replace(/\s+/g, '-');
-                
-                const optionLabel = document.createElement('label');
-                optionLabel.setAttribute('for', checkboxId);
-                optionLabel.textContent = option;
-                
-                optionElement.appendChild(checkbox);
-                optionElement.appendChild(optionLabel);
-                contentElement.appendChild(optionElement);
+            // Add event listener to show child filters when selected
+            radio.addEventListener('change', () => {
+                if (radio.checked) {
+                    renderChildFilters(option, masterFilterDataDict[option]);
+                }
             });
             
-            filterBlock.appendChild(labelElement);
-            filterBlock.appendChild(contentElement);
-            filtersContainer.appendChild(filterBlock);
-        }
+            const optionLabel = document.createElement('label');
+            optionLabel.setAttribute('for', radioId);
+            optionLabel.textContent = option;
+            
+            optionElement.appendChild(radio);
+            optionElement.appendChild(optionLabel);
+            parentContentElement.appendChild(optionElement);
+        });
+        
+        parentFilterBlock.appendChild(parentLabelElement);
+        parentFilterBlock.appendChild(parentContentElement);
+        filtersContainer.appendChild(parentFilterBlock);
+    }
     });
     
-    // Add event listeners to the newly created filter labels
+
+        // Add toggle event listeners to the parent filters
+        addToggleEventListeners();
+}
+
+// Function to render child filters when a parent is selected
+function renderChildFilters(parentValue, childFilters) {
+
+    // Get the filters container (must be available in the DOM)
+    const filtersContainer = document.querySelector('.filters');
+    
+    if (!filtersContainer) {
+        console.error('Filters container not found!');
+        return;
+    }
+
+
+    // Remove any existing child filters
+    document.querySelectorAll('.child-filter').forEach(el => el.remove());
+    
+    // Render each child filter category
+    Object.entries(childFilters).forEach(([childLabel, childOptions]) => {
+        const childFilterId = generateUniqueId('child-filter');
+        
+        // Create child filter block
+        const childFilterBlock = document.createElement('div');
+        childFilterBlock.className = 'filter-block child-filter';
+        
+        // Create child filter label
+        const childLabelElement = document.createElement('div');
+        childLabelElement.className = 'filter-label';
+        childLabelElement.textContent = childLabel;
+        
+        // Create child filter content
+        const childContentElement = document.createElement('div');
+        childContentElement.className = 'filter-content';
+        
+        // Create checkbox options for child values
+        childOptions.forEach(option => {
+            const checkboxId = generateUniqueId(`${childLabel.toLowerCase().replace(/\s+/g, '-')}`);
+            
+            const optionElement = document.createElement('div');
+            optionElement.className = 'filter-option';
+            
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.id = checkboxId;
+            checkbox.name = childLabel.toLowerCase().replace(/\s+/g, '-');
+            checkbox.value = option;
+            
+            const optionLabel = document.createElement('label');
+            optionLabel.setAttribute('for', checkboxId);
+            optionLabel.textContent = option;
+            
+            optionElement.appendChild(checkbox);
+            optionElement.appendChild(optionLabel);
+            childContentElement.appendChild(optionElement);
+        });
+        
+        childFilterBlock.appendChild(childLabelElement);
+        childFilterBlock.appendChild(childContentElement);
+        filtersContainer.appendChild(childFilterBlock);
+    });
+    
+    // Add toggle event listeners to the new child filters
     addToggleEventListeners();
 }
+
 
 // Function to add toggle event listeners to filter labels
 function addToggleEventListeners() {
@@ -186,12 +354,66 @@ document.addEventListener('DOMContentLoaded', function() {
     const maxPriceToggle = document.getElementById('max-price-toggle');
     const minPriceMenu = document.getElementById('min-price-menu');
     const maxPriceMenu = document.getElementById('max-price-menu');
-    const applyBtn = document.getElementById('apply-price');
+    // const applyBtn = document.getElementById('apply-price');
     
     const priceOptions = [
         0, 100, 200, 300, 400, 500, 
         750, 1000, 1500, 2000, 2500, 3000
     ];
+    
+    // Create dropdown options
+function createDropdownOptions(menu, isMaxMenu = false) {
+    menu.innerHTML = '';
+    
+    if (isMaxMenu) {
+        const anyItem = document.createElement('div');
+        anyItem.className = 'price-dropdown-item';
+        anyItem.textContent = 'Any';
+        anyItem.dataset.value = '';
+        menu.appendChild(anyItem);
+    }
+    
+    priceOptions.forEach(price => {
+        const item = document.createElement('div');
+        item.className = 'price-dropdown-item';
+        item.textContent = `₹${price}`;
+        item.dataset.value = price;
+        menu.appendChild(item);
+    });
+    
+    if (isMaxMenu) {
+        const plusItem = document.createElement('div');
+        plusItem.className = 'price-dropdown-item';
+        plusItem.textContent = '₹3000+';
+        plusItem.dataset.value = '3000+';
+        menu.appendChild(plusItem);
+    }
+}
+
+
+// Handle dropdown item selection
+function setupDropdownSelection(toggle, menu) {
+    menu.addEventListener('click', function(e) {
+        if (e.target.classList.contains('price-dropdown-item')) {
+            const value = e.target.dataset.value;
+            const displayText = value === '' ? (toggle === minPriceToggle ? 'Min' : 'Max') : 
+                                value === '3000+' ? '₹3000+' : `₹${value}`;
+            
+            toggle.textContent = displayText;
+            toggle.dataset.value = value;
+            this.classList.remove('show');
+            updateSliderFromDropdowns();
+        }
+    });
+}
+
+// Update slider from dropdowns
+    function updateSliderFromDropdowns() {
+        const minValue = minPriceToggle.dataset.value ? 
+                         (minPriceToggle.dataset.value === '3000+' ? 3000 : 
+                          parseInt(minPriceToggle.dataset.value)) : 0;
+        priceRangeSlider.value = minValue;
+    }
     
     
     
@@ -234,23 +456,23 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Handle apply button click
-    applyBtn.addEventListener('click', function() {
-        const minPrice = minPriceToggle.dataset.value ? 
-                        (minPriceToggle.dataset.value === '3000+' ? 3000 : 
-                         parseInt(minPriceToggle.dataset.value)) : 0;
+    // applyBtn.addEventListener('click', function() {
+    //     const minPrice = minPriceToggle.dataset.value ? 
+    //                     (minPriceToggle.dataset.value === '3000+' ? 3000 : 
+    //                      parseInt(minPriceToggle.dataset.value)) : 0;
         
-        const maxPrice = maxPriceToggle.dataset.value ? 
-                        (maxPriceToggle.dataset.value === '3000+' ? null : 
-                         parseInt(maxPriceToggle.dataset.value)) : null;
+    //     const maxPrice = maxPriceToggle.dataset.value ? 
+    //                     (maxPriceToggle.dataset.value === '3000+' ? null : 
+    //                      parseInt(maxPriceToggle.dataset.value)) : null;
         
-        if (maxPrice !== null && minPrice > maxPrice) {
-            alert('Minimum price cannot be greater than maximum price');
-            return;
-        }
+    //     if (maxPrice !== null && minPrice > maxPrice) {
+    //         alert('Minimum price cannot be greater than maximum price');
+    //         return;
+    //     }
         
-        console.log(`Applying price filter: ₹${minPrice} to ${maxPrice ? '₹' + maxPrice : 'Any'}`);
-        // Here you would typically filter your product list
-    });
+    //     console.log(`Applying price filter: ₹${minPrice} to ${maxPrice ? '₹' + maxPrice : 'Any'}`);
+    //     // Here you would typically filter your product list
+    // });
 
     // price functionality ends 
 
