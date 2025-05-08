@@ -1,8 +1,10 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request  
 import getFilter
 import getDataBase
-
+import getProductData
 app = Flask(__name__)
+
+getProductsdataDict = getProductData.GetProductsData()
 
 @app.route('/')
 def home():
@@ -18,6 +20,18 @@ def get_filters():
     masterFilterDataDict = db.masterFilterDataDictMethod()
     parentFiltervalues = db.parentFilterDictMethod()
     return jsonify( masterFilterDataDict, parentFiltervalues)
+
+@app.route('/api/getProducts', methods=['POST'])
+def getProducts():
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'error': 'No data provided'}), 400
+            
+        ProductData = getProductsdataDict.filterProducts(data)
+        return jsonify(ProductData)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

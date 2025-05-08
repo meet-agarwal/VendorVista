@@ -106,71 +106,6 @@ class ScrollableFilter {
     }
 }
 
-// // Function to create filter blocks from API data
-// function renderFilter(masterFilterDataDict ,parentFiltervalues ) {
-//     const filtersContainer = document.querySelector('.filters');
-    
-//     // Clear any existing filters
-//     filtersContainer.innerHTML = '';
-    
-//     // Loop through each filter category in the API response
-//     Object.entries(filterData).forEach(([filterLabel, filterOptions]) => {
-//         // Use ScrollableFilter for categories with more than 10 options
-//         if (filterOptions.length > 10) {
-//             new ScrollableFilter(filtersContainer, filterLabel, filterOptions);
-//         } else {
-//             // Create a unique ID for this filter block
-//             const filterId = generateUniqueId('filter');
-            
-//             // Create the filter block container
-//             const filterBlock = document.createElement('div');
-//             filterBlock.className = 'filter-block';
-            
-//             // Create the filter label
-//             const labelElement = document.createElement('div');
-//             labelElement.className = 'filter-label';
-//             labelElement.textContent = filterLabel;
-//             labelElement.setAttribute('role', 'button');
-//             labelElement.setAttribute('tabindex', '0');
-//             labelElement.setAttribute('aria-expanded', 'true');
-//             labelElement.setAttribute('aria-controls', filterId);
-            
-//             // Create the filter content container
-//             const contentElement = document.createElement('div');
-//             contentElement.id = filterId;
-//             contentElement.className = 'filter-content';
-            
-//             // Create filter options
-//             filterOptions.forEach(option => {
-//                 const checkboxId = generateUniqueId(`${filterLabel.toLowerCase().replace(/\s+/g, '-')}`);
-                
-//                 const optionElement = document.createElement('div');
-//                 optionElement.className = 'filter-option';
-                
-//                 const checkbox = document.createElement('input');
-//                 checkbox.type = 'checkbox';
-//                 checkbox.id = checkboxId;
-//                 checkbox.name = filterLabel.toLowerCase().replace(/\s+/g, '-');
-//                 checkbox.value = option.toLowerCase().replace(/\s+/g, '-');
-                
-//                 const optionLabel = document.createElement('label');
-//                 optionLabel.setAttribute('for', checkboxId);
-//                 optionLabel.textContent = option;
-                
-//                 optionElement.appendChild(checkbox);
-//                 optionElement.appendChild(optionLabel);
-//                 contentElement.appendChild(optionElement);
-//             });
-            
-//             filterBlock.appendChild(labelElement);
-//             filterBlock.appendChild(contentElement);
-//             filtersContainer.appendChild(filterBlock);
-//         }
-//     });
-    
-//     // Add event listeners to the newly created filter labels
-//     addToggleEventListeners();
-// }
 
 function renderFilter(masterFilterDataDict, parentFiltervalues) {
     const filtersContainer = document.querySelector('.filters');
@@ -239,136 +174,7 @@ function renderFilter(masterFilterDataDict, parentFiltervalues) {
 }
 
 // Function to render child filters when a parent is selected
-// function renderChildFilters(parentValue, childFilters) {
-
-//     // Get the filters container (must be available in the DOM)
-//     const filtersContainer = document.querySelector('.filters');
-    
-//     if (!filtersContainer) {
-//         console.error('Filters container not found!');
-//         return;
-//     }
-
-
-//     // Remove any existing child filters
-//     document.querySelectorAll('.child-filter').forEach(el => el.remove());
-    
-//     // Render each child filter category
-//     Object.entries(childFilters).forEach(([childLabel, childOptions]) => {
-//     if (childOptions.length > 6) {
-//         new ScrollableFilter(filtersContainer, childLabel, childOptions, "childType" , childFilters);
-//     } else {
-//         const childFilterId = generateUniqueId('child-filter');
-        
-//         // Create child filter block
-//         const childFilterBlock = document.createElement('div');
-//         childFilterBlock.className = 'filter-block child-filter';
-        
-//         // Create child filter label
-//         const childLabelElement = document.createElement('div');
-//         childLabelElement.className = 'filter-label';
-//         childLabelElement.textContent = childLabel;
-        
-//         // Create child filter content
-//         const childContentElement = document.createElement('div');
-//         childContentElement.className = 'filter-content';
-        
-//         // Create checkbox options for child values
-//         childOptions.forEach(option => {
-//             const checkboxId = generateUniqueId(`${childLabel.toLowerCase().replace(/\s+/g, '-')}`);
-            
-//             const optionElement = document.createElement('div');
-//             optionElement.className = 'filter-option';
-            
-//             const checkbox = document.createElement('input');
-//             checkbox.type = 'checkbox';
-//             checkbox.id = checkboxId;
-//             checkbox.name = childLabel.toLowerCase().replace(/\s+/g, '-');
-//             checkbox.value = option;
-            
-//             const optionLabel = document.createElement('label');
-//             optionLabel.setAttribute('for', checkboxId);
-//             optionLabel.textContent = option;
-            
-//             optionElement.appendChild(checkbox);
-//             optionElement.appendChild(optionLabel);
-//             childContentElement.appendChild(optionElement);
-//         });
-        
-//         childFilterBlock.appendChild(childLabelElement);
-//         childFilterBlock.appendChild(childContentElement);
-//         filtersContainer.appendChild(childFilterBlock);
-//     }
-//     });
-
-    
-//     // Add toggle event listeners to the new child filters
-//     addToggleEventListeners();
-// }
-
-// function renderChildFilters(parentValue, childFilters) {
-//     const filtersContainer = document.querySelector('.filters');
-//     if (!filtersContainer) return;
-
-//     // Remove any existing child filters
-//     document.querySelectorAll('.child-filter').forEach(el => el.remove());
-    
-//     // Render each child filter category
-//     Object.entries(childFilters).forEach(([childLabel, childOptions]) => {
-//         const childFilterId = generateUniqueId('child-filter');
-        
-//         // Create child filter block
-//         const childFilterBlock = document.createElement('div');
-//         childFilterBlock.className = 'filter-block child-filter';
-        
-//         // Create child filter label
-//         const childLabelElement = document.createElement('div');
-//         childLabelElement.className = 'filter-label';
-//         childLabelElement.textContent = childLabel;
-//         childLabelElement.setAttribute('role', 'button');
-//         childLabelElement.setAttribute('tabindex', '0');
-//         childLabelElement.setAttribute('aria-expanded', 'true');
-//         childLabelElement.setAttribute('aria-controls', childFilterId);
-        
-//         // Create child filter content
-//         const childContentElement = document.createElement('div');
-//         childContentElement.id = childFilterId;
-//         childContentElement.className = 'filter-content';
-        
-//         // ... rest of your child filter creation code ...
-//          // Create checkbox options for child values
-//         childOptions.forEach(option => {
-//             const checkboxId = generateUniqueId(`${childLabel.toLowerCase().replace(/\s+/g, '-')}`);
-            
-//             const optionElement = document.createElement('div');
-//             optionElement.className = 'filter-option';
-            
-//             const checkbox = document.createElement('input');
-//             checkbox.type = 'checkbox';
-//             checkbox.id = checkboxId;
-//             checkbox.name = childLabel.toLowerCase().replace(/\s+/g, '-');
-//             checkbox.value = option;
-            
-//             const optionLabel = document.createElement('label');
-//             optionLabel.setAttribute('for', checkboxId);
-//             optionLabel.textContent = option;
-            
-//             optionElement.appendChild(checkbox);
-//             optionElement.appendChild(optionLabel);
-//             childContentElement.appendChild(optionElement);
-//         });
-        
-//         childFilterBlock.appendChild(childLabelElement);
-//         childFilterBlock.appendChild(childContentElement);
-//         filtersContainer.appendChild(childFilterBlock);
-//     });
-
-//     // Add toggle event listeners after a small delay
-//     setTimeout(() => {
-//         addToggleEventListeners();
-//     }, 10);
-// }  
-function renderChildFilters(parentValue, childFilters) {
+ function renderChildFilters(parentValue, childFilters) {
     const filtersContainer = document.querySelector('.filters');
     if (!filtersContainer) return;
 
@@ -433,64 +239,73 @@ function renderChildFilters(parentValue, childFilters) {
     // Add toggle event listeners
     setTimeout(() => addToggleEventListeners(), 10);
 }
-// Function to add toggle event listeners to filter labels
-// function addToggleEventListeners() {
-//     const filterLabels = document.querySelectorAll('.filter-label');
-    
-//     filterLabels.forEach(label => {
-//         // Add click event listener
-//         label.addEventListener('click', function() {
-//             this.classList.toggle('collapsed');
-//             const contentId = this.getAttribute('aria-controls');
-//             const content = document.getElementById(contentId);
-//             content.classList.toggle('hidden');
-//             this.setAttribute('aria-expanded', !content.classList.contains('hidden'));
-//         });
-        
-//         // Add keyboard support for accessibility
-//         label.addEventListener('keydown', function(e) {
-//             if (e.key === 'Enter' || e.key === ' ') {
-//                 e.preventDefault();
-//                 this.click();
-//             }
-//         });
-//     });
-// }
-     
+
     // Function to add toggle event listeners to filter labels
-function addToggleEventListeners() {
-    const filterLabels = document.querySelectorAll('.filter-label:not([data-has-listener])');
+    function addToggleEventListeners() {
+        // First remove all existing listeners
+        document.querySelectorAll('.filter-label[data-has-listener]').forEach(label => {
+            label.replaceWith(label.cloneNode(true));
+        });
     
-    filterLabels.forEach(label => {
-        // Mark label as having a listener to prevent duplicates
-        label.setAttribute('data-has-listener', 'true');
-        
-        // Add click event listener
-        label.addEventListener('click', function() {
-            const contentId = this.getAttribute('aria-controls');
-            if (!contentId) return;
+        document.querySelectorAll('.filter-label').forEach(label => {
+            label.setAttribute('data-has-listener', 'true');
             
-            const content = document.getElementById(contentId);
-            if (!content) return;
+            const handler = function() {
+                const contentId = this.getAttribute('aria-controls');
+                const content = contentId ? document.getElementById(contentId) : null;
+                
+                if (content) {
+                    const wasExpanded = this.getAttribute('aria-expanded') === 'true';
+                    this.setAttribute('aria-expanded', !wasExpanded);
+                    this.classList.toggle('collapsed');
+                    content.classList.toggle('hidden');
+                }
+            };
             
-            // Toggle both classes for compatibility
-            this.classList.toggle('collapsed');
-            content.classList.toggle('hidden');
-            
-            // Update ARIA attribute
-            const isExpanded = !content.classList.contains('hidden');
-            this.setAttribute('aria-expanded', isExpanded);
+            label.addEventListener('click', handler);
+            label.addEventListener('keydown', function(e) {
+                if (['Enter', ' '].includes(e.key)) {
+                    e.preventDefault();
+                    handler.call(this);
+                }
+            });
         });
-        
-        // Add keyboard support for accessibility
-        label.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                this.click();
-            }
-        });
+    }
+
+    // Function to collect all selected filters
+function collectSelectedFilters() {
+    const selectedFilters = {
+        // price: {
+        //     min: minPriceToggle.dataset.value || '0',
+        //     max: maxPriceToggle.dataset.value || '3000+'
+        // },
+        parent: {},
+        child: {}
+    };
+
+    // Get selected parent filter (radio button)
+    const parentFilter = document.querySelector('.filter-block input[type="radio"]:checked');
+    if (parentFilter) {
+        selectedFilters.parent = {
+            name: parentFilter.name,
+            value: parentFilter.value
+        };
+    }
+
+    // Get all selected child filters (checkboxes)
+    document.querySelectorAll('.child-filter input[type="checkbox"]:checked').forEach(checkbox => {
+        const filterName = checkbox.name;
+        if (!selectedFilters.child[filterName]) {
+            selectedFilters.child[filterName] = [];
+        }
+        selectedFilters.child[filterName].push(checkbox.value);
     });
+
+    return selectedFilters;
 }
+
+
+
 
 document.addEventListener('DOMContentLoaded', function() {
     // Fetch filter data from API
@@ -643,4 +458,46 @@ function setupDropdownSelection(toggle, menu) {
     // price functionality ends 
 
 
+    // COLLECT THE FILTER CHECKED OPTIONS 
+
+    // Add event listener for Apply Filters button
+    document.getElementById('apply_filters_button')?.addEventListener('click', async function() {
+        const selectedFilters = collectSelectedFilters();
+        console.log('Selected Filters:', selectedFilters);
+
+        const productsData = getProductsData(selectedFilters) ; 
+        console.log("Products to Display", productsData)  ;
+        
+        // Here you would typically send this data to your backend
+        // or use it to filter products on the frontend
+        // For example:
+        // filterProducts(selectedFilters);
+    });
+
+
 });
+
+async function getProductsData(file) {
+    try {
+        const selectedFilters = file ; 
+
+        const response = await fetch('/api/getProducts', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(selectedFilters) 
+        });
+
+        if (!response.ok) {
+            throw new Error(data.error || "Something went wrong!");
+        }
+        const data = await response.json(); // Convert response to JSON        
+
+        return data ;
+
+    } catch (error) {
+        console.error('Error in getting Products Detials:', error);
+        throw error
+    }
+  }

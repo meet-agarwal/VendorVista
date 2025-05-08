@@ -75,3 +75,11 @@ class GetDataBase:
         """Returns the master filter dictionary"""
         print("Master filter data:", self.masterFilterDataDict)
         return self.masterFilterDataDict
+    
+
+    
+        
+        
+        
+        
+        
