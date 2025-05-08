@@ -18,7 +18,7 @@
         <!-- Left column: Filter panel -->
         <div class="filter-panel">
             <div class="price-filter">
-                <div class="price-filter-header">PRICE</div>
+                <div class="price-filter-header">START PRICE</div>
                 
                 <div class="price-slider-container">
                     <input type="range" min="0" max="3000" value="0" class="price-slider" id="price-range">
@@ -54,12 +54,14 @@
 
         <!-- Right column: Product listing -->
         <div class="product-listing">
-            <div class="product-grid">
-                No products to show. Apply filters to see results.
+            <div class="product-grid" id="cards-container">
+          
             </div>
         </div>
     </div>
 
-    <script src="../static/script.js"></script>
+    <!-- <script src="../static/script.js"></script> -->
+    <script src="../static/js/main.js" type="module"></script>
+
 </body>
 </html>
