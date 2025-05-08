@@ -211,40 +211,79 @@ export class CardGenerator {
         const pagination = document.createElement('div');
         pagination.className = 'pagination-controls';
 
-        // Prev
-        const prevBtn = document.createElement('button');
-        prevBtn.textContent = 'Prev';
-        prevBtn.disabled = this.currentPage === 1;
-        prevBtn.onclick = () => {
-            this.currentPage--;
-            this._renderCurrentPage();
+        const createPageButton = (text, page, disabled = false) => {
+            const btn = document.createElement('button');
+            btn.textContent = text;
+            btn.disabled = disabled;
+            if (!disabled && page !== this.currentPage) {
+                btn.onclick = () => {
+                    this.currentPage = page;
+                    this._renderCurrentPage();
+                };
+            }
+            return btn;
         };
-        pagination.appendChild(prevBtn);
 
-        // Page numbers
-        for (let i = 1; i <= totalPages; i++) {
-            const pageBtn = document.createElement('button');
-            pageBtn.textContent = i;
-            if (i === this.currentPage) pageBtn.disabled = true;
-            pageBtn.onclick = () => {
-                this.currentPage = i;
-                this._renderCurrentPage();
-            };
-            pagination.appendChild(pageBtn);
-        }
+        // Prev button
+        pagination.appendChild(createPageButton('Prev', this.currentPage - 1, this.currentPage === 1));
 
-        // Next
-        const nextBtn = document.createElement('button');
-        nextBtn.textContent = 'Next';
-        nextBtn.disabled = this.currentPage === totalPages;
-        nextBtn.onclick = () => {
-            this.currentPage++;
-            this._renderCurrentPage();
-        };
-        pagination.appendChild(nextBtn);
+        const visiblePages = this._getVisiblePages(totalPages);
+
+        visiblePages.forEach(p => {
+            if (p === '...') {
+                const dots = document.createElement('span');
+                dots.textContent = '...';
+                dots.className = 'dots';
+                pagination.appendChild(dots);
+            } else {
+                pagination.appendChild(createPageButton(p, p, p === this.currentPage));
+            }
+        });
+
+        // Next button
+        pagination.appendChild(createPageButton('Next', this.currentPage + 1, this.currentPage === totalPages));
 
         this.container.appendChild(pagination);
     }
+    _getVisiblePages(totalPages) {
+        const { currentPage } = this;
+        const pages = [];
+
+        // Always show first 10
+        for (let i = 1; i <= 10; i++) {
+            pages.push(i);
+        }
+
+        // Show ellipsis if currentPage is beyond 12
+        if (currentPage > 12) {
+            pages.push('...');
+        }
+
+        // Show nearby pages: currentPage -1, currentPage, currentPage +1
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+            if (i > 10 && i < totalPages - 1) {
+                pages.push(i);
+            }
+        }
+
+        // Ellipsis before last page, only if there's a gap
+        if (currentPage < totalPages - 3) {
+            pages.push('...');
+        }
+
+        // Finally, always show last page
+        pages.push(totalPages);
+
+        // Clean up: Remove duplicates and keep order
+        const seen = new Set();
+        return pages.filter(p => {
+            if (seen.has(p)) return false;
+            seen.add(p);
+            return true;
+        });
+    }
+
+
 
     // /**
     //  * Creates a single card element

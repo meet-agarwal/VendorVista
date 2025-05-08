@@ -493,3 +493,8 @@
     cursor: not-allowed;
   }
   
+
+  .pagination-controls .dots {
+    padding: 5px 10px;
+    color: #888;
+  }
