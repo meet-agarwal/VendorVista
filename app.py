@@ -32,6 +32,19 @@ def getProducts():
         return jsonify(ProductData)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    
+@app.route('/api/settings/options', methods=['GET'])
+def getOptionList():
+    try:
+        
+        optionList = getProductsdataDict.getAllSettingsOptions()
+        print('optionList' , optionList)
+        return jsonify(optionList)
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

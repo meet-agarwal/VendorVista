@@ -65,3 +65,8 @@ class GetProductsData:
         except Exception as e:
             print(f"Error filtering products: {e}")
             return []
+    
+    def getAllSettingsOptions(self):
+        optionList  = self.DBdf.columns.to_list() 
+        print("optionList of Setting is:",optionList)
+        return optionList
