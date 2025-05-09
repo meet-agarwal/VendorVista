@@ -53,9 +53,14 @@ export class CardGenerator {
     }
 
     _renderPaginationControls(totalPages) {
+        const paginationWrapper = document.querySelector('.pagination_control_div');
+        if (!paginationWrapper) return;
+    
+        paginationWrapper.innerHTML = ''; // Clear previous pagination controls
+    
         const pagination = document.createElement('div');
         pagination.className = 'pagination-controls';
-
+    
         const createPageButton = (text, page, disabled = false) => {
             const btn = document.createElement('button');
             btn.textContent = text;
@@ -65,67 +70,61 @@ export class CardGenerator {
                     this.currentPage = page;
                     this._renderCurrentPage();
                 };
+            } else if (page === this.currentPage) {
+                btn.classList.add('active');
             }
             return btn;
         };
-
+    
         // Prev button
         pagination.appendChild(createPageButton('Prev', this.currentPage - 1, this.currentPage === 1));
-
+    
         const visiblePages = this._getVisiblePages(totalPages);
-
+    
         visiblePages.forEach(p => {
-            if (p === '...') {
-                const dots = document.createElement('span');
-                dots.textContent = '...';
-                dots.className = 'dots';
-                pagination.appendChild(dots);
-            } else {
-                pagination.appendChild(createPageButton(p, p, p === this.currentPage));
-            }
+            pagination.appendChild(createPageButton(p, p, p === this.currentPage));
         });
-
+    
         // Next button
         pagination.appendChild(createPageButton('Next', this.currentPage + 1, this.currentPage === totalPages));
-
-        this.container.appendChild(pagination);
+    
+        // Page X of Y info
+        const pageInfo = document.createElement('span');
+        pageInfo.textContent = `Page ${this.currentPage} of ${totalPages.toLocaleString()}`;
+        pageInfo.style.marginLeft = '12px';
+        pageInfo.style.fontWeight = '500';
+        pageInfo.style.color = '#555';
+        pagination.appendChild(pageInfo);
+    
+        paginationWrapper.appendChild(pagination);
     }
+    
     _getVisiblePages(totalPages) {
-        const { currentPage } = this;
         const pages = [];
-
-        // Always show first 10
-        for (let i = 1; i <= 10; i++) {
-            pages.push(i);
-        }
-
-        // Show ellipsis if currentPage is beyond 12
-        if (currentPage > 12) {
-            pages.push('...');
-        }
-
-        // Show nearby pages: currentPage -1, currentPage, currentPage +1
-        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
-            if (i > 10 && i < totalPages - 1) {
-                pages.push(i);
+        const maxVisible = 10;
+        let startPage, endPage;
+    
+        if (totalPages <= maxVisible) {
+            startPage = 1;
+            endPage = totalPages;
+        } else {
+            if (this.currentPage <= 5) {
+                startPage = 1;
+                endPage = 10;
+            } else if (this.currentPage + 4 >= totalPages) {
+                startPage = totalPages - 9;
+                endPage = totalPages;
+            } else {
+                startPage = this.currentPage - 4;
+                endPage = this.currentPage + 5;
             }
         }
-
-        // Ellipsis before last page, only if there's a gap
-        if (currentPage < totalPages - 3) {
-            pages.push('...');
+    
+        for (let i = startPage; i <= endPage; i++) {
+            pages.push(i);
         }
-
-        // Finally, always show last page
-        pages.push(totalPages);
-
-        // Clean up: Remove duplicates and keep order
-        const seen = new Set();
-        return pages.filter(p => {
-            if (seen.has(p)) return false;
-            seen.add(p);
-            return true;
-        });
+    
+        return pages;
     }
 
 
