@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let dataPro = []
   let settingKeys = ['Adjustable', 'Design', 'Gemstone', 'Metal']
 
+  window.settingKeys = ['Adjustable', 'Design', 'Gemstone', 'Metal']
+
   const settingsManager = new SettingsManager(
     '.settings-btn',        // Button to open popup
     '.settings-popup',      // Popup container
@@ -46,6 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
       );
       
       settingKeys = formattedKeys;
+      window.settingKeys = formattedKeys;
 
      const selectedTab = document.getElementById('SelectedProductsNavFront') ;
      const alltab = document.getElementById('AllProductsNavFront') ;

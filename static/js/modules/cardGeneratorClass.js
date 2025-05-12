@@ -362,4 +362,14 @@ function handleCheckboxChange(isChecked, cardId, cardData) {
     // Use selectionManager to manage selections
     selectionManager.toggleProductSelection(isChecked, cardId, cardData);
     console.log("Selected:", selectionManager.getSelectedProducts());
+
+    // Check if the Selected Products tab is currently active
+    const selectedTab = document.getElementById('SelectedProductsNavFront');
+    if (selectedTab && selectedTab.checked) {
+        const selectedData = selectionManager.getSelectedProducts();
+        const keysToShow = window.settingKeys || ['Adjustable', 'Design', 'Gemstone', 'Metal'];
+        
+        // Immediately update the view with remaining selected products
+        showProducts(selectedData, keysToShow);
+    }
 }
