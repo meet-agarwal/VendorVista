@@ -57,7 +57,9 @@ class GetDataBase:
         except Exception as e:
             print(f"Error loading filter data: {str(e)}")
 
-    def getDataBaseDict(self):
+
+    # getDataBaseDict 
+    def load_master_filter_dict(self):
         baseDir = os.path.dirname(os.path.abspath(__file__))
         filePath = os.path.normpath(os.path.join(baseDir , './resources/DataBase.xlsx' ))
         self.loadDataBaseDictData(filePath)

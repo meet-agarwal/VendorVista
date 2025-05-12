@@ -2,8 +2,13 @@ import { renderFilter } from './modules/renderFilter.js';
 import { collectSelectedFilters } from './modules/filterCollector.js';
 import { setupPriceFilter } from './modules/priceFilter.js';
 import { getProductsData } from './modules/api.js';
-import { showProducts } from './modules/cardGeneratorClass.js'
+import { showProducts , selectionManager } from './modules/cardGeneratorClass.js'
 import { SettingsManager } from './modules/settingManager.js';
+// Importing necessary modules
+
+// declaring global variables 
+window.selectionManager = selectionManager;
+
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -69,29 +74,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     dataPro = productsData ;
 
-    showProducts(productsData);
+    showProducts(productsData); // card generator call function 
   });
 
+  document.getElementById("SelectedProductsNavFront")?.addEventListener("change", () => {
+      
+      const selectedData = selectionManager.getSelectedProducts();
+      showProducts(selectedData);
+      
+  });
 
-  // const settingsBtn = document.querySelector('.settings-btn');
-  // const settingsPopup = document.querySelector('.settings-popup');
-
-  // settingsBtn.addEventListener('click', function(e) {
-  //   e.stopPropagation();
-  //   settingsPopup.classList.toggle('show');
-  // });
-
-  // document.addEventListener('click', function() {
-  //   settingsPopup.classList.remove('show');
-  // });
-
-  // settingsPopup.addEventListener('click', function(e) {
-  //   e.stopPropagation();
-  // });
-
-
-
-
-
+  document.getElementById("AllProductsNavFront")?.addEventListener("change", () => {
+      showProducts(dataPro);  // Shows all products again
+  });
 
 });

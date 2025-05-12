@@ -1,10 +1,11 @@
 from flask import Flask, render_template, jsonify, request  
-import getFilter
-import getDataBase
+import filterTypes
+import filter_hierarchy
 import getProductData
+import getDataBase
 app = Flask(__name__)
 
-getProductsdataDict = getProductData.GetProductsData()
+filterd_products_Dict = getProductData.GetProductsData()
 
 @app.route('/')
 def home():
@@ -12,14 +13,24 @@ def home():
 
 @app.route('/api/filters')
 def get_filters():
-    gf = getFilter.GetFilter()
-    gf.getFilterDict()
-    filtersData = gf.getFilterData()
-    db = getDataBase.GetDataBase(filtersData)
-    db.getDataBaseDict()
-    masterFilterDataDict = db.masterFilterDataDictMethod()
-    parentFiltervalues = db.parentFilterDictMethod()
-    return jsonify( masterFilterDataDict, parentFiltervalues)
+    
+    
+    filters_Types = filterTypes.FilterTypeLoader().get_filter_dict()
+
+    filter_hierarchy_builder = filter_hierarchy.FilterHierarchyBuilder(filters_Types)
+    filter_hierarchy_builder.build_hierarchy()
+
+    master_filter_dict = filter_hierarchy_builder.get_master_filter_dict()
+    parent_filter_dict = filter_hierarchy_builder.get_parent_filter_dict()
+
+    return jsonify( master_filter_dict, parent_filter_dict)
+
+    # getData = getDataBase.GetDataBase(filters_Types)
+    # getData.load_master_filter_dict()
+    # masterdict = getData.masterFilterDataDictMethod()
+    # parentDict = getData.parentFilterDictMethod()
+    
+    # return jsonify(masterdict , parentDict)
 
 @app.route('/api/getProducts', methods=['POST'])
 def getProducts():
@@ -28,7 +39,7 @@ def getProducts():
         if not data:
             return jsonify({'error': 'No data provided'}), 400
             
-        ProductData = getProductsdataDict.filterProducts(data)
+        ProductData = filterd_products_Dict.filterProducts(data)
         return jsonify(ProductData)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -37,7 +48,7 @@ def getProducts():
 def getOptionList():
     try:
         
-        optionList = getProductsdataDict.getAllSettingsOptions()
+        optionList = filterd_products_Dict.getAllSettingsOptions()
         print('optionList' , optionList)
         return jsonify(optionList)
     

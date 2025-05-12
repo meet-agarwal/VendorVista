@@ -43,7 +43,7 @@ export class CardGenerator {
         const pageEntries = entries.slice(startIdx, endIdx);
 
         for (const [cardId, cardData] of pageEntries) {
-            const card = this._createCardElement(cardId, cardData, this.checkboxCallback);
+            const card = this._createCardElement( cardData, this.checkboxCallback);
             this.container.appendChild(card);
         }
 
@@ -65,17 +65,26 @@ export class CardGenerator {
             const btn = document.createElement('button');
             btn.textContent = text;
             btn.disabled = disabled;
+        
             if (!disabled && page !== this.currentPage) {
                 btn.onclick = () => {
                     this.currentPage = page;
                     this._renderCurrentPage();
+        
+                    // Scroll to top of product grid or page
+                    const grid = document.getElementById('cards-container');
+                    if (grid) {
+                        grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    } else {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
                 };
             } else if (page === this.currentPage) {
                 btn.classList.add('active');
             }
             return btn;
         };
-    
+        
         // Prev button
         pagination.appendChild(createPageButton('Prev', this.currentPage - 1, this.currentPage === 1));
     
@@ -137,14 +146,14 @@ export class CardGenerator {
     //  * @param {Function} checkboxCallback - Callback for checkbox events
     //  * @returns {HTMLElement} The created card element
     //  **/
-    _createCardElement(cardId, cardData, checkboxCallback) {
+    _createCardElement( cardData, checkboxCallback) {
         // Create main card container
         const card = document.createElement('div');
         card.className = 'card';
-        card.dataset.cardId = cardId;
-
+        card.dataset.cardId = cardData._id;
+        
         // Create image section (top half of card)
-        const imageSection = this._createImageSection(cardId, cardData, checkboxCallback);
+        const imageSection = this._createImageSection(cardData, checkboxCallback);
         card.appendChild(imageSection);
 
         // Create table section (bottom half of card)
@@ -163,7 +172,7 @@ export class CardGenerator {
     //      * @param {Function} checkboxCallback - Callback for checkbox events
     //      * @returns {HTMLElement} The created image section
     //      */  
-    _createImageSection(cardId, cardData, checkboxCallback) {
+    _createImageSection( cardData, checkboxCallback) {
         const imageSection = document.createElement('div');
         imageSection.className = 'card-image-section';
 
@@ -179,6 +188,9 @@ export class CardGenerator {
             imageSection.style.minHeight = '150px';
             imageSection.textContent = 'No Image Available';
         }
+        
+        // fetch the cardId from the cardData 
+        const cardId = cardData._id;
 
         // Create and add checkbox
         const checkboxContainer = document.createElement('div');
@@ -188,6 +200,12 @@ export class CardGenerator {
         checkbox.type = 'checkbox';
         checkbox.id = `card-checkbox-${cardId}`;
         checkbox.className = 'card-checkbox';
+
+        // Check if this product is already selected
+        if (window.selectionManager && window.selectionManager.isProductSelected(cardId)) {
+            checkbox.checked = true;
+        }
+
 
         // Add callback if provided
         if (checkboxCallback) {
@@ -274,7 +292,14 @@ export function showProducts(productsData, keysList = null) {
 }
 
 
+import { SelectionManager } from './selectionManager.js';
+export const selectionManager = new SelectionManager();
+
+
 // Optional: Define checkbox callback function
 function handleCheckboxChange(isChecked, cardId, cardData) {
     console.log(`Card ${cardId} ${isChecked ? 'selected' : 'deselected'}`, cardData);
+    // Use selectionManager to manage selections
+    selectionManager.toggleProductSelection(isChecked, cardId, cardData);
+    console.log("Selected:", selectionManager.getSelectedProducts());
 }

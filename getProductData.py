@@ -1,42 +1,57 @@
+import logging
+from loadDataBase import DataLoader
+from config import Config
+import uuid
 import pandas as pd
-import os
+
+
+logging.basicConfig(level=logging.INFO)
 
 class GetProductsData:
     def __init__(self):
-        self.DBdf = None
-        self.loadDatabase() 
+        self.df = self._load_data()
 
 
-    def loadDatabase(self):
-        """Loads the Excel file DataBase.xlsx and stores it in memory"""
-        baseDir = os.path.dirname(os.path.abspath(__file__))
-        filePath = os.path.normpath(os.path.join(baseDir, './resources/DataBase.xlsx'))
-        
+
+    def _load_data(self):
         try:
-            # Load the entire 'filters' sheet
-            self.DBdf = pd.read_excel(filePath, sheet_name='filters')
-            self.DBdf.fillna('', inplace=True)  # Replace NaNs with empty strings
-            #  important as causing error when strinify
+            df = DataLoader.load_excel(Config.DATABASE_PATH, "filters")
+            df.reset_index(drop=True, inplace=True)  # Ensure clean indexing
+            df.fillna('', inplace=True)  # Handle missing data
+
+            # Add unique ID per row — consistent in-memory
+            df["_id"] = [str(uuid.uuid4()) for _ in range(len(df))]
+
+            logging.info("Loaded product data with unique IDs.")
+            return df
         except Exception as e:
-            print(f"Error loading database: {e}")
-            self.DBdf = pd.DataFrame()  # Empty DataFrame as fallback
-            
+            logging.error(f"Failed to load product data: {e}")
+            return pd.DataFrame()
+        
+    
+    
+    def getAllSettingsOptions(self):
+        optionList  = self.df.columns.to_list() 
+        print("optionList of Setting is:",optionList)
+        return optionList
+    
+    
     
     def getActualColName(self, col_name):
         """Helper to match column name case-insensitively"""
-        for actual_col in self.DBdf.columns:
+        for actual_col in self.df.columns:
             if actual_col.lower() == col_name.lower():
                 return actual_col
-        return col_name  # fallback
+        return col_name # fallback
             
 
     def filterProducts(self, selectedFilters):
         """Returns products filtered by the selected filters"""
-        if self.DBdf is None or self.DBdf.empty:
+        if self.df.empty:
             return []
         
         try:
-            df = self.DBdf.copy()
+            df = self.df.copy()
             
             # Apply parent filter
             if 'parent' in selectedFilters:
@@ -63,10 +78,7 @@ class GetProductsData:
             return df.to_dict('records')
             
         except Exception as e:
-            print(f"Error filtering products: {e}")
+            logging.error(f"Error filtering products: {e}")
             return []
     
-    def getAllSettingsOptions(self):
-        optionList  = self.DBdf.columns.to_list() 
-        print("optionList of Setting is:",optionList)
-        return optionList
+    
