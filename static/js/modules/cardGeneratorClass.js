@@ -38,6 +38,13 @@ export class CardGenerator {
 
         const entries = Object.entries(this.masterData);
         const totalPages = Math.ceil(entries.length / this.cardsPerPage);
+
+        // If no data, show message
+        if (entries.length === 0) {
+            this.container.textContent = 'No products to display';
+            return;
+        }
+
         const startIdx = (this.currentPage - 1) * this.cardsPerPage;
         const endIdx = startIdx + this.cardsPerPage;
         const pageEntries = entries.slice(startIdx, endIdx);
@@ -47,12 +54,17 @@ export class CardGenerator {
             this.container.appendChild(card);
         }
 
-        if (entries.length > this.cardsPerPage) {
+        // only render pagination if there are multiple pages
+        if (totalPages > 1) {
             this._renderPaginationControls(totalPages);
         }
     }
 
     _renderPaginationControls(totalPages) {
+
+       
+
+
         const paginationWrapper = document.querySelector('.pagination_control_div');
         if (!paginationWrapper) return;
     
@@ -108,35 +120,77 @@ export class CardGenerator {
         paginationWrapper.appendChild(pagination);
     }
     
+    // _getVisiblePages(totalPages) {
+    //     const pages = [];
+    //     const maxVisible = 10;
+    //     let startPage, endPage;
+    
+    //     if (totalPages <= maxVisible) {
+    //         startPage = 1;
+    //         endPage = totalPages;
+    //     } else {
+    //         if (this.currentPage <= 5) {
+    //             startPage = 1;
+    //             endPage = 10;
+    //         } else if (this.currentPage + 4 >= totalPages) {
+    //             startPage = totalPages - 9;
+    //             endPage = totalPages;
+    //         } else {
+    //             startPage = this.currentPage - 4;
+    //             endPage = this.currentPage + 5;
+    //         }
+    //     }
+    
+    //     for (let i = startPage; i <= endPage; i++) {
+    //         pages.push(i);
+    //     }
+    
+    //     return pages;
+    // }
+
     _getVisiblePages(totalPages) {
-        const pages = [];
-        const maxVisible = 10;
-        let startPage, endPage;
+    const pages = [];
+    const maxVisible = 10;
     
-        if (totalPages <= maxVisible) {
-            startPage = 1;
-            endPage = totalPages;
-        } else {
-            if (this.currentPage <= 5) {
-                startPage = 1;
-                endPage = 10;
-            } else if (this.currentPage + 4 >= totalPages) {
-                startPage = totalPages - 9;
-                endPage = totalPages;
-            } else {
-                startPage = this.currentPage - 4;
-                endPage = this.currentPage + 5;
-            }
-        }
-    
-        for (let i = startPage; i <= endPage; i++) {
+    // If total pages is less than or equal to maxVisible, show all pages
+    if (totalPages <= maxVisible) {
+        for (let i = 1; i <= totalPages; i++) {
             pages.push(i);
         }
-    
         return pages;
     }
-
-
+    
+    // Calculate start and end pages for the visible range
+    let startPage, endPage;
+    
+    // Current page is in the first 5 pages
+    if (this.currentPage <= 5) {
+        startPage = 1;
+        endPage = maxVisible;
+    } 
+    // Current page is in the last 5 pages
+    else if (this.currentPage >= totalPages - 4) {
+        startPage = totalPages - maxVisible + 1;
+        endPage = totalPages;
+    } 
+    // Current page is somewhere in the middle
+    else {
+        startPage = this.currentPage - Math.floor(maxVisible / 2);
+        endPage = this.currentPage + Math.floor(maxVisible / 2) - 1;
+    }
+    
+    // Ensure we don't go below page 1
+    startPage = Math.max(startPage, 1);
+    // Ensure we don't go beyond total pages
+    endPage = Math.min(endPage, totalPages);
+    
+    // Generate the page numbers
+    for (let i = startPage; i <= endPage; i++) {
+        pages.push(i);
+    }
+    
+    return pages;
+}
 
     // /**
     //  * Creates a single card element
@@ -286,6 +340,12 @@ export function showProducts(productsData, keysList = null) {
     } else {
         cardGenerator.setKeysToDisplay(keysToShow); // Update keys
     }
+
+     // Reset to first page and clear any existing pagination
+    cardGenerator.currentPage = 1;
+    const paginationWrapper = document.querySelector('.pagination_control_div');
+    if (paginationWrapper) paginationWrapper.innerHTML = '';
+    
     
     // Create/update cards
     cardGenerator.createCards(productsData, handleCheckboxChange);

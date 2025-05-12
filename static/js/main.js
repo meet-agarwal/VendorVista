@@ -13,6 +13,7 @@ window.selectionManager = selectionManager;
 document.addEventListener('DOMContentLoaded', () => {
 
   let dataPro = []
+  let settingKeys = ['Adjustable', 'Design', 'Gemstone', 'Metal']
 
   const settingsManager = new SettingsManager(
     '.settings-btn',        // Button to open popup
@@ -44,7 +45,19 @@ document.addEventListener('DOMContentLoaded', () => {
           ).join(' ')
       );
       
-      showProducts(dataPro, formattedKeys);
+      settingKeys = formattedKeys;
+
+     const selectedTab = document.getElementById('SelectedProductsNavFront') ;
+     const alltab = document.getElementById('AllProductsNavFront') ;
+
+      if (selectedTab.checked) {
+        const selectedData = selectionManager.getSelectedProducts();
+        showProducts(selectedData, formattedKeys); // Show selected products
+      }else if (alltab.checked) {
+        showProducts(dataPro, formattedKeys); // Show all products
+      }
+
+   
   });
 
   fetch('/api/filters')
@@ -78,14 +91,17 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.getElementById("SelectedProductsNavFront")?.addEventListener("change", () => {
-      
-      const selectedData = selectionManager.getSelectedProducts();
-      showProducts(selectedData);
-      
-  });
+    const selectedData = selectionManager.getSelectedProducts();
+    if (Object.keys(selectedData).length === 0) {
+        document.getElementById('cards-container').textContent = 'No products selected';
+        document.querySelector('.pagination_control_div').innerHTML = '';
+    } else {
+        showProducts(selectedData, settingKeys);
+    }
+});
 
   document.getElementById("AllProductsNavFront")?.addEventListener("change", () => {
-      showProducts(dataPro);  // Shows all products again
+      showProducts(dataPro , settingKeys);  // Shows all products again
   });
 
 });
