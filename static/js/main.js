@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     dataPro = productsData ;
 
-    showProducts(productsData); // card generator call function 
+    showProducts(productsData , settingKeys); // card generator call function 
   });
 
   document.getElementById("SelectedProductsNavFront")?.addEventListener("change", () => {
