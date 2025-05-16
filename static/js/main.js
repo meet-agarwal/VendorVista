@@ -195,7 +195,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       console.log('Updated Filter Options:', dataDict);
 
-      // updateFilterUI(dataDict)
+      updateFilterUI(dataDict , cleanedResult);
+      // Update the UI with the new filter options  
 
     }
   });

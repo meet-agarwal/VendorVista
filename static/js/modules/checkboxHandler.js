@@ -17,7 +17,7 @@
 //     });
 // }
 
-export function updateFilterUI(updatedOptions) {
+export function updateFilterUI(updatedOptions , checkedFilters = {}) {
     Object.entries(updatedOptions).forEach(([filterName, values]) => {
         const normalizedKey = filterName.trim().toLowerCase();
 
@@ -36,6 +36,12 @@ export function updateFilterUI(updatedOptions) {
                     checkbox.type = 'checkbox';
                     checkbox.name = filterName;
                     checkbox.value = value;
+
+                    // Check if this value is in checkedFilters for this group
+                    const checkedValues = checkedFilters[filterName] || [];
+                    if (checkedValues.includes(value)) {
+                        checkbox.checked = true;
+                    }
 
                     wrapper.appendChild(checkbox);
                     wrapper.append(` ${value}`); // Optional: add text label
