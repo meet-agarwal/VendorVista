@@ -190,8 +190,8 @@ class HierarchyManager:
             if key not in filtered_df.columns:
                 continue
 
-            # Fill unique values
-            result[key] = sorted(filtered_df[key].dropna().unique().tolist())
+            # # Fill unique values
+            # result[key] = sorted(filtered_df[key].dropna().unique().tolist())
 
             # If key exists in selected_filters, filter again
             if key in selected_filters:
@@ -200,6 +200,21 @@ class HierarchyManager:
                     val = [val]
                 val = [str(v).lower() for v in val]
                 filtered_df = filtered_df[filtered_df[key].str.lower().isin(val)]
+                
+        for key in normalized_filter_child_list:
+            if key not in filtered_df.columns:
+                continue
+
+            # Fill unique values
+            result[key] = sorted(filtered_df[key].dropna().unique().tolist())
+
+            # # If key exists in selected_filters, filter again
+            # if key in selected_filters:
+            #     val = selected_filters[key]
+            #     if not isinstance(val, list):
+            #         val = [val]
+            #     val = [str(v).lower() for v in val]
+            #     filtered_df = filtered_df[filtered_df[key].str.lower().isin(val)]
 
         return result
         
