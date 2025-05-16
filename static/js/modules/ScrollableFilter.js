@@ -38,7 +38,11 @@ export class ScrollableFilter {
         contentElement.setAttribute('role', 'group');
         
         if(this.typediv === "parentType"){
-            // Create radio options for parent values
+        // Create radio options for parent values
+
+        // // Sort options alphabetically
+        // this.filterOptions.sort((a, b) => a.localeCompare(b));
+
         this.filterOptions.forEach(option => {
             const radioId = generateUniqueId(`${this.filterLabel.toLowerCase().replace(/\s+/g, '-')}`);
             
@@ -68,6 +72,10 @@ export class ScrollableFilter {
         });
 
         }else{
+            // Sort options alphabetically
+        this.filterOptions.sort((a, b) => String(a).localeCompare(String(b)));
+
+
             // Create filter options
         this.filterOptions.forEach(option => {
             const checkboxId = generateUniqueId(`${this.filterLabel.toLowerCase().replace(/\s+/g, '-')}`);

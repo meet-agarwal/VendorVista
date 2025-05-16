@@ -84,6 +84,9 @@ export function renderChildFilters(parentValue, childFilters) {
     
     // Render each child filter category
     Object.entries(childFilters).forEach(([childLabel, childOptions]) => {
+        // Sort child options alphabetically
+       childOptions.sort((a, b) => String(a).localeCompare(String(b)));
+
         const childFilterId = generateUniqueId('child-filter');
         
         // Create child filter block
