@@ -34,6 +34,8 @@ export class ScrollableFilter {
         const contentElement = document.createElement('div');
         contentElement.id = filterId;
         contentElement.className = 'filter-content scrollable-content';
+         contentElement.setAttribute('aria-labelledby', this.filterLabel );
+        contentElement.setAttribute('role', 'group');
         
         if(this.typediv === "parentType"){
             // Create radio options for parent values

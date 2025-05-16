@@ -3,9 +3,13 @@ import filterTypes
 import filter_hierarchy
 import getProductData
 import getDataBase
+from herirachy_manager import HierarchyManager  # Import the HierarchyManager class 
+import json
+from flask import Response
 app = Flask(__name__)
 
 filterd_products_Dict = getProductData.GetProductsData()
+hierarchy_manager = HierarchyManager()  # Create an instance of HierarchyManager
 
 @app.route('/')
 def home():
@@ -23,7 +27,12 @@ def get_filters():
     master_filter_dict = filter_hierarchy_builder.get_master_filter_dict()
     parent_filter_dict = filter_hierarchy_builder.get_parent_filter_dict()
 
-    return jsonify( master_filter_dict, parent_filter_dict)
+    # return jsonify( master_filter_dict, parent_filter_dict)
+    
+    # … build master_filter_dict and parent_filter_dict …
+    payload = [master_filter_dict, parent_filter_dict]
+    body = json.dumps(payload, ensure_ascii=False, separators=(',',':'))
+    return Response(body, mimetype='application/json')
 
     # getData = getDataBase.GetDataBase(filters_Types)
     # getData.load_master_filter_dict()
@@ -54,7 +63,36 @@ def getOptionList():
     
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
+    
+@app.route('/api/filters/updateFilters', methods=['POST'])
+def updateFilters():
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'error': 'No data provided'}), 400
+        
+        new_data = {}
+        for key, value in data.items():
+            # Remove hyphens from the key
+            new_key = key.replace('-', ' ')
+            
+            # Remove hyphens from each item in the value list (if it's a string)
+            new_value = []
+            for item in value:
+                if isinstance(item, str):
+                    new_item = item.replace('-', ' ')
+                    new_value.append(new_item)
+                else:
+                    new_value.append(item)  # Keep non-string items as-is
+            
+            new_data[new_key] = new_value
+             
+        updatedDictFilter = hierarchy_manager.update_hierarchy(new_data)
+        
+        return jsonify(updatedDictFilter)
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 if __name__ == '__main__':

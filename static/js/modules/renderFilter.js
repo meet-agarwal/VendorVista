@@ -29,6 +29,9 @@ export function renderFilter(masterFilterDataDict, parentFiltervalues) {
         // Create parent filter content
         const parentContentElement = document.createElement('div');
         parentContentElement.className = 'filter-content';
+        parentContentElement.setAttribute('aria-labelledby', parentLabel );
+        parentContentElement.setAttribute('role', 'group');
+        
         
         // Create radio options for parent values
         parentOptions.forEach(option => {
@@ -100,6 +103,8 @@ export function renderChildFilters(parentValue, childFilters) {
         const childContentElement = document.createElement('div');
         childContentElement.id = childFilterId;
         childContentElement.className = 'filter-content scrollable-content';
+        childContentElement.setAttribute('aria-labelledby', childLabel );
+        childContentElement.setAttribute('role', 'group');
         
         // Create checkbox options
         childOptions.forEach(option => {
