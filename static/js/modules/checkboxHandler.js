@@ -48,7 +48,15 @@ export function updateFilterUI(updatedOptions , checkedFilters = {}) {
 
                     group.appendChild(wrapper);
                 });
-            }
+
+                        // now refresh counters:
+        document.querySelectorAll('.filter-block').forEach(block => {
+            const numItems = block.querySelectorAll('.filter-content .filter-option').length;
+            block.querySelector('.filter-item-counter')
+                .textContent = `${numItems} items`;
+        });
+        }
+            
         });
     });
 }
