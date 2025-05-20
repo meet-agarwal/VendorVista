@@ -82,6 +82,8 @@ export class ScrollableFilter {
 
             // Create filter options
         this.filterOptions.forEach(option => {
+
+            if (option === 'Start Price') return;
             const checkboxId = generateUniqueId(`${this.filterLabel.toLowerCase().replace(/\s+/g, '-')}`);
             
             const optionElement = document.createElement('div');

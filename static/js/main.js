@@ -93,9 +93,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const productsData = await getProductsData(selectedFilters);
     console.log('Products to Display', productsData);
 
-    dataPro = productsData;
+    let min = document.getElementById('filter-input-min').value;
+    let max = document.getElementById('filter-input-max').value;
 
-    showProducts(productsData, settingKeys); // card generator call function 
+    const filtered = productsData.filter(item =>
+      item["Start Price"] >= min &&
+      item["Start Price"] <= max
+    );
+
+    console.log('Filtered Products - Price Filter:', filtered);
+
+    // dataPro = productsData;
+
+    showProducts(filtered, settingKeys); // card generator call function 
   });
 
   document.getElementById("SelectedProductsNavFront")?.addEventListener("change", () => {

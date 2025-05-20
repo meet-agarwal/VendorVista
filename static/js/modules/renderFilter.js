@@ -88,6 +88,8 @@ export function renderChildFilters(parentValue, childFilters) {
     
     // Render each child filter category
     Object.entries(childFilters).forEach(([childLabel, childOptions]) => {
+        if (childLabel === 'Start Price') return; // Skip if child label is 'startPrice'
+
         // Sort child options alphabetically
        childOptions.sort((a, b) => String(a).localeCompare(String(b)));
 

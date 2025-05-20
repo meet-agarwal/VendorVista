@@ -1,10 +1,10 @@
 export function collectSelectedFilters() {
     // ... logic to get selected parent + child filters
 
-    const selectedFilters = {
+    let selectedFilters = {
         // price: {
-        //     min: minPriceToggle.dataset.value || '0',
-        //     max: maxPriceToggle.dataset.value || '3000+'
+        //     min: document.getElementById('filter-input-min').value || '0',
+        //     max: document.getElementById('filter-input-max').value || '3000+'
         // },
         parent: {},
         child: {}
