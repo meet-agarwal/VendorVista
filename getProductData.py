@@ -19,6 +19,10 @@ class GetProductsData:
             df.reset_index(drop=True, inplace=True)  # Ensure clean indexing
             df.fillna('', inplace=True)  # Handle missing data
 
+            # Remove leading/trailing whitespace from all string entries
+            df = df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
+
+
             # Add unique ID per row — consistent in-memory
             df["_id"] = [str(uuid.uuid4()) for _ in range(len(df))]
 
@@ -73,6 +77,9 @@ class GetProductsData:
                             df = df[df[col_name].astype(str).str.lower().isin(filter_values)]
                         else:
                             df = df[df[col_name].astype(str).str.lower() == str(filter_values).lower()]
+                            
+            # Remove leading/trailing whitespace from all string entries
+            df = df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
 
             
             return df.to_dict('records')

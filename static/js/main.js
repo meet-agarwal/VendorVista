@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
 
-      // ✅ Find the div with the specific radio group (aria-labelledby="Product", role="group")
+      // Find the div with the specific radio group (aria-labelledby="Product", role="group")
       const productRadioContainer = document.querySelector('[aria-labelledby="Product"][role="group"]');
       if (productRadioContainer) {
         const selectedRadio = productRadioContainer.querySelector('input[type="radio"]:checked');

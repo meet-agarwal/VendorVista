@@ -17,50 +17,95 @@
 //     });
 // }
 
-export function updateFilterUI(updatedOptions , checkedFilters = {}) {
-    Object.entries(updatedOptions).forEach(([filterName, values]) => {
-        const normalizedKey = filterName.trim().toLowerCase();
+// export function updateFilterUI(updatedOptions , checkedFilters = {}) {
+//     Object.entries(updatedOptions).forEach(([filterName, values]) => {
+//         const normalizedKey = filterName.trim().toLowerCase();
 
-        const filterGroups = document.querySelectorAll('.filter-content.scrollable-content');
+//         const filterGroups = document.querySelectorAll('.filter-content.scrollable-content');
 
-        filterGroups.forEach(group => {
-            const label = group.getAttribute('aria-labelledby')?.trim().toLowerCase();
-            if (label === normalizedKey) {
-                group.innerHTML = ''; // Clear current checkboxes
+//         filterGroups.forEach(group => {
+//             const label = group.getAttribute('aria-labelledby')?.trim().toLowerCase();
+//             if (label === normalizedKey) {
+//                 group.innerHTML = ''; // Clear current checkboxes
 
-                values.forEach(value => {
-                    const wrapper = document.createElement('div');
-                    wrapper.className = 'filter-option';
+//                 values.forEach(value => {
+//                     const wrapper = document.createElement('div');
+//                     wrapper.className = 'filter-option';
 
-                    const checkbox = document.createElement('input');
-                    checkbox.type = 'checkbox';
-                    checkbox.name = filterName;
-                    checkbox.value = value;
+//                     const checkbox = document.createElement('input');
+//                     checkbox.type = 'checkbox';
+//                     checkbox.name = filterName;
+//                     checkbox.value = value;
 
-                    // Check if this value is in checkedFilters for this group
-                    const checkedValues = checkedFilters[filterName] || [];
-                    if (checkedValues.includes(value)) {
-                        checkbox.checked = true;
-                    }
+//                     // Check if this value is in checkedFilters for this group
+//                     const checkedValues = checkedFilters[filterName] || [];
+//                     if (checkedValues.includes(value)) {
+//                         checkbox.checked = true;
+//                     }
 
-                    wrapper.appendChild(checkbox);
-                    wrapper.append(` ${value}`); // Optional: add text label
+//                     wrapper.appendChild(checkbox);
+//                     wrapper.append(` ${value}`); // Optional: add text label
 
-                    group.appendChild(wrapper);
-                });
+//                     group.appendChild(wrapper);
+//                 });
 
-                        // now refresh counters:
-        document.querySelectorAll('.filter-block').forEach(block => {
-            const numItems = block.querySelectorAll('.filter-content .filter-option').length;
-            block.querySelector('.filter-item-counter')
-                .textContent = `${numItems} items`;
-        });
-        }
+//                         // now refresh counters:
+//         document.querySelectorAll('.filter-block').forEach(block => {
+//             const numItems = block.querySelectorAll('.filter-content .filter-option').length;
+//             block.querySelector('.filter-item-counter')
+//                 .textContent = `${numItems} items`;
+//         });
+//         }
             
-        });
-    });
-}
+//         });
+//     });
+// }
 
+export function updateFilterUI(updatedOptions, checkedFilters = {}) {
+  Object.entries(updatedOptions).forEach(([filterName, values]) => {
+    const normalizedKey = filterName.trim().toLowerCase();
+    const filterGroups = document.querySelectorAll('.filter-content.scrollable-content');
+
+    filterGroups.forEach(group => {
+      const label = group.getAttribute('aria-labelledby')?.trim().toLowerCase();
+      if (label !== normalizedKey) return;
+
+      group.innerHTML = ''; // Clear current options
+
+      // Grab the list of currently checked values for this filter:
+      const checkedValues = checkedFilters[filterName] || [];
+
+      // 1. Partition and sort: checked items first, then unchecked (you can secondary‑sort alphabetically too)
+      const sorted = [
+        ...values.filter(v => checkedValues.includes(v)),
+        ...values.filter(v => !checkedValues.includes(v))
+      ];
+
+      // 2. Render in that order
+      sorted.forEach(value => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'filter-option';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.name = filterName;
+        checkbox.value = value;
+        if (checkedValues.includes(value)) checkbox.checked = true;
+
+        wrapper.appendChild(checkbox);
+        wrapper.append(` ${value}`);
+        group.appendChild(wrapper);
+      });
+
+      // 3. Update the counter as before
+      document.querySelectorAll('.filter-block').forEach(block => {
+        const numItems = block.querySelectorAll('.filter-content .filter-option').length;
+        block.querySelector('.filter-item-counter')
+             .textContent = `${numItems} items`;
+      });
+    });
+  });
+}
 
 
 export async function get_updated_filter_options(dataDict) {
