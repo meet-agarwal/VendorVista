@@ -775,60 +775,36 @@ header h1 {
       user-select: none;
     }
 
-     .sortby-dropdown-container {
-            position: relative;
-            display: inline-block;
-            font-family: Arial, sans-serif;
-        }
-        
-        .sortby-dropdown-button {
-            background-color: #f8f8f8;
-            color: #333;
-            padding: 10px 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            cursor: pointer;
-            min-width: 120px;
-            text-align: left;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .sortby-dropdown-button:hover {
-            background-color: #e7e7e7;
-        }
-        
-        .sortby-dropdown-options {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 120px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-            border-radius: 4px;
-        }
-        
-        .sortby-dropdown-options a {
-            color: #333;
-            padding: 10px 15px;
-            text-decoration: none;
-            display: block;
-        }
-        
-        .sortby-dropdown-options a:hover {
-            background-color: #e7e7e7;
-        }
-        
-        .sortby-dropdown-container.show .sortby-dropdown-options {
-            display: block;
-        }
-        
-        .sortby-arrow {
-            margin-left: 10px;
-            transition: transform 0.3s;
-        }
-        
-        .sortby-dropdown-container.show .sortby-arrow {
-            transform: rotate(180deg);
-        }
+     /* Wrapper for positioning the arrow */
+    #sortDropdownContainer {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+
+    /* Style dropdown with only bottom border, custom arrow, and remove default styling */
+    .sortDropdownClass {
+      padding: 8px 12px;
+      padding-right: 30px; /* space for arrow */
+      font-size: 16px;
+      border: none;
+      border-bottom: 1px solid #ccc;
+      background-color: #fff;
+      cursor: pointer;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      outline: none;
+
+      /* Custom arrow using SVG data URI */
+      background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path fill='none' stroke='%23666' stroke-width='2' d='M1 1l4 4 4-4'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      background-size: 10px 6px;
+    }
+
+    /* Change bottom border color on focus */
+    .sortDropdownClass:focus {
+      border-bottom-color: #666;
+      box-shadow: none;
+    }

@@ -24,7 +24,7 @@
                     <div class="popup-title preserve">Cards Table Options</div>
                     <!-- Checkboxes injected by JS -->
                 </div>
-                <button id="setting_submit"  class="preserve">
+                <button id="setting_submit" class="preserve">
                     Apply
                 </button>
             </div>
@@ -35,30 +35,32 @@
     <div class="container">
         <!-- Left column: Filter panel -->
         <div class="filter-panel">
-            
+
             <!-- Filters will be dynamically inserted here -->
             <div class="filters"></div>
             <div class="price-filter">
                 <div class="price-filter-header">START PRICE</div>
-            <div id="filter-container">
-            <div id="filter-slider-container" class="filter-slider-container">
-            <div class="filter-slider-track"></div>
-            <div id="filter-slider-range" class="filter-slider-range"></div>
-            <div id="filter-slider-thumb-min" class="filter-slider-thumb" role="slider" aria-valuemin="" aria-valuemax="" aria-valuenow=""></div>
-            <div id="filter-slider-thumb-max" class="filter-slider-thumb" role="slider" aria-valuemin="" aria-valuemax="" aria-valuenow=""></div>
-            </div>
-            <div id="filter-input-container" class="filter-input-container">
-                <div id="min_div">
-                    <label for="filter-input-min">Min:</label>
-                    <input id="filter-input-min" class="filter-input" type="number" />
-                </div>
+                <div id="filter-container">
+                    <div id="filter-slider-container" class="filter-slider-container">
+                        <div class="filter-slider-track"></div>
+                        <div id="filter-slider-range" class="filter-slider-range"></div>
+                        <div id="filter-slider-thumb-min" class="filter-slider-thumb" role="slider" aria-valuemin=""
+                            aria-valuemax="" aria-valuenow=""></div>
+                        <div id="filter-slider-thumb-max" class="filter-slider-thumb" role="slider" aria-valuemin=""
+                            aria-valuemax="" aria-valuenow=""></div>
+                    </div>
+                    <div id="filter-input-container" class="filter-input-container">
+                        <div id="min_div">
+                            <label for="filter-input-min">Min:</label>
+                            <input id="filter-input-min" class="filter-input" type="number" />
+                        </div>
 
-                <div id="max_div">
-                    <label for="filter-input-max">Max:</label>
-                    <input id="filter-input-max" class="filter-input" type="number" />
+                        <div id="max_div">
+                            <label for="filter-input-max">Max:</label>
+                            <input id="filter-input-max" class="filter-input" type="number" />
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
 
                 <!-- <button class="price-apply-btn" id="apply-price">Apply</button> -->
             </div>
@@ -66,22 +68,35 @@
                 <button class="apply_filters_btn" id="apply_filters_button">Apply Filters</button>
             </div>
         </div>
-         
+
         <!-- Right column: Product listing -->
         <div class="product-listing">
             <div class="tab_switch_selected">
-                <div style="display: flex; justify-content: center ; margin-bottom: 1.5rem;" class="selectionList">
+                <div style="display: flex; justify-content: center ;" class="selectionList">
                     <div class="btn-group" role="group" aria-label="Basic segment styles example">
                         <input type="radio" class="btn-check" name="btnGroupSegmentRadio" id="AllProductsNavFront"
                             autocomplete="off" checked>
                         <label class="btn btn-outline-secondary btn-lg" for="AllProductsNavFront">All Products</label>
-        
+
                         <input type="radio" class="btn-check" name="btnGroupSegmentRadio" id="SelectedProductsNavFront"
                             autocomplete="off" disabled>
-                        <label class="btn btn-outline-secondary btn-lg" for="SelectedProductsNavFront">Selected Products</label>
+                        <label class="btn btn-outline-secondary btn-lg" for="SelectedProductsNavFront">Selected
+                            Products</label>
                     </div>
                 </div>
             </div>
+
+            <!-- Dropdown container -->
+            <div id="sortDropdownContainer">
+                <select id="sortDropdown" class="sortDropdownClass">
+                    <!-- Placeholder option, dynamically updated -->
+                    <option value="" disabled selected hidden>Sort By</option>
+                    <!-- Actionable options -->
+                    <option value="highToLow" id="optionHighToLow">High to Low</option>
+                    <option value="lowToHigh" id="optionLowToHigh">Low to High</option>
+                </select>
+            </div>
+
             <div class="product-grid" id="cards-container">
                 No Product To Display
             </div>

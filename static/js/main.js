@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     '/api/settings/options' // API endpoint for options
   );
 
+
   settingsManager.fetchOptions()
     .then(options => {
       // Transform string array into {id, label} objects
@@ -108,6 +109,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
     showProducts(filtered, settingKeys); // card generator call function 
   });
+
+
+   // Reference to the dropdown element
+    const dropdownElement = document.getElementById('sortDropdown');
+    const placeholderOption = dropdownElement.options[0];
+
+     // Sorting function: takes list and order ('highToLow' or 'lowToHigh')
+    function sortItemsByStartPrice(list, order) {
+      return list.slice().sort((a, b) => {
+        const priceA = a['Start Price'];
+        const priceB = b['Start Price'];
+        return order === 'highToLow' ? priceB - priceA : priceA - priceB;
+      });
+    }
+
+    dropdownElement.addEventListener('change', function(event) {
+      const selectedIndex = event.target.selectedIndex;
+      const selectedOption = event.target.options[selectedIndex];
+      const selectedValue = selectedOption.value;
+      const selectedText = selectedOption.text;
+
+      // Update placeholder text
+      placeholderOption.text = `Sort By: ${selectedText}`;
+
+      // Reset selection back to placeholder
+      dropdownElement.selectedIndex = 0;
+
+      // Call your sorting function here based on selectedValue
+      console.log('Sorting order chosen:', selectedValue);
+      // e.g., sortItems(selectedValue);
+
+     let sampledata = dataPro;
+      // Perform sorting
+      const sortedList = sortItemsByStartPrice(sampledata, selectedValue);
+      console.log('Sorted List of Products :', sortedList);
+      showProducts(sortedList, settingKeys); // card generator call function
+
+    });
 
   document.getElementById("SelectedProductsNavFront")?.addEventListener("change", () => {
     const selectedData = selectionManager.getSelectedProducts();
@@ -206,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       console.log('Updated Filter Options:', dataDict);
 
-      updateFilterUI(dataDict , cleanedResult);
+      updateFilterUI(dataDict, cleanedResult);
       // Update the UI with the new filter options  
 
     }
