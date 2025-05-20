@@ -144,6 +144,8 @@ header h1 {
     margin-bottom: 20px;
     background-color: white;
     transition: box-shadow 0.3s ease;
+    display: none;
+    margin-top: 1rem;
 }
 
 .price-filter:hover {
@@ -331,6 +333,10 @@ header h1 {
     padding: 5px 10px;
     border-bottom: 1px solid #e0e0e0;
     margin-top: -1px;
+}
+
+#apply_filters_button{
+    display: none;
 }
 
 .apply_filters_btn {

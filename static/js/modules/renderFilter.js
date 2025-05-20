@@ -53,7 +53,12 @@ export function renderFilter(masterFilterDataDict, parentFiltervalues) {
                     renderChildFilters(option, masterFilterDataDict[option]);
                     // Hide other child filters
                     get_updated_price_options(this.masterFilterDataDict[option]);
-                                        
+                    
+                    const PriceFilterDiv = document.querySelector('.price-filter');
+                    PriceFilterDiv.style = "display: block";
+
+                    const SubmitButton = document.getElementById('apply_filters_button');
+                    SubmitButton.style = "display: block";
                 }
             });
             

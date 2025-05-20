@@ -104,6 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Filtered Products - Price Filter:', filtered);
 
     // dataPro = productsData;
+    dataPro = filtered;
 
     showProducts(filtered, settingKeys); // card generator call function 
   });
