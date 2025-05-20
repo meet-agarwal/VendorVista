@@ -1,7 +1,30 @@
-const priceOptions = [
-    0, 100, 200, 300, 400, 500,
-    750, 1000, 1500, 2000, 2500, 3000
-];
+// const priceOptions = [
+//     0, 100, 200, 300, 400, 500,
+//     750, 1000, 1500, 2000, 2500, 3000
+// ];
+
+
+
+let priceOptions = [];
+
+export function get_updated_price_options(masterData){
+    const    input  = masterData['Start Price'];
+    
+    const roundedUnique = Array.from(
+    new Set(input.map(num => Math.round(num)))
+    );
+
+    priceOptions = roundedUnique.sort((a, b) => a - b);
+
+      const filter = new PriceFilter(document.getElementById('filter-container'), priceOptions)
+        .onChange(({min, max}) => {
+          console.log('Selected range:', min, max);
+          // TODO: apply filtering logic here
+        });
+
+    console.log(roundedUnique); 
+}
+
 
 export function setupPriceFilter() {
     // Setup price slider, dropdowns, and interaction logic

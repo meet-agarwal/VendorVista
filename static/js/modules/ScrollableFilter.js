@@ -1,5 +1,6 @@
 import { generateUniqueId } from './idUtils.js';
 import { renderChildFilters } from './renderFilter.js';
+import { get_updated_price_options } from './PriceFilterSlider.js';
 
 export class ScrollableFilter {
   constructor(container, filterLabel, filterOptions, typediv, masterFilterDataDict) {
@@ -59,6 +60,9 @@ export class ScrollableFilter {
             radio.addEventListener('change', () => {
                 if (radio.checked) {
                     renderChildFilters(option, this.masterFilterDataDict[option]);
+                    console.log(`Selected parent type: ${option}`);
+                    get_updated_price_options(this.masterFilterDataDict[option]);
+                    
                 }
             });
             

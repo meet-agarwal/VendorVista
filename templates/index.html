@@ -38,29 +38,29 @@
             <div class="price-filter">
                 <div class="price-filter-header">START PRICE</div>
 
-                <div class="price-slider-container">
-                    <input type="range" min="0" max="3000" value="0" class="price-slider" id="price-range">
-                    <div class="price-slider-labels">
-                        <span>₹0</span>
-                        <span>₹3000+</span>
-                    </div>
+
+            
+
+                <div id="filter-container">
+            <div id="filter-slider-container" class="filter-slider-container">
+            <div class="filter-slider-track"></div>
+            <div id="filter-slider-range" class="filter-slider-range"></div>
+            <div id="filter-slider-thumb-min" class="filter-slider-thumb" role="slider" aria-valuemin="" aria-valuemax="" aria-valuenow=""></div>
+            <div id="filter-slider-thumb-max" class="filter-slider-thumb" role="slider" aria-valuemin="" aria-valuemax="" aria-valuenow=""></div>
+            </div>
+            <div id="filter-input-container" class="filter-input-container">
+                <div id="min_div">
+                    <label for="filter-input-min">Min:</label>
+                    <input id="filter-input-min" class="filter-input" type="number" />
                 </div>
 
-                <div class="price-inputs">
-                    <div class="price-dropdown">
-                        <button class="price-dropdown-toggle" id="min-price-toggle">Min</button>
-                        <div class="price-dropdown-menu" id="min-price-menu">
-                            <!-- Options will be added by JavaScript -->
-                        </div>
-                    </div>
-                    <span class="price-divider">to</span>
-                    <div class="price-dropdown">
-                        <button class="price-dropdown-toggle" id="max-price-toggle">Max</button>
-                        <div class="price-dropdown-menu" id="max-price-menu">
-                            <!-- Options will be added by JavaScript -->
-                        </div>
-                    </div>
+                <div id="max_div">
+                    <label for="filter-input-max">Max:</label>
+                    <input id="filter-input-max" class="filter-input" type="number" />
                 </div>
+            </div>
+        </div>
+
                 <!-- <button class="price-apply-btn" id="apply-price">Apply</button> -->
             </div>
             <!-- Filters will be dynamically inserted here -->
@@ -69,7 +69,7 @@
                 <button class="apply_filters_btn" id="apply_filters_button">Apply Filters</button>
             </div>
         </div>
-
+         
         <!-- Right column: Product listing -->
         <div class="product-listing">
             <div class="tab_switch_selected">

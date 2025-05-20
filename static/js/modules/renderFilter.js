@@ -1,6 +1,7 @@
 import { generateUniqueId } from './idUtils.js';
 import { ScrollableFilter } from './ScrollableFilter.js';
 import { addToggleEventListeners } from './toggleEvents.js';
+import {} from './PriceFilterSlider.js'
 
 export function renderFilter(masterFilterDataDict, parentFiltervalues) {
   // ... logic to render parent filter
@@ -50,6 +51,9 @@ export function renderFilter(masterFilterDataDict, parentFiltervalues) {
             radio.addEventListener('change', () => {
                 if (radio.checked) {
                     renderChildFilters(option, masterFilterDataDict[option]);
+                    // Hide other child filters
+                    get_updated_price_options(this.masterFilterDataDict[option]);
+                                        
                 }
             });
             

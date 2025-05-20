@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .catch(err => console.error('Error fetching filter data:', err));
 
-  setupPriceFilter();
+  // setupPriceFilter();
 
   document.getElementById('apply_filters_button')?.addEventListener('click', async () => {
     const selectedFilters = collectSelectedFilters();
