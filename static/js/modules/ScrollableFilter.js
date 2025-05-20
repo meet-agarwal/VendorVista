@@ -67,6 +67,9 @@ export class ScrollableFilter {
 
                     const SubmitButton = document.getElementById('apply_filters_button');
                     SubmitButton.style = "display: block";
+
+                    const checkNavTab = document.getElementById('SelectedProductsNavFront');
+                    checkNavTab.disabled = false;
                 }
             });
             
