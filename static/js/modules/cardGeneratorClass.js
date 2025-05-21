@@ -85,11 +85,11 @@ export class CardGenerator {
         
                     // Scroll to top of product grid or page
                     const grid = document.getElementById('cards-container');
-                    if (grid) {
-                        grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    } else {
+                    // if (grid) {
+                    //     grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // } else {
                         window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }
+                    // }
                 };
             } else if (page === this.currentPage) {
                 btn.classList.add('active');

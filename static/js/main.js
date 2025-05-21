@@ -251,6 +251,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // assume all cards are rendered inside #cards-container
+const cardsContainer = document.getElementById('cards-container');
+
+cardsContainer.addEventListener('click', e => {
+  // find the closest .card ancestor of whatever was clicked
+  const card = e.target.closest('.card');
+  if (!card) return;               // click was outside any card
+  if (e.target.matches('input[type="checkbox"]')) return;  // let real checkbox clicks go through
+
+  // find the checkbox inside this card, and toggle it
+  const cb = card.querySelector('input[type="checkbox"]');
+  if (cb) {
+    cb.click();  // this toggles checked-state and fires existing handlers
+  }
+});
+
 
 
 });
