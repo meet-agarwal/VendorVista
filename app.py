@@ -64,35 +64,52 @@ def getOptionList():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     
+
 @app.route('/api/filters/updateFilters', methods=['POST'])
 def updateFilters():
     try:
         data = request.get_json()
         if not data:
             return jsonify({'error': 'No data provided'}), 400
-        
+
         new_data = {}
         for key, value in data.items():
-            # Remove hyphens from the key
+            # Normalize the key by replacing hyphens with spaces
             new_key = key.replace('-', ' ')
-            
-            # Remove hyphens from each item in the value list (if it's a string)
-            new_value = []
-            for item in value:
-                if isinstance(item, str):
-                    new_item = item.replace('-', ' ')
-                    new_value.append(new_item)
-                else:
-                    new_value.append(item)  # Keep non-string items as-is
-            
+
+            # If this is the ring size filter, convert each entry to float
+            if new_key == 'ring size':
+                new_value = []
+                for item in value:
+                    try:
+                        # Ensure it's a string, strip hyphens/spaces, then cast
+                        clean = str(item).replace('-', ' ').strip()
+                        new_value.append(float(clean))
+                    except ValueError:
+                        print(f"Invalid ring size value: {item}. Skipping.")
+                        print(f"Invalid ring size value: {item}. Skipping.")
+                        continue
+            else:
+                # Otherwise just strip hyphens from any string entries
+                new_value = []
+                for item in value:
+                    if isinstance(item, str):
+                        new_item = item.replace('-', ' ')
+                        new_value.append(new_item)
+                    else:
+                        new_value.append(item)
+
             new_data[new_key] = new_value
-             
+
+        # Feed into your hierarchy manager and return the updated filters
         updatedDictFilter = hierarchy_manager.update_hierarchy(new_data)
-        
         return jsonify(updatedDictFilter)
-    
+
     except Exception as e:
+        # Catch-all error handler
         return jsonify({'error': str(e)}), 500
+ 
+ 
 
 
 if __name__ == '__main__':

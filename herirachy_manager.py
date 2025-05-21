@@ -198,8 +198,8 @@ class HierarchyManager:
                 val = selected_filters[key]
                 if not isinstance(val, list):
                     val = [val]
-                val = [str(v).lower() for v in val]
-                filtered_df = filtered_df[filtered_df[key].str.lower().isin(val)]
+                filtered_df = filtered_df[filtered_df[key].astype(str).str.lower().isin([str(v).lower() for v in val])]
+
                 
         # for key in normalized_filter_child_list:
         #     if key not in filtered_df.columns:
