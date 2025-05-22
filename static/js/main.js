@@ -5,10 +5,12 @@ import { getProductsData } from './modules/api.js';
 import { showProducts, selectionManager } from './modules/cardGeneratorClass.js'
 import { SettingsManager } from './modules/settingManager.js';
 import { get_updated_filter_options, updateFilterUI } from './modules/checkboxHandler.js';
+import { imageGetter } from './modules/ImageGetter.js';
 // Importing necessary modules
 
 // declaring global variables 
 window.selectionManager = selectionManager;
+
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -100,14 +102,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const filtered = productsData.filter(item =>
       item["Start Price"] >= min &&
       item["Start Price"] <= max
+      
     );
+
 
     console.log('Filtered Products - Price Filter:', filtered);
 
     // dataPro = productsData;
     dataPro = filtered;
 
-    showProducts(filtered, settingKeys); // card generator call function 
+    let ImageGetterDict = await imageGetter()  ;
+    console.log('ImageGetterDict:', ImageGetterDict);
+
+    showProducts(filtered, settingKeys, ImageGetterDict); // card generator call function
+
   });
 
 

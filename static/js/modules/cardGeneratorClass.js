@@ -7,6 +7,7 @@
  */
 export class CardGenerator {
     constructor(keysToDisplay, containerId) {
+        this.imageUrlDict = {};
         this.keysToDisplay = keysToDisplay;
         this.container = document.getElementById(containerId);
         if (!this.container) {
@@ -50,7 +51,7 @@ export class CardGenerator {
         const pageEntries = entries.slice(startIdx, endIdx);
 
         for (const [cardId, cardData] of pageEntries) {
-            const card = this._createCardElement( cardData, this.checkboxCallback);
+            const card = this._createCardElement(cardData, this.checkboxCallback);
             this.container.appendChild(card);
         }
 
@@ -62,33 +63,33 @@ export class CardGenerator {
 
     _renderPaginationControls(totalPages) {
 
-       
+
 
 
         const paginationWrapper = document.querySelector('.pagination_control_div');
         if (!paginationWrapper) return;
-    
+
         paginationWrapper.innerHTML = ''; // Clear previous pagination controls
-    
+
         const pagination = document.createElement('div');
         pagination.className = 'pagination-controls';
-    
+
         const createPageButton = (text, page, disabled = false) => {
             const btn = document.createElement('button');
             btn.textContent = text;
             btn.disabled = disabled;
-        
+
             if (!disabled && page !== this.currentPage) {
                 btn.onclick = () => {
                     this.currentPage = page;
                     this._renderCurrentPage();
-        
+
                     // Scroll to top of product grid or page
                     const grid = document.getElementById('cards-container');
                     // if (grid) {
                     //     grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     // } else {
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                     // }
                 };
             } else if (page === this.currentPage) {
@@ -96,19 +97,19 @@ export class CardGenerator {
             }
             return btn;
         };
-        
+
         // Prev button
         pagination.appendChild(createPageButton('Prev', this.currentPage - 1, this.currentPage === 1));
-    
+
         const visiblePages = this._getVisiblePages(totalPages);
-    
+
         visiblePages.forEach(p => {
             pagination.appendChild(createPageButton(p, p, p === this.currentPage));
         });
-    
+
         // Next button
         pagination.appendChild(createPageButton('Next', this.currentPage + 1, this.currentPage === totalPages));
-    
+
         // Page X of Y info
         const pageInfo = document.createElement('span');
         pageInfo.textContent = `Page ${this.currentPage} of ${totalPages.toLocaleString()}`;
@@ -116,15 +117,15 @@ export class CardGenerator {
         pageInfo.style.fontWeight = '500';
         pageInfo.style.color = '#555';
         pagination.appendChild(pageInfo);
-    
+
         paginationWrapper.appendChild(pagination);
     }
-    
+
     // _getVisiblePages(totalPages) {
     //     const pages = [];
     //     const maxVisible = 10;
     //     let startPage, endPage;
-    
+
     //     if (totalPages <= maxVisible) {
     //         startPage = 1;
     //         endPage = totalPages;
@@ -140,57 +141,57 @@ export class CardGenerator {
     //             endPage = this.currentPage + 5;
     //         }
     //     }
-    
+
     //     for (let i = startPage; i <= endPage; i++) {
     //         pages.push(i);
     //     }
-    
+
     //     return pages;
     // }
 
     _getVisiblePages(totalPages) {
-    const pages = [];
-    const maxVisible = 10;
-    
-    // If total pages is less than or equal to maxVisible, show all pages
-    if (totalPages <= maxVisible) {
-        for (let i = 1; i <= totalPages; i++) {
+        const pages = [];
+        const maxVisible = 10;
+
+        // If total pages is less than or equal to maxVisible, show all pages
+        if (totalPages <= maxVisible) {
+            for (let i = 1; i <= totalPages; i++) {
+                pages.push(i);
+            }
+            return pages;
+        }
+
+        // Calculate start and end pages for the visible range
+        let startPage, endPage;
+
+        // Current page is in the first 5 pages
+        if (this.currentPage <= 5) {
+            startPage = 1;
+            endPage = maxVisible;
+        }
+        // Current page is in the last 5 pages
+        else if (this.currentPage >= totalPages - 4) {
+            startPage = totalPages - maxVisible + 1;
+            endPage = totalPages;
+        }
+        // Current page is somewhere in the middle
+        else {
+            startPage = this.currentPage - Math.floor(maxVisible / 2);
+            endPage = this.currentPage + Math.floor(maxVisible / 2) - 1;
+        }
+
+        // Ensure we don't go below page 1
+        startPage = Math.max(startPage, 1);
+        // Ensure we don't go beyond total pages
+        endPage = Math.min(endPage, totalPages);
+
+        // Generate the page numbers
+        for (let i = startPage; i <= endPage; i++) {
             pages.push(i);
         }
+
         return pages;
     }
-    
-    // Calculate start and end pages for the visible range
-    let startPage, endPage;
-    
-    // Current page is in the first 5 pages
-    if (this.currentPage <= 5) {
-        startPage = 1;
-        endPage = maxVisible;
-    } 
-    // Current page is in the last 5 pages
-    else if (this.currentPage >= totalPages - 4) {
-        startPage = totalPages - maxVisible + 1;
-        endPage = totalPages;
-    } 
-    // Current page is somewhere in the middle
-    else {
-        startPage = this.currentPage - Math.floor(maxVisible / 2);
-        endPage = this.currentPage + Math.floor(maxVisible / 2) - 1;
-    }
-    
-    // Ensure we don't go below page 1
-    startPage = Math.max(startPage, 1);
-    // Ensure we don't go beyond total pages
-    endPage = Math.min(endPage, totalPages);
-    
-    // Generate the page numbers
-    for (let i = startPage; i <= endPage; i++) {
-        pages.push(i);
-    }
-    
-    return pages;
-}
 
     // /**
     //  * Creates a single card element
@@ -200,12 +201,12 @@ export class CardGenerator {
     //  * @param {Function} checkboxCallback - Callback for checkbox events
     //  * @returns {HTMLElement} The created card element
     //  **/
-    _createCardElement( cardData, checkboxCallback) {
+    _createCardElement(cardData, checkboxCallback) {
         // Create main card container
         const card = document.createElement('div');
         card.className = 'card';
         card.dataset.cardId = cardData._id;
-        
+
         // Create image section (top half of card)
         const imageSection = this._createImageSection(cardData, checkboxCallback);
         card.appendChild(imageSection);
@@ -226,23 +227,51 @@ export class CardGenerator {
     //      * @param {Function} checkboxCallback - Callback for checkbox events
     //      * @returns {HTMLElement} The created image section
     //      */  
-    _createImageSection( cardData, checkboxCallback) {
+    _createImageSection(cardData, checkboxCallback) {
         const imageSection = document.createElement('div');
         imageSection.className = 'card-image-section';
 
-        // Create and add image if available
-        if (cardData.imageUrl) {
-            const img = document.createElement('img');
-            img.src = cardData.imageUrl;
-            img.alt = cardData.title || 'Card Image';
-            imageSection.appendChild(img);
-        } else {
-            // Placeholder if no image
-            imageSection.style.backgroundColor = '#f0f0f0';
-            imageSection.style.minHeight = '150px';
-            imageSection.textContent = 'No Image Available';
+
+        if (this.imageUrlDict) {
+            const Url = this.imageUrlDict[cardData.Images];
+            console.log("Image URL:", Url);
+            console.log("folder name:", cardData.Images);
+
+            if (Url && Url[0]) {
+                const imageUrl = Url[0].replace('C:\\Users\\dell\\Documents\\VendorVista', '');
+                const img = document.createElement('img');
+                img.src = `../${imageUrl}`;
+                img.alt = cardData.title || 'Card Image';
+                imageSection.appendChild(img);
+            } else {
+                // Placeholder if image not found
+                imageSection.style.backgroundColor = '#f0f0f0';
+                imageSection.style.minHeight = '150px';
+                imageSection.textContent = 'No Image Available';
+            }
         }
-        
+
+
+        // Create and add image if available
+        // if (this.imageUrlDict) {
+        //     const img = document.createElement('img');
+        //     const Url = this.imageUrlDict[cardData.Images];
+        //     console.log("Image URL:", Url);
+        //     console.log("folder name:", cardData.Images);
+
+        //     // needs to process the URL to get the image as it is not allowing the local path 
+        //     const imageUrl = Url[0].replace('C:\\Users\\dell\\Documents\\VendorVista', ''); // Replace backslashes with forward slashes
+
+        //     img.src = `../${imageUrl}`;
+        //     img.alt = cardData.title || 'Card Image';
+        //     imageSection.appendChild(img);
+        // } else {
+        //     // Placeholder if no image
+        //     imageSection.style.backgroundColor = '#f0f0f0';
+        //     imageSection.style.minHeight = '150px';
+        //     imageSection.textContent = 'No Image Available';
+        // }
+
         // fetch the cardId from the cardData 
         const cardId = cardData._id;
 
@@ -307,31 +336,22 @@ export class CardGenerator {
         tableSection.appendChild(table);
         return tableSection;
     }
+
+    getImageurlidct(imageDict) {
+
+        this.imageUrlDict = imageDict;
+
+    }
 }
 
-// export  function showProducts(productsData ,keysList) {
-//     // 1. Define which keys you want to display in each card
-//     const keys = ['Adjustable', 'Design', 'Gemstone', 'Metal'];
 
-//     let keysToShow ;
-//     if (!keysList) keysToShow = keys 
-//     else keysToShow = keysList
-
-//     // 2. Initialize the CardGenerator with your keys and container ID
-//     const cardGenerator = new CardGenerator(keysToShow, 'cards-container');
-//     // 4. Create and insert the cards
-//     cardGenerator.createCards(productsData, handleCheckboxChange);
-
-//     // Later, if you need to update the keys to display:
-//     // cardGenerator.setKeysToDisplay(['name', 'email', 'phone']);
-//     // cardGenerator.createCards(masterDict); // Recreate cards with new keys
 // }
 
-export function showProducts(productsData, keysList = null) {
+export function showProducts(productsData, keysList = null, imageGetterDict = null) {
     // Use default keys if none provided
     const defaultKeys = ['Adjustable', 'Design', 'Gemstone', 'Metal'];
     const keysToShow = keysList || defaultKeys;
-    
+
     // Initialize or reuse existing CardGenerator
     let cardGenerator = window.cardGenerator; // Store in global scope
     if (!cardGenerator) {
@@ -341,12 +361,14 @@ export function showProducts(productsData, keysList = null) {
         cardGenerator.setKeysToDisplay(keysToShow); // Update keys
     }
 
-     // Reset to first page and clear any existing pagination
+    // Reset to first page and clear any existing pagination
     cardGenerator.currentPage = 1;
     const paginationWrapper = document.querySelector('.pagination_control_div');
     if (paginationWrapper) paginationWrapper.innerHTML = '';
-    
-    
+
+    cardGenerator.getImageurlidct(imageGetterDict);
+
+
     // Create/update cards
     cardGenerator.createCards(productsData, handleCheckboxChange);
 }
@@ -368,7 +390,7 @@ function handleCheckboxChange(isChecked, cardId, cardData) {
     if (selectedTab && selectedTab.checked) {
         const selectedData = selectionManager.getSelectedProducts();
         const keysToShow = window.settingKeys || ['Adjustable', 'Design', 'Gemstone', 'Metal'];
-        
+
         // Immediately update the view with remaining selected products
         showProducts(selectedData, keysToShow);
     }
