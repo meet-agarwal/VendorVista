@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let dataPro = []
   let settingKeys = ['Adjustable', 'Design', 'Gemstone', 'Metal']
-
+  let imageDict = {}
   window.settingKeys = ['Adjustable', 'Design', 'Gemstone', 'Metal']
 
   const settingsManager = new SettingsManager(
@@ -59,9 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (selectedTab.checked) {
       const selectedData = selectionManager.getSelectedProducts();
-      showProducts(selectedData, formattedKeys); // Show selected products
+      showProducts(selectedData, formattedKeys, imageDict); // Show selected products
     } else if (alltab.checked) {
-      showProducts(dataPro, formattedKeys); // Show all products
+      showProducts(dataPro, formattedKeys, imageDict); // Show all products
     }
 
 
@@ -113,6 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let ImageGetterDict = await imageGetter()  ;
     console.log('ImageGetterDict:', ImageGetterDict);
+    imageDict = ImageGetterDict;
 
     showProducts(filtered, settingKeys, ImageGetterDict); // card generator call function
 
@@ -152,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Perform sorting
       const sortedList = sortItemsByStartPrice(sampledata, selectedValue);
       console.log('Sorted List of Products :', sortedList);
-      showProducts(sortedList, settingKeys); // card generator call function
+      showProducts(sortedList, settingKeys , imageDict); // card generator call function
 
     });
 
@@ -162,12 +163,12 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('cards-container').textContent = 'No products selected';
       document.querySelector('.pagination_control_div').innerHTML = '';
     } else {
-      showProducts(selectedData, settingKeys);
+      showProducts(selectedData, settingKeys, imageDict);
     }
   });
 
   document.getElementById("AllProductsNavFront")?.addEventListener("change", () => {
-    showProducts(dataPro, settingKeys);  // Shows all products again
+    showProducts(dataPro, settingKeys, imageDict);  // Shows all products again
   });
 
   // Event delegation for checkboxes
