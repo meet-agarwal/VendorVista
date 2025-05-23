@@ -808,3 +808,23 @@ header h1 {
       border-bottom-color: #666;
       box-shadow: none;
     }
+
+        .print_button {
+      position: fixed;
+      bottom: 40px;
+      right: 40px;
+      background-color: #6c9fd6;
+      color: white;
+      border: none;
+      border-radius: 5%;
+      width: 10rem;
+      height: 60px;
+      font-size: 24px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    .print_button:hover {
+      background-color: #0056b3;
+    }

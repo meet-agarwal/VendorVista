@@ -61,7 +61,7 @@ def getProducts():
 def getOptionList():
     try:
         
-        optionList = filterd_products_Dict.getAllSettingsOptions()
+        optionList = sorted(filterd_products_Dict.getAllSettingsOptions())
         print('optionList' , optionList)
         return jsonify(optionList)
     

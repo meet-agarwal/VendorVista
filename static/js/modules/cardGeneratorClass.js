@@ -346,6 +346,7 @@ export class CardGenerator {
 
 
 // }
+let imageD = null;
 
 export function showProducts(productsData, keysList = null, imageGetterDict = null) {
     // Use default keys if none provided
@@ -360,6 +361,9 @@ export function showProducts(productsData, keysList = null, imageGetterDict = nu
     } else {
         cardGenerator.setKeysToDisplay(keysToShow); // Update keys
     }
+
+    imageD = imageGetterDict;
+    
 
     // Reset to first page and clear any existing pagination
     cardGenerator.currentPage = 1;
@@ -392,6 +396,6 @@ function handleCheckboxChange(isChecked, cardId, cardData) {
         const keysToShow = window.settingKeys || ['Adjustable', 'Design', 'Gemstone', 'Metal'];
 
         // Immediately update the view with remaining selected products
-        showProducts(selectedData, keysToShow);
+        showProducts(selectedData, keysToShow ,imageD );
     }
 }
