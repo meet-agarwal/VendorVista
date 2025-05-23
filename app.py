@@ -128,5 +128,9 @@ def getImages():
 def custom_static(filename):
     return send_from_directory('resources', filename)
 
+@app.route('/print-template')
+def print_template():
+    return render_template('broucher.html')
+
 if __name__ == '__main__':
     app.run(debug=True)

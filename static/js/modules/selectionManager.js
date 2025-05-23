@@ -6,6 +6,10 @@ export class SelectionManager {
     toggleProductSelection(isChecked, productId, productData) {
         if (isChecked) {
             this.selectedProducts.set(productId, productData);
+            console.log(`Product selected: ${productId}`, productData); 
+            console.log(`Selected products:`, this.selectedProducts);
+            
+            
         } else {
             this.selectedProducts.delete(productId);
         }
@@ -22,4 +26,9 @@ export class SelectionManager {
     isProductSelected(productId) {
         return this.selectedProducts.has(productId);
     }
+
+    getSelectedProductData() {
+        return Array.from(this.selectedProducts.values());
+    }
+
 }

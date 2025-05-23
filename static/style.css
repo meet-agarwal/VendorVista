@@ -9,17 +9,28 @@ body {
     padding: 0;
     background-color: #f8f9fa;
     color: #333;
+  
+    padding-top: 0px; /* push content down globally */
+
+
 }
 
 /* Header styles */
 header {
-    background:linear-gradient(102deg, #007bff63, #0056b399) ;
-    /* color: white; */
+    background: linear-gradient(102deg, #007bff63, #0056b399);
+    backdrop-filter: blur(20px);
     padding: 15px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+
+    /* Add these */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
 }
 
 header img {
@@ -38,12 +49,13 @@ header h1 {
 .container {
     display: flex;
     max-width: 1400px;
-    margin: 20px auto;
+    margin: 100px auto 20px; /* top margin increased */
     background-color: white;
     border-radius: 12px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.08);
     overflow: hidden;
 }
+
 
 /* Filter panel */
 .filter-panel {
@@ -823,6 +835,7 @@ header h1 {
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       cursor: pointer;
       z-index: 1000;
+      display: none;
     }
 
     .print_button:hover {

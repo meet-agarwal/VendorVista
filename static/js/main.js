@@ -165,10 +165,21 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       showProducts(selectedData, settingKeys, imageDict);
     }
+
+    const printButton = document.getElementById('printButton');
+    if (Object.keys(selectedData).length === 0) {
+      printButton.style.display = 'none';
+    } else {
+      printButton.style.display = 'block';
+    }
   });
 
   document.getElementById("AllProductsNavFront")?.addEventListener("change", () => {
     showProducts(dataPro, settingKeys, imageDict);  // Shows all products again
+
+    const printButton = document.getElementById('printButton');
+      printButton.style.display = 'none';
+
   });
 
   // Event delegation for checkboxes
@@ -277,9 +288,82 @@ cardsContainer.addEventListener('click', e => {
 });
 
   const printButton = document.getElementById('printButton');
-  printButton.addEventListener('click', () => {
-    window.print();
-  });
+  printButton.addEventListener('click', async () => {
+  const selectedData = selectionManager.getSelectedProducts();
+  if (Object.keys(selectedData).length === 0) {
+    alert('No products selected for printing');
+    return;
+  }
+
+  const imageDict = window.imageDict || {};  // Adjust as per actual usage
+
+  const printWindow = window.open('/print-template', '_blank');
+  if (!printWindow) {
+    alert('Popup blocked! Please allow popups for this site.');
+    return;
+  }
+
+  // Wait until the new window fully loads
+  printWindow.onload = () => {
+    const doc = printWindow.document;
+    const container = doc.querySelector('.container');
+    if (!container) {
+      alert("Couldn't find container in the loaded broucher.html");
+      return;
+    }
+
+    // Remove existing product blocks (except cover page)
+    const pages = doc.querySelectorAll('.page_break');
+    pages.forEach(p => p.remove());
+
+    let count = 0;
+    let currentPage = null;
+
+    for (const [productId, product] of Object.entries(selectedData)) {
+      if (count % 2 === 0) {
+        // Start a new page
+        currentPage = doc.createElement('div');
+        currentPage.className = 'page_break';
+        container.appendChild(currentPage);
+      }
+
+      const item = doc.createElement('div');
+      item.className = count % 2 === 0 ? 'item1' : 'item2';
+
+      const imageUrls = product.Image || []; // Assuming it's an array
+      const firstImageKey = Array.isArray(imageUrls) ? imageUrls[0] : imageUrls;
+      const imageUrl = imageDict[firstImageKey] || 'https://via.placeholder.com/300';
+
+      item.innerHTML = `
+        <div class="pic">
+          <img src="${imageUrl}" alt="Product Image">
+        </div>
+        <div class="product-details">
+          <h3>Product Details</h3>
+          <table>
+            <tr><td><strong>Metal</strong></td><td>${product.Metal || ''}</td></tr>
+            <tr><td>Metal Purity</td><td>${product['Metal Purity'] || ''}</td></tr>
+            <tr><td><strong>Main Stone</strong></td><td>${product['Main Stone'] || ''}</td></tr>
+            <tr><td><strong>Main Stone Shape</strong></td><td>${product['Main Stone Shape'] || ''}</td></tr>
+            <tr><td><strong>Main Stone Color</strong></td><td>${product['Main Stone Color'] || ''}</td></tr>
+            <tr><td><strong>Main Stone Creation</strong></td><td>${product['Main Stone Creation'] || ''}</td></tr>
+            <tr><td><strong>Gross Weight(Gram)</strong></td><td>${product['Gross Weight(Gram)'] || ''}</td></tr>
+            <tr><td><strong>Ring Size</strong></td><td>${product['Ring Size'] || ''}</td></tr>
+            <tr><td><strong>Style</strong></td><td>${product.Style || ''}</td></tr>
+            <tr><td><strong>Certification</strong></td><td>${product.Certification || ''}</td></tr>
+          </table>
+        </div>
+      `;
+
+      currentPage.appendChild(item);
+      count++;
+    }
+
+    printWindow.focus();
+    printWindow.print();
+  };
+});
+
 
 });
 
