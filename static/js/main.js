@@ -469,10 +469,12 @@ document.addEventListener('DOMContentLoaded', () => {
             : [];
           const imgEl = slot.querySelector('img#image');
 
+          // .replace('C:\\Users\\dell\\Documents\\VendorVista', '');
+
           if (sources && sources[0]) {
-                const imageUrl = sources[0].replace('C:\\Users\\dell\\Documents\\VendorVista', '');
+                const imageUrl = sources[0] ; 
                 const img = imgEl || document.createElement('img');
-                img.src = `../${imageUrl}`;
+                img.src = `${imageUrl}`;
                 img.alt = 'product Image';
                // img.style.objectFit = 'cover';
             // } else {
@@ -508,10 +510,15 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         });
 
+        
+
         parent.appendChild(clone);
       }
 
-
+      let state = doc.getElementById('State');
+      state.setAttribute('donePopulating', 'true'); 
+      console.log('State attribute set to donePopulating inside the main.js file');
+      
     };
   });
 

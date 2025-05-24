@@ -7,6 +7,9 @@ from herirachy_manager import HierarchyManager  # Import the HierarchyManager cl
 import json
 from flask import Response
 from get_images import GetImagesDict
+import tempfile
+import os   
+from datetime import datetime
 app = Flask(__name__)
 
 filterd_products_Dict = getProductData.GetProductsData()
@@ -131,6 +134,37 @@ def custom_static(filename):
 @app.route('/print-template')
 def print_template():
     return render_template('broucher.html')
+
+@app.route('/save-template', methods=['POST'])
+def save_template():
+    try:
+        data = request.get_json()
+        html_content = data.get('html', '')
+        
+        if not html_content:
+            return jsonify({'error': 'No HTML content provided'}), 400
+        
+        # Create a temporary directory if it doesn't exist
+        temp_dir = os.path.join(tempfile.gettempdir(), 'vendor_vista_brochures')
+        os.makedirs(temp_dir, exist_ok=True)
+        
+        # Generate a unique filename with timestamp
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        filename = f'brochure_{timestamp}.html'
+        filepath = os.path.join(temp_dir, filename)
+        
+        # Save the HTML content to file
+        with open(filepath, 'w', encoding='utf-8') as f:
+            f.write(html_content)
+        
+        return jsonify({
+            'status': 'success',
+            'message': 'HTML saved successfully',
+            'filepath': filepath
+        })
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

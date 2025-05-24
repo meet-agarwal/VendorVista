@@ -5,7 +5,209 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../static/broucher.css">
+    <!-- <link rel="stylesheet" href="../static/broucher.css"> -->
+
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #f5f3eb;
+            color: #4D1C17;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            padding: 20px;
+        }
+
+        .item1 {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            background-color: #f5f3eb;
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            gap: 20px;
+            align-items: center;
+        }
+
+        .item2 {
+            display: flex;
+            flex-direction: row-reverse;
+            flex-wrap: wrap;
+            background-color: #f5f3eb;
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            gap: 20px;
+            align-items: center;
+
+        }
+
+
+        /* Make images responsive */
+        .item1 img {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .item2 img {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+
+        /* Product details styling */
+        .product-details {
+            flex: 1;
+            /* background-color: #fdfafa; */
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #0000002e;
+        }
+
+        .product-details h3 {
+            text-align: center;
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #6a1b9a;
+        }
+
+        .product-details table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .product-details td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #0000002e;
+        }
+
+        .product-details td:first-child {
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* @media print{
+
+    @page{
+        size: A4;
+        margin: 0;
+    }
+   
+
+    .product-details td{
+        padding: 0;
+    }
+    
+    .item2 ,.item1{
+        margin-top: 2rem;
+        
+    }
+    container{
+        width: 90%;
+    }
+    .page_break{
+        page-break-inside: avoid;
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+        
+       
+    }
+} */
+
+
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
+
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+            }
+
+            /* .page1 {
+        page-break-after: always;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    } */
+            .container {
+                margin: 0;
+                padding: 0;
+            }
+
+            .page1 {
+                page-break-after: always;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                /* exactly one page */
+                margin: 0;
+                padding: 0;
+            }
+
+            /* .page1 img {
+        max-width: 100%;
+        max-height: 90vh;
+        object-fit: contain;
+    } */
+            .page1 img {
+                max-height: 95vh;
+                /* keep room for page margins */
+                width: auto;
+                height: auto;
+                object-fit: contain;
+                display: block;
+                margin: auto;
+            }
+
+            .product-details {
+                /* border: 1px solid  #0d1b2a; */
+            }
+
+            .product-details td {
+                padding: 1px;
+                border-bottom: 1px solid #0000002e;
+            }
+
+
+            .item2,
+            .item1 {
+                margin-top: 2rem;
+            }
+
+            .container {
+                width: 90%;
+            }
+
+            .page_break {
+                page-break-inside: avoid;
+                padding-top: 3rem;
+                padding-bottom: 3rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -14,10 +216,10 @@
         <div class="page_break" product="2"
             rows="Metal,Metal_Purity,Main_Stone,Main_Stone_Shape,Main_Stone_Color,Main_Stone_Creation,Weight,Ring_Size,Style,Store_Category">
 
-            
+
 
             <div class="item1">
-                <img src="https://i.ebayimg.com/images/g/fCcAAOSwKAZmt5Yg/s-l1600.webp" id="image">
+                <img src="" id="image">
                 <div class="product-details">
                     <h3>Product Details</h3>
                     <table id="item_product_details">
@@ -67,7 +269,7 @@
             </div>
 
             <div class="item2">
-                <img src="https://i.ebayimg.com/images/g/fCcAAOSwKAZmt5Yg/s-l1600.webp" id="image">
+                <img src="" id="image">
                 <div class="product-details">
                     <h3>Product Details</h3>
                     <table id="item_product_details">
@@ -118,6 +320,66 @@
         </div>
 
     </div>
+
+    <div id="State" donePopulating="false"></div>
+
+   <script>
+    const state = document.getElementById('State');
+
+    async function sendDataToServer(htmlContent) {
+        state.setAttribute('donePopulating', 'false');
+        const response = await fetch('/save-template', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ html: htmlContent })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to save template');
+        }
+
+        return await response.json();
+    }
+
+    async function checkPopulated() {
+        if (state.getAttribute('donePopulating') === 'true') {
+            const htmlContent = document.documentElement.outerHTML;
+            console.log('HTML Content:', htmlContent);
+
+            try {
+                const data = await sendDataToServer(htmlContent);
+                console.log('HTML saved:', data);
+
+                // Only proceed after successful save
+                if (data.status === 'success') {
+                    const images = document.getElementsByTagName('img');
+                    Array.from(images).forEach(img => {
+                        let src = img.getAttribute('src');
+                        if (src) {
+                            src = src.replace('C:\\Users\\dell\\Documents\\VendorVista', '');
+                            src = '../' + src;
+                            img.setAttribute('src', src);
+                        }
+                    });
+
+                    console.log('All image src attributes have been updated.');
+                } else {
+                    console.warn('Backend did not confirm save success.');
+                }
+
+            } catch (error) {
+                console.error('Error during save or image update:', error);
+            }
+        } else {
+            setTimeout(checkPopulated, 100);
+        }
+    }
+
+    checkPopulated();
+</script>
+
 
 </body>
 
