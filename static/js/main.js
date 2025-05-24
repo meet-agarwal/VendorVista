@@ -323,173 +323,182 @@ document.addEventListener('DOMContentLoaded', () => {
   //   };
   // });
 
-// Print Brochure Generator
-// const printButton = document.getElementById('printButton');
-// printButton.addEventListener('click', async () => {
-//   const selectedData = selectionManager.getSelectedProducts();
-//   const entries = Object.entries(selectedData);
-//   if (entries.length === 0) {
-//     alert('No products selected for printing');
-//     return;
-//   }
+  // Print Brochure Generator
+  // const printButton = document.getElementById('printButton');
+  // printButton.addEventListener('click', async () => {
+  //   const selectedData = selectionManager.getSelectedProducts();
+  //   const entries = Object.entries(selectedData);
+  //   if (entries.length === 0) {
+  //     alert('No products selected for printing');
+  //     return;
+  //   }
 
-//   const printWin = window.open('/print-template', '_blank');
-//   if (!printWin) {
-//     alert('Popup blocked! Please allow popups for this site.');
-//     return;
-//   }
+  //   const printWin = window.open('/print-template', '_blank');
+  //   if (!printWin) {
+  //     alert('Popup blocked! Please allow popups for this site.');
+  //     return;
+  //   }
 
-//   printWin.onload = () => {
-//     const doc = printWin.document;
-//     const template = doc.querySelector('.page_break');
-//     if (!template) {
-//       alert("Template .page_break not found");
-//       return;
-//     }
+  //   printWin.onload = () => {
+  //     const doc = printWin.document;
+  //     const template = doc.querySelector('.page_break');
+  //     if (!template) {
+  //       alert("Template .page_break not found");
+  //       return;
+  //     }
 
-//     const productsPerPage = parseInt(template.getAttribute('product'), 10);
-//     const totalItems = entries.length;
-//     const pageCount = Math.ceil(totalItems / productsPerPage);
+  //     const productsPerPage = parseInt(template.getAttribute('product'), 10);
+  //     const totalItems = entries.length;
+  //     const pageCount = Math.ceil(totalItems / productsPerPage);
 
-//     // Clear existing
-//     const parent = template.parentElement;
-//     parent.innerHTML = '';
+  //     // Clear existing
+  //     const parent = template.parentElement;
+  //     parent.innerHTML = '';
 
-//     // Build pages
-//     for (let p = 0; p < pageCount; p++) {
-//       const clone = template.cloneNode(true);
-//       const sliceStart = p * productsPerPage;
-//       const sliceEnd = sliceStart + productsPerPage;
-//       const pageItems = entries.slice(sliceStart, sliceEnd);
+  //     // Build pages
+  //     for (let p = 0; p < pageCount; p++) {
+  //       const clone = template.cloneNode(true);
+  //       const sliceStart = p * productsPerPage;
+  //       const sliceEnd = sliceStart + productsPerPage;
+  //       const pageItems = entries.slice(sliceStart, sliceEnd);
 
-//       // Find all item slots
-//       const itemDivs = clone.querySelectorAll('[class^="item"]');
-      
-//       // Process each slot
-//       itemDivs.forEach((slot, idx) => {
-//         const dataPair = pageItems[idx];
-//         if (!dataPair) {
-//           slot.remove();
-//           return;
-//         }
-//         const [key, data] = dataPair;
-//         // Fill image
-//         if (Array.isArray(data.Images) && data.Images.length) {
-//           const imgEl = slot.querySelector('img#image');
-//           if (imgEl) imgEl.src = data.Images[0];
-//         }
+  //       // Find all item slots
+  //       const itemDivs = clone.querySelectorAll('[class^="item"]');
 
-//         // Fill table rows based on rows attribute
-//         const table = slot.querySelector('table[rows]');
-//         if (table) {
-//           const rowIds = table.getAttribute('rows').split(',').map(id => id.trim());
-//           rowIds.forEach(id => {
-//             const cell = table.querySelector(`#${id}`);
-//             if (!cell) return;
-//             const value = data[id];
-//             if (value === undefined || value === null || value === '') {
-//               // remove entire row
-//               const row = cell.closest('tr');
-//               if (row) row.remove();
-//             } else {
-//               cell.textContent = value;
-//             }
-//           });
-//         }
-//       });
+  //       // Process each slot
+  //       itemDivs.forEach((slot, idx) => {
+  //         const dataPair = pageItems[idx];
+  //         if (!dataPair) {
+  //           slot.remove();
+  //           return;
+  //         }
+  //         const [key, data] = dataPair;
+  //         // Fill image
+  //         if (Array.isArray(data.Images) && data.Images.length) {
+  //           const imgEl = slot.querySelector('img#image');
+  //           if (imgEl) imgEl.src = data.Images[0];
+  //         }
 
-//       parent.appendChild(clone);
-//     }
-//   };
-// });
+  //         // Fill table rows based on rows attribute
+  //         const table = slot.querySelector('table[rows]');
+  //         if (table) {
+  //           const rowIds = table.getAttribute('rows').split(',').map(id => id.trim());
+  //           rowIds.forEach(id => {
+  //             const cell = table.querySelector(`#${id}`);
+  //             if (!cell) return;
+  //             const value = data[id];
+  //             if (value === undefined || value === null || value === '') {
+  //               // remove entire row
+  //               const row = cell.closest('tr');
+  //               if (row) row.remove();
+  //             } else {
+  //               cell.textContent = value;
+  //             }
+  //           });
+  //         }
+  //       });
+
+  //       parent.appendChild(clone);
+  //     }
+  //   };
+  // });
 
 
-// Print Brochure Generator
-const printButton = document.getElementById('printButton');
-printButton.addEventListener('click', async () => {
-  const selectedData = selectionManager.getSelectedProducts();
-  const entries = Object.entries(selectedData);
-  if (entries.length === 0) {
-    alert('No products selected for printing');
-    return;
-  }
-
-  const printWin = window.open('/print-template', '_blank');
-  if (!printWin) {
-    alert('Popup blocked! Please allow popups for this site.');
-    return;
-  }
-
-  printWin.onload = () => {
-    const doc = printWin.document;
-    const template = doc.querySelector('.page_break');
-    if (!template) {
-      alert("Template .page_break not found");
+  // Print Brochure Generator
+  const printButton = document.getElementById('printButton');
+  printButton.addEventListener('click', async () => {
+    const selectedData = selectionManager.getSelectedProducts();
+    const entries = Object.entries(selectedData);
+    if (entries.length === 0) {
+      alert('No products selected for printing');
       return;
     }
 
-    // Store original template for repeated clones (preserves full rows intact)
-    const rawTemplate = template.cloneNode(true);
-    const parent = template.parentElement;
-
-    const productsPerPage = parseInt(rawTemplate.getAttribute('product'), 10);
-    const totalItems = entries.length;
-    const pageCount = Math.ceil(totalItems / productsPerPage);
-
-    // Remove the initial template node, we'll rebuild entirely
-    parent.removeChild(template);
-
-    // Build pages
-    for (let p = 0; p < pageCount; p++) {
-      const clone = rawTemplate.cloneNode(true);
-      const pageItems = entries.slice(p * productsPerPage, (p + 1) * productsPerPage);
-      const itemDivs = clone.querySelectorAll('[class^="item"]');
-
-      itemDivs.forEach((slot, idx) => {
-        const dataPair = pageItems[idx];
-        if (!dataPair) {
-          slot.remove();
-          return;
-        }
-        const [key, data] = dataPair;
-
-        // Fill image if available
-        if (Array.isArray(data.Images) && data.Images.length) {
-          const imgEl = slot.querySelector('img#image');
-          if (imgEl) imgEl.src = data.Images[0];
-        }
-
-        // Fill table rows based on rows attribute
-        const table = slot.querySelector('table[rows]');
-        if (table) {
-          const rowIds = table.getAttribute('rows')
-            .split(',')
-            .map(id => id.trim());
-
-          rowIds.forEach(id => {
-            const cell = table.querySelector(`#${id}`);
-            if (!cell) return;
-            const displayKey = id.replace(/_/g, ' ');
-            const value = data[displayKey];
-            if (value === undefined || value === null || value === '') {
-              // remove entire row
-              const row = cell.closest('tr');
-              if (row) row.remove();
-            } else {
-              // Clean id for display if needed
-              const displayKey = id.replace(/_/g, ' ');
-              cell.previousElementSibling.textContent = displayKey;
-              cell.textContent = value;
-            }
-          });
-        }
-      });
-
-      parent.appendChild(clone);
+    const printWin = window.open('/print-template', '_blank');
+    if (!printWin) {
+      alert('Popup blocked! Please allow popups for this site.');
+      return;
     }
-  };
-});
 
-  
+    printWin.onload = () => {
+      const doc = printWin.document;
+      const template = doc.querySelector('.page_break');
+      if (!template) {
+        alert("Template .page_break not found");
+        return;
+      }
+
+      // Clone the full page template (so we preserve the original for each page)
+      const rawTemplate = template.cloneNode(true);
+      const parent = template.parentElement;
+
+      // Read the list of row-IDs once from the page_break div
+      const rowIds = rawTemplate
+        .getAttribute('rows')
+        .split(',')
+        .map(id => id.trim());
+
+      // How many items per page
+      const productsPerPage = parseInt(rawTemplate.getAttribute('product'), 10);
+      const totalItems = entries.length;
+      const pageCount = Math.ceil(totalItems / productsPerPage);
+
+      // Remove the original placeholder
+      parent.removeChild(template);
+
+      // Build each page
+      for (let p = 0; p < pageCount; p++) {
+        const clone = rawTemplate.cloneNode(true);
+        const pageItems = entries.slice(p * productsPerPage, (p + 1) * productsPerPage);
+        const itemDivs = clone.querySelectorAll('[class^="item"]');
+
+        itemDivs.forEach((slot, idx) => {
+          const dataPair = pageItems[idx];
+          if (!dataPair) {
+            // No more items → drop this slot
+            slot.remove();
+            return;
+          }
+          const [key, data] = dataPair;
+
+          // — Image —
+          if (Array.isArray(data.Images) && data.Images.length) {
+            const imgEl = slot.querySelector('img#image');
+            if (imgEl) imgEl.src = data.Images[0];
+          }
+
+          // — Details table —
+          const table = slot.querySelector('table');
+          if (table) {
+            rowIds.forEach(id => {
+              const cell = table.querySelector(`#${id}`);
+              if (!cell) return;
+
+              // Convert “Main_Stone_Color” → “Main Stone Color”
+              const displayKey = id.replace(/_/g, ' ');
+              const value = data[displayKey];
+
+              if (value === undefined || value === null || value === '') {
+                // remove entire <tr>
+                const row = cell.closest('tr');
+                if (row) row.remove();
+              } else {
+                // set label + value
+                const labelCell = cell.previousElementSibling;
+                if (labelCell) labelCell.textContent = displayKey;
+                cell.textContent = value;
+              }
+            });
+          }
+        });
+
+        parent.appendChild(clone);
+      }
+
+
+    };
+  });
+
+
 });
 
