@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const filtered = productsData.filter(item =>
       item["Start Price"] >= min &&
       item["Start Price"] <= max
-      
+
     );
 
 
@@ -111,51 +111,53 @@ document.addEventListener('DOMContentLoaded', () => {
     // dataPro = productsData;
     dataPro = filtered;
 
-    let ImageGetterDict = await imageGetter()  ;
+    let ImageGetterDict = await imageGetter();
     console.log('ImageGetterDict:', ImageGetterDict);
     imageDict = ImageGetterDict;
 
     showProducts(filtered, settingKeys, ImageGetterDict); // card generator call function
 
+    const sorter = document.getElementById('sortDropdownContainer');
+    sorter.style.display = 'block'; // Show the sorting dropdown
   });
 
 
-   // Reference to the dropdown element
-    const dropdownElement = document.getElementById('sortDropdown');
-    const placeholderOption = dropdownElement.options[0];
+  // Reference to the dropdown element
+  const dropdownElement = document.getElementById('sortDropdown');
+  const placeholderOption = dropdownElement.options[0];
 
-     // Sorting function: takes list and order ('highToLow' or 'lowToHigh')
-    function sortItemsByStartPrice(list, order) {
-      return list.slice().sort((a, b) => {
-        const priceA = a['Start Price'];
-        const priceB = b['Start Price'];
-        return order === 'highToLow' ? priceB - priceA : priceA - priceB;
-      });
-    }
-
-    dropdownElement.addEventListener('change', function(event) {
-      const selectedIndex = event.target.selectedIndex;
-      const selectedOption = event.target.options[selectedIndex];
-      const selectedValue = selectedOption.value;
-      const selectedText = selectedOption.text;
-
-      // Update placeholder text
-      placeholderOption.text = `Sort By: ${selectedText}`;
-
-      // Reset selection back to placeholder
-      dropdownElement.selectedIndex = 0;
-
-      // Call your sorting function here based on selectedValue
-      console.log('Sorting order chosen:', selectedValue);
-      // e.g., sortItems(selectedValue);
-
-     let sampledata = dataPro;
-      // Perform sorting
-      const sortedList = sortItemsByStartPrice(sampledata, selectedValue);
-      console.log('Sorted List of Products :', sortedList);
-      showProducts(sortedList, settingKeys , imageDict); // card generator call function
-
+  // Sorting function: takes list and order ('highToLow' or 'lowToHigh')
+  function sortItemsByStartPrice(list, order) {
+    return list.slice().sort((a, b) => {
+      const priceA = a['Start Price'];
+      const priceB = b['Start Price'];
+      return order === 'highToLow' ? priceB - priceA : priceA - priceB;
     });
+  }
+
+  dropdownElement.addEventListener('change', function (event) {
+    const selectedIndex = event.target.selectedIndex;
+    const selectedOption = event.target.options[selectedIndex];
+    const selectedValue = selectedOption.value;
+    const selectedText = selectedOption.text;
+
+    // Update placeholder text
+    placeholderOption.text = `Sort By: ${selectedText}`;
+
+    // Reset selection back to placeholder
+    dropdownElement.selectedIndex = 0;
+
+    // Call your sorting function here based on selectedValue
+    console.log('Sorting order chosen:', selectedValue);
+    // e.g., sortItems(selectedValue);
+
+    let sampledata = dataPro;
+    // Perform sorting
+    const sortedList = sortItemsByStartPrice(sampledata, selectedValue);
+    console.log('Sorted List of Products :', sortedList);
+    showProducts(sortedList, settingKeys, imageDict); // card generator call function
+
+  });
 
   document.getElementById("SelectedProductsNavFront")?.addEventListener("change", () => {
     const selectedData = selectionManager.getSelectedProducts();
@@ -178,7 +180,8 @@ document.addEventListener('DOMContentLoaded', () => {
     showProducts(dataPro, settingKeys, imageDict);  // Shows all products again
 
     const printButton = document.getElementById('printButton');
-      printButton.style.display = 'none';
+
+    printButton.style.display = 'none';
 
   });
 
@@ -272,98 +275,221 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // assume all cards are rendered inside #cards-container
-const cardsContainer = document.getElementById('cards-container');
+  const cardsContainer = document.getElementById('cards-container');
 
-cardsContainer.addEventListener('click', e => {
-  // find the closest .card ancestor of whatever was clicked
-  const card = e.target.closest('.card');
-  if (!card) return;               // click was outside any card
-  if (e.target.matches('input[type="checkbox"]')) return;  // let real checkbox clicks go through
+  cardsContainer.addEventListener('click', e => {
+    // find the closest .card ancestor of whatever was clicked
+    const card = e.target.closest('.card');
+    if (!card) return;               // click was outside any card
+    if (e.target.matches('input[type="checkbox"]')) return;  // let real checkbox clicks go through
 
-  // find the checkbox inside this card, and toggle it
-  const cb = card.querySelector('input[type="checkbox"]');
-  if (cb) {
-    cb.click();  // this toggles checked-state and fires existing handlers
-  }
-});
+    // find the checkbox inside this card, and toggle it
+    const cb = card.querySelector('input[type="checkbox"]');
+    if (cb) {
+      cb.click();  // this toggles checked-state and fires existing handlers
+    }
+  });
 
-  const printButton = document.getElementById('printButton');
-  printButton.addEventListener('click', async () => {
+  // const printButton = document.getElementById('printButton');
+  // printButton.addEventListener('click', async () => {
+  //   const selectedData = selectionManager.getSelectedProducts();
+  //   if (Object.keys(selectedData).length === 0) {
+  //     alert('No products selected for printing');
+  //     return;
+  //   }
+
+  //   const printWindow = window.open('/print-template', '_blank');
+  //   if (!printWindow) {
+  //     alert('Popup blocked! Please allow popups for this site.');
+  //     return;
+  //   }
+
+  //   let data = window.selectionManager.getSelectedProducts()
+
+  //   // Wait until the new window fully loads
+  //   printWindow.onload = () => {
+  //     const doc = printWindow.document;
+  //     const container = doc.querySelector('.container');
+  //     if (!container) {
+  //       alert("Couldn't find container in the loaded broucher.html");
+  //       return;
+  //     }
+
+  //     Object.entries(data).forEach(([key, value]) => {
+  //       console.log("Key:", key);         // "ring123"
+  //       console.log("Value:", value);     // { "Start Price": 100, ... }
+  //     });
+
+  //   };
+  // });
+
+// Print Brochure Generator
+// const printButton = document.getElementById('printButton');
+// printButton.addEventListener('click', async () => {
+//   const selectedData = selectionManager.getSelectedProducts();
+//   const entries = Object.entries(selectedData);
+//   if (entries.length === 0) {
+//     alert('No products selected for printing');
+//     return;
+//   }
+
+//   const printWin = window.open('/print-template', '_blank');
+//   if (!printWin) {
+//     alert('Popup blocked! Please allow popups for this site.');
+//     return;
+//   }
+
+//   printWin.onload = () => {
+//     const doc = printWin.document;
+//     const template = doc.querySelector('.page_break');
+//     if (!template) {
+//       alert("Template .page_break not found");
+//       return;
+//     }
+
+//     const productsPerPage = parseInt(template.getAttribute('product'), 10);
+//     const totalItems = entries.length;
+//     const pageCount = Math.ceil(totalItems / productsPerPage);
+
+//     // Clear existing
+//     const parent = template.parentElement;
+//     parent.innerHTML = '';
+
+//     // Build pages
+//     for (let p = 0; p < pageCount; p++) {
+//       const clone = template.cloneNode(true);
+//       const sliceStart = p * productsPerPage;
+//       const sliceEnd = sliceStart + productsPerPage;
+//       const pageItems = entries.slice(sliceStart, sliceEnd);
+
+//       // Find all item slots
+//       const itemDivs = clone.querySelectorAll('[class^="item"]');
+      
+//       // Process each slot
+//       itemDivs.forEach((slot, idx) => {
+//         const dataPair = pageItems[idx];
+//         if (!dataPair) {
+//           slot.remove();
+//           return;
+//         }
+//         const [key, data] = dataPair;
+//         // Fill image
+//         if (Array.isArray(data.Images) && data.Images.length) {
+//           const imgEl = slot.querySelector('img#image');
+//           if (imgEl) imgEl.src = data.Images[0];
+//         }
+
+//         // Fill table rows based on rows attribute
+//         const table = slot.querySelector('table[rows]');
+//         if (table) {
+//           const rowIds = table.getAttribute('rows').split(',').map(id => id.trim());
+//           rowIds.forEach(id => {
+//             const cell = table.querySelector(`#${id}`);
+//             if (!cell) return;
+//             const value = data[id];
+//             if (value === undefined || value === null || value === '') {
+//               // remove entire row
+//               const row = cell.closest('tr');
+//               if (row) row.remove();
+//             } else {
+//               cell.textContent = value;
+//             }
+//           });
+//         }
+//       });
+
+//       parent.appendChild(clone);
+//     }
+//   };
+// });
+
+
+// Print Brochure Generator
+const printButton = document.getElementById('printButton');
+printButton.addEventListener('click', async () => {
   const selectedData = selectionManager.getSelectedProducts();
-  if (Object.keys(selectedData).length === 0) {
+  const entries = Object.entries(selectedData);
+  if (entries.length === 0) {
     alert('No products selected for printing');
     return;
   }
 
-  const imageDict = window.imageDict || {};  // Adjust as per actual usage
-
-  const printWindow = window.open('/print-template', '_blank');
-  if (!printWindow) {
+  const printWin = window.open('/print-template', '_blank');
+  if (!printWin) {
     alert('Popup blocked! Please allow popups for this site.');
     return;
   }
 
-  // Wait until the new window fully loads
-  printWindow.onload = () => {
-    const doc = printWindow.document;
-    const container = doc.querySelector('.container');
-    if (!container) {
-      alert("Couldn't find container in the loaded broucher.html");
+  printWin.onload = () => {
+    const doc = printWin.document;
+    const template = doc.querySelector('.page_break');
+    if (!template) {
+      alert("Template .page_break not found");
       return;
     }
 
-    // Remove existing product blocks (except cover page)
-    const pages = doc.querySelectorAll('.page_break');
-    pages.forEach(p => p.remove());
+    // Store original template for repeated clones (preserves full rows intact)
+    const rawTemplate = template.cloneNode(true);
+    const parent = template.parentElement;
 
-    let count = 0;
-    let currentPage = null;
+    const productsPerPage = parseInt(rawTemplate.getAttribute('product'), 10);
+    const totalItems = entries.length;
+    const pageCount = Math.ceil(totalItems / productsPerPage);
 
-    for (const [productId, product] of Object.entries(selectedData)) {
-      if (count % 2 === 0) {
-        // Start a new page
-        currentPage = doc.createElement('div');
-        currentPage.className = 'page_break';
-        container.appendChild(currentPage);
-      }
+    // Remove the initial template node, we'll rebuild entirely
+    parent.removeChild(template);
 
-      const item = doc.createElement('div');
-      item.className = count % 2 === 0 ? 'item1' : 'item2';
+    // Build pages
+    for (let p = 0; p < pageCount; p++) {
+      const clone = rawTemplate.cloneNode(true);
+      const pageItems = entries.slice(p * productsPerPage, (p + 1) * productsPerPage);
+      const itemDivs = clone.querySelectorAll('[class^="item"]');
 
-      const imageUrls = product.Image || []; // Assuming it's an array
-      const firstImageKey = Array.isArray(imageUrls) ? imageUrls[0] : imageUrls;
-      const imageUrl = imageDict[firstImageKey] || 'https://via.placeholder.com/300';
+      itemDivs.forEach((slot, idx) => {
+        const dataPair = pageItems[idx];
+        if (!dataPair) {
+          slot.remove();
+          return;
+        }
+        const [key, data] = dataPair;
 
-      item.innerHTML = `
-        <div class="pic">
-          <img src="${imageUrl}" alt="Product Image">
-        </div>
-        <div class="product-details">
-          <h3>Product Details</h3>
-          <table>
-            <tr><td><strong>Metal</strong></td><td>${product.Metal || ''}</td></tr>
-            <tr><td>Metal Purity</td><td>${product['Metal Purity'] || ''}</td></tr>
-            <tr><td><strong>Main Stone</strong></td><td>${product['Main Stone'] || ''}</td></tr>
-            <tr><td><strong>Main Stone Shape</strong></td><td>${product['Main Stone Shape'] || ''}</td></tr>
-            <tr><td><strong>Main Stone Color</strong></td><td>${product['Main Stone Color'] || ''}</td></tr>
-            <tr><td><strong>Main Stone Creation</strong></td><td>${product['Main Stone Creation'] || ''}</td></tr>
-            <tr><td><strong>Gross Weight(Gram)</strong></td><td>${product['Gross Weight(Gram)'] || ''}</td></tr>
-            <tr><td><strong>Ring Size</strong></td><td>${product['Ring Size'] || ''}</td></tr>
-            <tr><td><strong>Style</strong></td><td>${product.Style || ''}</td></tr>
-            <tr><td><strong>Certification</strong></td><td>${product.Certification || ''}</td></tr>
-          </table>
-        </div>
-      `;
+        // Fill image if available
+        if (Array.isArray(data.Images) && data.Images.length) {
+          const imgEl = slot.querySelector('img#image');
+          if (imgEl) imgEl.src = data.Images[0];
+        }
 
-      currentPage.appendChild(item);
-      count++;
+        // Fill table rows based on rows attribute
+        const table = slot.querySelector('table[rows]');
+        if (table) {
+          const rowIds = table.getAttribute('rows')
+            .split(',')
+            .map(id => id.trim());
+
+          rowIds.forEach(id => {
+            const cell = table.querySelector(`#${id}`);
+            if (!cell) return;
+            const displayKey = id.replace(/_/g, ' ');
+            const value = data[displayKey];
+            if (value === undefined || value === null || value === '') {
+              // remove entire row
+              const row = cell.closest('tr');
+              if (row) row.remove();
+            } else {
+              // Clean id for display if needed
+              const displayKey = id.replace(/_/g, ' ');
+              cell.previousElementSibling.textContent = displayKey;
+              cell.textContent = value;
+            }
+          });
+        }
+      });
+
+      parent.appendChild(clone);
     }
-
-    printWindow.focus();
-    printWindow.print();
   };
 });
 
-
+  
 });
 

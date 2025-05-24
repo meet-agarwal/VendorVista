@@ -841,3 +841,7 @@ header h1 {
     .print_button:hover {
       background-color: #0056b3;
     }
+
+    #sortDropdownContainer{
+        display: none;
+    }
