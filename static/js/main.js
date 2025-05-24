@@ -461,10 +461,26 @@ document.addEventListener('DOMContentLoaded', () => {
           }
           const [key, data] = dataPair;
 
-          // — Image —
-          if (Array.isArray(data.Images) && data.Images.length) {
-            const imgEl = slot.querySelector('img#image');
-            if (imgEl) imgEl.src = data.Images[0];
+          // Fill image
+          // Fill image
+          const folderName = data.Images;
+          const sources = Array.isArray(imageDict[folderName])
+            ? imageDict[folderName]
+            : [];
+          const imgEl = slot.querySelector('img#image');
+
+          if (sources && sources[0]) {
+                const imageUrl = sources[0].replace('C:\\Users\\dell\\Documents\\VendorVista', '');
+                const img = imgEl || document.createElement('img');
+                img.src = `../${imageUrl}`;
+                img.alt = 'product Image';
+               // img.style.objectFit = 'cover';
+            // } else {
+            //     // Placeholder if image not found
+            //     imageSection.style.backgroundColor = '#f0f0f0';
+            //     imageSection.style.minHeight = '150px';
+            //     imageSection.textContent = 'No Image Available';
+            // }
           }
 
           // — Details table —
