@@ -202,9 +202,13 @@
             }
 
             .page_break {
+               .page_break {
                 page-break-inside: avoid;
                 padding-top: 3rem;
                 padding-bottom: 3rem;
+                margin: 50px 0; /* visible spacing for screen */
+                border-top: 2px dashed #ccc; /* optional: to visually show the separation */
+            }
             }
         }
     </style>
@@ -213,6 +217,8 @@
 <body>
 
     <div class="container">
+        <div id="first_page"></div>
+
         <div class="page_break" product="2"
             rows="Metal,Metal_Purity,Main_Stone,Main_Stone_Shape,Main_Stone_Color,Main_Stone_Creation,Weight,Ring_Size,Style,Store_Category">
 
@@ -319,9 +325,11 @@
             </div>
         </div>
 
+        <div id="last_page"></div>
+
     </div>
 
-    <div id="State" donePopulating="false"></div>
+    <div id="State" donePopulating="false" Extrapage="false"></div>
 
    <script>
     const state = document.getElementById('State');
@@ -343,8 +351,27 @@
         return await response.json();
     }
 
+    async function getFIRSTnLAST() {
+        const response = await fetch('/api/getFIRSTnLAST', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to save template');
+        }
+
+        return await response.json();
+    }
+
+
     async function checkPopulated() {
-        if (state.getAttribute('donePopulating') === 'true') {
+        if (state.getAttribute('donePopulating') === 'true' && state.getAttribute('Extrapage') === 'true') {
+            const lastPageElement = document.getElementById('last_page');
+                lastPageElement.innerHTML = lastPage;
+
             const htmlContent = document.documentElement.outerHTML;
             console.log('HTML Content:', htmlContent);
 
@@ -370,6 +397,8 @@
                     console.warn('Backend did not confirm save success.');
                 }
 
+                
+
             } catch (error) {
                 console.error('Error during save or image update:', error);
             }
@@ -378,7 +407,30 @@
         }
     }
 
-    checkPopulated();
+    let lastPage;
+
+    getFIRSTnLAST().then(data => {
+        console.log('FIRSTnLAST data:', data);
+        const first = data.first_page;
+        lastPage = data.last_page;
+
+        const Firstoutput = first.replace(/<body>/g, '').replace(/<\/body>/g, '');
+        console.log(Firstoutput);
+        const Lastoutput = lastPage.replace(/<body>/g, '').replace(/<\/body>/g, '');
+        console.log(Lastoutput);
+
+        lastPage = Lastoutput;
+
+        const firstPage = document.getElementById('first_page');
+        firstPage.innerHTML = Firstoutput;
+        document.getElementById('State').setAttribute('Extrapage', 'true');
+        checkPopulated();
+
+    }).catch(error => {
+        console.error('Error fetching FIRSTnLAST data:', error);
+    });
+
+    
 </script>
 
 

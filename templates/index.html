@@ -18,16 +18,22 @@
             <button class="settings-btn">
                 <i class="fas fa-cog"></i> <!-- Font Awesome gear icon -->
             </button>
-            <div class="settings-popup">
-                <div class="popup-content">
-
-                    <div class="popup-title preserve">Cards Table Options</div>
-                    <!-- Checkboxes injected by JS -->
+            <div class="setting_div">
+                <div id="pathSetting">
+                    
                 </div>
-                <button id="setting_submit" class="preserve">
-                    Apply
-                </button>
+                <div class="settings-popup">
+                    <div class="popup-content">
+
+                        <div class="popup-title preserve">Cards Table Options</div>
+                        <!-- Checkboxes injected by JS -->
+                    </div>
+                    <button id="setting_submit" class="preserve">
+                        Apply
+                    </button>
+                </div>
             </div>
+
         </div>
     </header>
 
@@ -87,15 +93,15 @@
             </div>
 
             <!-- Dropdown container -->
-            <div id="sortDropdownContainer" >
+            <div id="sortDropdownContainer">
                 <div class="sorter">
                     <select id="sortDropdown" class="sortDropdownClass">
-                    <!-- Placeholder option, dynamically updated -->
-                    <option value="" disabled selected hidden>Sort By</option>
-                    <!-- Actionable options -->
-                    <option value="highToLow" id="optionHighToLow">Price High to Low</option>
-                    <option value="lowToHigh" id="optionLowToHigh">Price Low to High</option>
-                </select>
+                        <!-- Placeholder option, dynamically updated -->
+                        <option value="" disabled selected hidden>Sort By</option>
+                        <!-- Actionable options -->
+                        <option value="highToLow" id="optionHighToLow">Price High to Low</option>
+                        <option value="lowToHigh" id="optionLowToHigh">Price Low to High</option>
+                    </select>
                 </div>
                 <div class="clearAll" style="">
                     <div class="counterSelected" style="margin-right: 1rem;">

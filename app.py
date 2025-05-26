@@ -200,6 +200,27 @@ def save_template():
     except Exception as e:
         app.logger.exception("save_template error")
         return jsonify({'error': str(e)}), 500
+    
+@app.route('/api/getFIRSTnLAST', methods=['GET'])
+def getpages():
+    try:
+        first_page_path = r"C:\Users\dell\Documents\first.html"
+        last_page_path = r"C:\Users\dell\Documents\last.html"
+
+        if not os.path.exists(first_page_path) or not os.path.exists(last_page_path):
+            return jsonify({'error': 'Required HTML files not found'}), 404
+
+        from getFrontnlast import HTMLContentExtractor
+        extractor = HTMLContentExtractor(first_page_path, last_page_path)
+        first_page_content, last_page_content = extractor.get_first_and_last_page_content()
+
+        return jsonify({
+            'first_page': first_page_content,
+            'last_page': last_page_content
+        })
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
