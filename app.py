@@ -3,6 +3,7 @@ import filterTypes
 import filter_hierarchy
 import getProductData
 import getDataBase
+import subprocess
 from herirachy_manager import HierarchyManager  # Import the HierarchyManager class 
 import json
 from flask import Response
@@ -12,6 +13,8 @@ import os
 import pdfkit
 from config import Config  # Import the configuration settings
 from datetime import datetime
+
+
 app = Flask(__name__)
 
 filterd_products_Dict = getProductData.GetProductsData()
@@ -137,6 +140,27 @@ def custom_static(filename):
 def print_template():
     return render_template('broucher.html')
 
+def savePDF(htmlPath, pdfPath):
+    # Chrome executable path
+    chromePath = r'C:\Program Files\Google\Chrome\Application\chrome.exe'
+
+    # Construct the command
+    cmd = [
+        chromePath,
+        '--headless',
+        '--disable-gpu',
+        f'--print-to-pdf={pdfPath}',
+        htmlPath
+    ]
+
+    # Run the command
+    try:
+        subprocess.run(cmd, check=True)
+        print("PDF generated successfully.")
+    except subprocess.CalledProcessError as e:
+        print("Failed to generate PDF:", e)
+    
+    
 @app.route('/save-template', methods=['POST'])
 def save_template():
     try:
@@ -162,11 +186,18 @@ def save_template():
         pdf_filename = f'{base_filename}.pdf'
         pdf_filepath = os.path.join(downloads_dir, pdf_filename)
 
+        savePDF(html_filepath, pdf_filepath)
+        
         # PDF options (allow local file access so embedded images/CSS work)
         options = {
             'encoding': 'UTF-8',
             'quiet': '',
-            'enable-local-file-access': ''
+            'enable-local-file-access': '',
+            'print-media-type': '',
+            'margin-top': '0mm',
+            'margin-bottom': '0mm',
+            'margin-left': '0mm',
+            'margin-right': '0mm'
         }
 
         # 3a. Try direct conversion from string
