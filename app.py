@@ -188,38 +188,8 @@ def save_template():
 
         savePDF(html_filepath, pdf_filepath)
         
-        # PDF options (allow local file access so embedded images/CSS work)
-        options = {
-            'encoding': 'UTF-8',
-            'quiet': '',
-            'enable-local-file-access': '',
-            'print-media-type': '',
-            'margin-top': '0mm',
-            'margin-bottom': '0mm',
-            'margin-left': '0mm',
-            'margin-right': '0mm'
-        }
 
-        # 3a. Try direct conversion from string
-        try:
-            pdfkit.from_string(html_content, pdf_filepath,
-                               options=options,
-                               configuration=Config.WKHTMLTOPDF_PATH)
-        except Exception as direct_e:
-            app.logger.warning(f"Direct conversion failed: {direct_e}. Falling back to hosted URL.")
-
-            # 3b. Fallback: convert using your hosted /print-template endpoint
-            hosted_url = request.url_root.rstrip('/') + '/print-template'
-            try:
-                pdfkit.from_url(hosted_url, pdf_filepath,
-                                options=options,
-                                configuration=Config.WKHTMLTOPDF_PATH)
-            except Exception as url_e:
-                app.logger.error(f"Hosted conversion also failed: {url_e}")
-                # Both methods failed
-                raise Exception(f"PDF conversion failed (direct: {direct_e}; hosted: {url_e})")
-
-        # 4. Return paths (or you could return a download URL if you add a route)
+       
         return jsonify({
             'status': 'success',
             'message': 'HTML saved and PDF generated successfully',
