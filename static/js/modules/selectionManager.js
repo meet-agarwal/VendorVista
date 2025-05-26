@@ -8,10 +8,19 @@ export class SelectionManager {
             this.selectedProducts.set(productId, productData);
             console.log(`Product selected: ${productId}`, productData); 
             console.log(`Selected products:`, this.selectedProducts);
-            
-            
+
+            let counter = document.getElementById('selectedCount');
+            let count = counter.textContent;
+            count++;
+            counter.textContent = count;
+           
         } else {
             this.selectedProducts.delete(productId);
+
+            let counter = document.getElementById('selectedCount');
+            let count = counter.textContent;
+            count--;
+            counter.textContent = count;
         }
     }
 

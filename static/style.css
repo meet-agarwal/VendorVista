@@ -1,7 +1,3 @@
-
-
-
-
 /* Base styles */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -9,8 +5,9 @@ body {
     padding: 0;
     background-color: #f8f9fa;
     color: #333;
-  
-    padding-top: 0px; /* push content down globally */
+
+    padding-top: 0px;
+    /* push content down globally */
 
 
 }
@@ -23,7 +20,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
 
     /* Add these */
     position: fixed;
@@ -36,7 +33,7 @@ header {
 header img {
     height: 40px;
     margin-right: 15px;
-    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
 }
 
 header h1 {
@@ -49,10 +46,11 @@ header h1 {
 .container {
     display: flex;
     max-width: 1400px;
-    margin: 100px auto 20px; /* top margin increased */
+    margin: 100px auto 20px;
+    /* top margin increased */
     background-color: white;
     border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
     overflow: hidden;
 }
 
@@ -91,7 +89,8 @@ header h1 {
     transform: rotate(0deg);
 }
 
-.filter-label:hover, .filter-label:focus {
+.filter-label:hover,
+.filter-label:focus {
     color: #007BFF;
     outline: none;
 }
@@ -154,7 +153,7 @@ header h1 {
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     padding: 18px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     margin-bottom: 20px;
     background-color: white;
     transition: box-shadow 0.3s ease;
@@ -163,7 +162,7 @@ header h1 {
 }
 
 .price-filter:hover {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .price-filter-header {
@@ -207,7 +206,7 @@ header h1 {
 .price-dropdown-toggle:focus {
     outline: none;
     border-color: #007BFF;
-    box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
 .price-dropdown-toggle:after {
@@ -228,7 +227,7 @@ header h1 {
     background: white;
     border: 1px solid #e0e0e0;
     border-radius: 6px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     z-index: 100;
     max-height: 200px;
     overflow-y: auto;
@@ -237,8 +236,15 @@ header h1 {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .price-dropdown-menu.show {
@@ -282,7 +288,7 @@ header h1 {
     border-radius: 50%;
     background: #007BFF;
     cursor: pointer;
-    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     transition: transform 0.2s ease;
 }
 
@@ -296,7 +302,7 @@ header h1 {
     border-radius: 50%;
     background: #007BFF;
     cursor: pointer;
-    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     transition: transform 0.2s ease;
 }
 
@@ -349,7 +355,7 @@ header h1 {
     margin-top: -1px;
 }
 
-#apply_filters_button{
+#apply_filters_button {
     display: none;
 }
 
@@ -366,19 +372,19 @@ header h1 {
     transition: all 0.3s ease;
     font-weight: 500;
     letter-spacing: 0.5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .apply_filters_btn:hover {
     background-color: #0056b3;
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .apply_filters_btn:active {
     background-color: #004494;
     transform: translateY(1px);
-    box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
 }
 
 /* Card container styles */
@@ -387,7 +393,7 @@ header h1 {
     border-radius: 10px;
     overflow: hidden;
     width: 100%;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
     display: flex;
     flex-direction: column;
     height: 350px;
@@ -397,7 +403,7 @@ header h1 {
 
 .card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
 }
 
 /* Image section styles (top half) */
@@ -540,7 +546,7 @@ header h1 {
     background: white;
     border: none;
     border-radius: 10px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
     display: none;
     min-width: 250px;
     z-index: 1000;
@@ -549,8 +555,15 @@ header h1 {
 }
 
 @keyframes slideDown {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .settings-popup.show {
@@ -667,11 +680,12 @@ header h1 {
     .container {
         flex-direction: column;
     }
-    
-    .filter-panel, .product-listing {
+
+    .filter-panel,
+    .product-listing {
         width: 100%;
     }
-    
+
     .product-grid {
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     }
@@ -681,23 +695,24 @@ header h1 {
     .product-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .card {
         height: auto;
     }
 }
 
 .selection-counter {
-  position: sticky;
-  bottom: 0%; /* Adjust based on your submit button height */
-  left: 100%;
-  right: 0%;
-  /* padding: 8px 16px; */
-  background-color: #f8f9fa;
-  /* border-top: 1px solid #dee2e6; */
-  text-align: center;
-  font-weight: bold;
-  z-index: 10;
+    position: sticky;
+    bottom: 0%;
+    /* Adjust based on your submit button height */
+    left: 100%;
+    right: 0%;
+    /* padding: 8px 16px; */
+    background-color: #f8f9fa;
+    /* border-top: 1px solid #dee2e6; */
+    text-align: center;
+    font-weight: bold;
+    z-index: 10;
 }
 
 .popup-title {
@@ -717,131 +732,208 @@ header h1 {
 
 /* dd */
 
- /* Container */
-    #filter-container {
-      max-width: 400px;
-      margin: 2rem auto;
-      font-family: sans-serif;
-    }
-    /* Slider track and range */
-    .filter-slider-container {
-      position: relative;
-      width: 100%;
-      height: 6px;
-      background: #e0e0e0;
-      border-radius: 3px;
-      margin-bottom: 1rem;
-      --min: 0;
-      --max: 100;
-      --val-min: 0;
-      --val-max: 100;
-    }
-    .filter-slider-track {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background: transparent;
-      border-radius: 3px;
-    }
-    .filter-slider-range {
-      position: absolute;
-      height: 100%;
-      background: #3b82f6;
-      left: calc((var(--val-min) - var(--min)) / (var(--max) - var(--min)) * 100%);
-      width: calc((var(--val-max) - var(--val-min)) / (var(--max) - var(--min)) * 100%);
-      border-radius: 3px;
-    }
-    /* Thumbs */
-    .filter-slider-thumb {
-      position: absolute;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      width: 16px;
-      height: 16px;
-      background: #fff;
-      border: 2px solid #3b82f6;
-      border-radius: 50%;
-      cursor: pointer;
-      touch-action: none;
-      left: calc((var(--val-min) - var(--min)) / (var(--max) - var(--min)) * 100%);
-    }
-    #filter-slider-thumb-max.filter-slider-thumb {
-      left: calc((var(--val-max) - var(--min)) / (var(--max) - var(--min)) * 100%);
-    }
-    /* Inputs */
-    .filter-input-container {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .filter-input-container label {
-      font-size: 0.9rem;
-    }
-    .filter-input {
-      width: 4rem;
-      padding: 0.2rem;
-      font-size: 0.9rem;
-    }
-    /* Prevent text selection during drag */
-    .no-select {
-      user-select: none;
-    }
+/* Container */
+#filter-container {
+    max-width: 400px;
+    margin: 2rem auto;
+    font-family: sans-serif;
+}
 
-     /* Wrapper for positioning the arrow */
-    #sortDropdownContainer {
-      position: relative;
-      display: inline-block;
-      margin-bottom: 1rem;
-    }
+/* Slider track and range */
+.filter-slider-container {
+    position: relative;
+    width: 100%;
+    height: 6px;
+    background: #e0e0e0;
+    border-radius: 3px;
+    margin-bottom: 1rem;
+    --min: 0;
+    --max: 100;
+    --val-min: 0;
+    --val-max: 100;
+}
 
-    /* Style dropdown with only bottom border, custom arrow, and remove default styling */
-    .sortDropdownClass {
-      padding: 8px 12px;
-      padding-right: 30px; /* space for arrow */
-      font-size: 16px;
-      border: none;
-      border-bottom: 1px solid #ccc;
-      background-color: #fff;
-      cursor: pointer;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-      outline: none;
+.filter-slider-track {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border-radius: 3px;
+}
 
-      /* Custom arrow using SVG data URI */
-      background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path fill='none' stroke='%23666' stroke-width='2' d='M1 1l4 4 4-4'/></svg>");
-      background-repeat: no-repeat;
-      background-position: right 8px center;
-      background-size: 10px 6px;
-    }
+.filter-slider-range {
+    position: absolute;
+    height: 100%;
+    background: #3b82f6;
+    left: calc((var(--val-min) - var(--min)) / (var(--max) - var(--min)) * 100%);
+    width: calc((var(--val-max) - var(--val-min)) / (var(--max) - var(--min)) * 100%);
+    border-radius: 3px;
+}
 
-    /* Change bottom border color on focus */
-    .sortDropdownClass:focus {
-      border-bottom-color: #666;
-      box-shadow: none;
-    }
+/* Thumbs */
+.filter-slider-thumb {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    border: 2px solid #3b82f6;
+    border-radius: 50%;
+    cursor: pointer;
+    touch-action: none;
+    left: calc((var(--val-min) - var(--min)) / (var(--max) - var(--min)) * 100%);
+}
 
-        .print_button {
-      position: fixed;
-      bottom: 40px;
-      right: 40px;
-      background-color: #6c9fd6;
-      color: white;
-      border: none;
-      border-radius: 5%;
-      width: 10rem;
-      height: 60px;
-      font-size: 24px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      cursor: pointer;
-      z-index: 1000;
-      display: none;
-    }
+#filter-slider-thumb-max.filter-slider-thumb {
+    left: calc((var(--val-max) - var(--min)) / (var(--max) - var(--min)) * 100%);
+}
 
-    .print_button:hover {
-      background-color: #0056b3;
-    }
+/* Inputs */
+.filter-input-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
 
-    #sortDropdownContainer{
-        display: none;
-    }
+.filter-input-container label {
+    font-size: 0.9rem;
+}
+
+.filter-input {
+    width: 4rem;
+    padding: 0.2rem;
+    font-size: 0.9rem;
+}
+
+/* Prevent text selection during drag */
+.no-select {
+    user-select: none;
+}
+
+/* Wrapper for positioning the arrow */
+#sortDropdownContainer {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1rem;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px 0;
+    display: none;
+    justify-content: space-between;
+}
+
+/* Style dropdown with only bottom border, custom arrow, and remove default styling */
+.sortDropdownClass {
+    padding: 8px 12px;
+    padding-right: 30px;
+    /* space for arrow */
+    font-size: 16px;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    background-color: #fff;
+    cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    outline: none;
+
+    /* Custom arrow using SVG data URI */
+    background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path fill='none' stroke='%23666' stroke-width='2' d='M1 1l4 4 4-4'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 10px 6px;
+}
+
+/* Change bottom border color on focus */
+.sortDropdownClass:focus {
+    border-bottom-color: #666;
+    box-shadow: none;
+}
+
+.clearAll {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 8px 16px;
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    justify-content: space-between;
+}
+
+/* Enhanced Counter Styling */
+.counterSelected {
+    font-size: 14px;
+    font-weight: 600;
+    color: #495057;
+    padding: 6px 12px;
+    /* background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); */
+    border-radius: 20px;
+    /* border: 1px solid #90caf9; */
+    min-width: 80px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.counterSelected span {
+    font-weight: 700;
+}
+
+/* Enhanced Clear Button */
+.clearAllButton {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(238, 90, 82, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.clearAllButton:hover {
+    background: linear-gradient(135deg, #ee5a52 0%, #e53e3e 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(238, 90, 82, 0.4);
+}
+
+.clearAllButton:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(238, 90, 82, 0.3);
+}
+
+.clearAllButton:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.print_button {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    background-color: #6c9fd6;
+    color: white;
+    border: none;
+    border-radius: 5%;
+    width: 10rem;
+    height: 60px;
+    font-size: 24px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    z-index: 1000;
+    display: none;
+}
+
+.print_button:hover {
+    background-color: #0056b3;
+}
+

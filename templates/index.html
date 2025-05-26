@@ -87,17 +87,25 @@
             </div>
 
             <!-- Dropdown container -->
-            <div id="sortDropdownContainer">
-                <select id="sortDropdown" class="sortDropdownClass">
+            <div id="sortDropdownContainer" >
+                <div class="sorter">
+                    <select id="sortDropdown" class="sortDropdownClass">
                     <!-- Placeholder option, dynamically updated -->
                     <option value="" disabled selected hidden>Sort By</option>
                     <!-- Actionable options -->
                     <option value="highToLow" id="optionHighToLow">Price High to Low</option>
                     <option value="lowToHigh" id="optionLowToHigh">Price Low to High</option>
                 </select>
+                </div>
+                <div class="clearAll" style="">
+                    <div class="counterSelected" style="margin-right: 1rem;">
+                        <span id="selectedCount">0</span> selected
+                    </div>
+                    <button id="clearAllButton" class="clearAllButton">Clear All</button>
+                </div>
             </div>
 
-            
+
 
             <div class="product-grid" id="cards-container">
                 No Product To Display

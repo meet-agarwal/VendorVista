@@ -118,7 +118,11 @@ document.addEventListener('DOMContentLoaded', () => {
     showProducts(filtered, settingKeys, ImageGetterDict); // card generator call function
 
     const sorter = document.getElementById('sortDropdownContainer');
-    sorter.style.display = 'block'; // Show the sorting dropdown
+    sorter.style.display = 'flex'; // Show the sorting dropdown
+
+     const printButton = document.getElementById('printButton');
+
+    printButton.style.display = 'block';
   });
 
 
@@ -168,20 +172,13 @@ document.addEventListener('DOMContentLoaded', () => {
       showProducts(selectedData, settingKeys, imageDict);
     }
 
-    const printButton = document.getElementById('printButton');
-    if (Object.keys(selectedData).length === 0) {
-      printButton.style.display = 'none';
-    } else {
-      printButton.style.display = 'block';
-    }
+   
   });
 
   document.getElementById("AllProductsNavFront")?.addEventListener("change", () => {
     showProducts(dataPro, settingKeys, imageDict);  // Shows all products again
 
-    const printButton = document.getElementById('printButton');
-
-    printButton.style.display = 'none';
+   
 
   });
 
@@ -197,18 +194,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const filterContent = checkbox.closest('.filter-content');
 
       if (!filterContent) return;
-
-      // Now only find checkboxes with the same name inside the same filter-content group
-      // const groupCheckboxes = filterContent.querySelectorAll(
-      //   `input[type="checkbox"][name="${groupName}"]`
-      // );
-
-      // const checkedValues = Array.from(groupCheckboxes)
-      //   .filter(cb => cb.checked)
-      //   .map(cb => cb.value);
-
-      // const result = {};
-      // result[groupName] = checkedValues;
 
       // Define all group names exactly as they appear in the name attributes
       const allGroups = [
@@ -290,120 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // const printButton = document.getElementById('printButton');
-  // printButton.addEventListener('click', async () => {
-  //   const selectedData = selectionManager.getSelectedProducts();
-  //   if (Object.keys(selectedData).length === 0) {
-  //     alert('No products selected for printing');
-  //     return;
-  //   }
-
-  //   const printWindow = window.open('/print-template', '_blank');
-  //   if (!printWindow) {
-  //     alert('Popup blocked! Please allow popups for this site.');
-  //     return;
-  //   }
-
-  //   let data = window.selectionManager.getSelectedProducts()
-
-  //   // Wait until the new window fully loads
-  //   printWindow.onload = () => {
-  //     const doc = printWindow.document;
-  //     const container = doc.querySelector('.container');
-  //     if (!container) {
-  //       alert("Couldn't find container in the loaded broucher.html");
-  //       return;
-  //     }
-
-  //     Object.entries(data).forEach(([key, value]) => {
-  //       console.log("Key:", key);         // "ring123"
-  //       console.log("Value:", value);     // { "Start Price": 100, ... }
-  //     });
-
-  //   };
-  // });
-
-  // Print Brochure Generator
-  // const printButton = document.getElementById('printButton');
-  // printButton.addEventListener('click', async () => {
-  //   const selectedData = selectionManager.getSelectedProducts();
-  //   const entries = Object.entries(selectedData);
-  //   if (entries.length === 0) {
-  //     alert('No products selected for printing');
-  //     return;
-  //   }
-
-  //   const printWin = window.open('/print-template', '_blank');
-  //   if (!printWin) {
-  //     alert('Popup blocked! Please allow popups for this site.');
-  //     return;
-  //   }
-
-  //   printWin.onload = () => {
-  //     const doc = printWin.document;
-  //     const template = doc.querySelector('.page_break');
-  //     if (!template) {
-  //       alert("Template .page_break not found");
-  //       return;
-  //     }
-
-  //     const productsPerPage = parseInt(template.getAttribute('product'), 10);
-  //     const totalItems = entries.length;
-  //     const pageCount = Math.ceil(totalItems / productsPerPage);
-
-  //     // Clear existing
-  //     const parent = template.parentElement;
-  //     parent.innerHTML = '';
-
-  //     // Build pages
-  //     for (let p = 0; p < pageCount; p++) {
-  //       const clone = template.cloneNode(true);
-  //       const sliceStart = p * productsPerPage;
-  //       const sliceEnd = sliceStart + productsPerPage;
-  //       const pageItems = entries.slice(sliceStart, sliceEnd);
-
-  //       // Find all item slots
-  //       const itemDivs = clone.querySelectorAll('[class^="item"]');
-
-  //       // Process each slot
-  //       itemDivs.forEach((slot, idx) => {
-  //         const dataPair = pageItems[idx];
-  //         if (!dataPair) {
-  //           slot.remove();
-  //           return;
-  //         }
-  //         const [key, data] = dataPair;
-  //         // Fill image
-  //         if (Array.isArray(data.Images) && data.Images.length) {
-  //           const imgEl = slot.querySelector('img#image');
-  //           if (imgEl) imgEl.src = data.Images[0];
-  //         }
-
-  //         // Fill table rows based on rows attribute
-  //         const table = slot.querySelector('table[rows]');
-  //         if (table) {
-  //           const rowIds = table.getAttribute('rows').split(',').map(id => id.trim());
-  //           rowIds.forEach(id => {
-  //             const cell = table.querySelector(`#${id}`);
-  //             if (!cell) return;
-  //             const value = data[id];
-  //             if (value === undefined || value === null || value === '') {
-  //               // remove entire row
-  //               const row = cell.closest('tr');
-  //               if (row) row.remove();
-  //             } else {
-  //               cell.textContent = value;
-  //             }
-  //           });
-  //         }
-  //       });
-
-  //       parent.appendChild(clone);
-  //     }
-  //   };
-  // });
-
-
+ 
   // Print Brochure Generator
   const printButton = document.getElementById('printButton');
   printButton.addEventListener('click', async () => {
@@ -522,6 +394,12 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   });
 
+  document.getElementById('clearAllButton').addEventListener('click', () => {
+    selectionManager.clearSelections();
+    document.getElementById('selectedCount').textContent = '0'; // Reset the counter
+    console.log('All selections cleared');
+    showProducts(dataPro, settingKeys, imageDict); 
+  });
 
 });
 
