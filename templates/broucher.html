@@ -7,211 +7,125 @@
     <title>Document</title>
     <!-- <link rel="stylesheet" href="../static/broucher.css"> -->
 
-    <style>
-        body {
-            font-family: 'Georgia', serif;
-            background-color: #f5f3eb;
-            color: #4D1C17;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-        }
+<style>
+body {
+    font-family: 'Georgia', serif;
+    background-color: #f5f3eb;
+    color: #4D1C17;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
 
+.container {
+    width: 90%;
+    max-width: 1000px;
+    padding: 20px;
+}
 
-        .container {
-            width: 90%;
-            max-width: 1000px;
-            padding: 20px;
-        }
+.item1, .item2 {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    background-color: #f5f3eb;
+    margin-bottom: 30px;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    gap: 20px;
+    align-items: center;
+}
 
-        .item1 {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            background-color: #f5f3eb;
-            margin-bottom: 30px;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            gap: 20px;
-            align-items: center;
-        }
+.item2 {
+    flex-direction: row-reverse;
+}
 
-        .item2 {
-            display: flex;
-            flex-direction: row-reverse;
-            flex-wrap: wrap;
-            background-color: #f5f3eb;
-            margin-bottom: 30px;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            gap: 20px;
-            align-items: center;
+.item1 img, .item2 img {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    border-radius: 10px;
+    object-fit: cover;
+}
 
-        }
+.product-details {
+    flex: 1;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #0000002e;
+}
 
+.product-details h3 {
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 15px;
+    color: #6a1b9a;
+}
 
-        /* Make images responsive */
-        .item1 img {
-            width: 100%;
-            max-width: 300px;
-            height: auto;
-            border-radius: 10px;
-            object-fit: cover;
-        }
+.product-details table {
+    width: 100%;
+    border-collapse: collapse;
+}
 
-        .item2 img {
-            width: 100%;
-            max-width: 300px;
-            height: auto;
-            border-radius: 10px;
-            object-fit: cover;
-        }
+.product-details td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #0000002e;
+}
 
+.product-details td:first-child {
+    font-weight: bold;
+    color: #333;
+}
 
-        /* Product details styling */
-        .product-details {
-            flex: 1;
-            /* background-color: #fdfafa; */
-            padding: 20px;
-            border-radius: 10px;
-            border: 1px solid #0000002e;
-        }
-
-        .product-details h3 {
-            text-align: center;
-            font-size: 22px;
-            margin-bottom: 15px;
-            color: #6a1b9a;
-        }
-
-        .product-details table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .product-details td {
-            padding: 8px 10px;
-            border-bottom: 1px solid #0000002e;
-        }
-
-        .product-details td:first-child {
-            font-weight: bold;
-            color: #333;
-        }
-
-        /* @media print{
-
-    @page{
+@media print {
+    @page {
         size: A4;
         margin: 0;
     }
-   
 
-    .product-details td{
+    html, body {
+        margin: 0;
         padding: 0;
+        height: 100%;
     }
-    
-    .item2 ,.item1{
-        margin-top: 2rem;
-        
+
+    .container {
+        margin: 0;
+        padding: 0;
+        width: 100%;
     }
-    container{
-        width: 90%;
+
+    #first_page,
+    .page_break,
+    #last_page {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        display: block;
     }
-    .page_break{
-        page-break-inside: avoid;
+
+    .page_break {
         padding-top: 3rem;
         padding-bottom: 3rem;
-        
-       
+        margin: 50px 0;
+        border-top: 2px dashed #ccc;
     }
-} */
+
+    .item1,
+    .item2 {
+        margin-top: 2rem;
+        page-break-inside: avoid !important;
+    }
+
+    .product-details td {
+        padding: 1px;
+        border-bottom: 1px solid #0000002e;
+    }
+}
+</style>
 
 
-        @media print {
-            @page {
-                size: A4;
-                margin: 0;
-            }
 
-            html,
-            body {
-                margin: 0;
-                padding: 0;
-                height: 100%;
-            }
-
-            /* .page1 {
-        page-break-after: always;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    } */
-            .container {
-                margin: 0;
-                padding: 0;
-            }
-
-            .page1 {
-                page-break-after: always;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                /* exactly one page */
-                margin: 0;
-                padding: 0;
-            }
-
-            /* .page1 img {
-        max-width: 100%;
-        max-height: 90vh;
-        object-fit: contain;
-    } */
-            .page1 img {
-                max-height: 95vh;
-                /* keep room for page margins */
-                width: auto;
-                height: auto;
-                object-fit: contain;
-                display: block;
-                margin: auto;
-            }
-
-            .product-details {
-                /* border: 1px solid  #0d1b2a; */
-            }
-
-            .product-details td {
-                padding: 1px;
-                border-bottom: 1px solid #0000002e;
-            }
-
-
-            .item2,
-            .item1 {
-                margin-top: 2rem;
-            }
-
-            .container {
-                width: 90%;
-            }
-
-            .page_break {
-               .page_break {
-                page-break-inside: avoid;
-                padding-top: 3rem;
-                padding-bottom: 3rem;
-                margin: 50px 0; /* visible spacing for screen */
-                border-top: 2px dashed #ccc; /* optional: to visually show the separation */
-            }
-            }
-        }
-    </style>
 </head>
 
 <body>
