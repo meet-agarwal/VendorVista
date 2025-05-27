@@ -325,7 +325,7 @@
             </div>
         </div>
 
-        <div id="last_page"></div>
+       
 
     </div>
 
@@ -369,9 +369,18 @@
 
     async function checkPopulated() {
         if (state.getAttribute('donePopulating') === 'true' && state.getAttribute('Extrapage') === 'true') {
-            const lastPageElement = document.getElementById('last_page');
-                lastPageElement.innerHTML = lastPage;
+            // const lastPageElement = document.getElementById('last_page');
+            //     lastPageElement.innerHTML = lastPage;
 
+            const last_page  = document.createElement('div');
+            last_page.id = 'last_page';
+            last_page.innerHTML = lastPage;
+
+            document.querySelector('.container').appendChild(last_page);
+
+            console.log('Last page added to the container.');
+
+            state.setAttribute('donePopulating', 'false');
             const htmlContent = document.documentElement.outerHTML;
             console.log('HTML Content:', htmlContent);
 
