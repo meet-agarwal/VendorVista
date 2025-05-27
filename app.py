@@ -212,7 +212,7 @@ def getpages():
             return jsonify({'error': 'Required HTML files not found'}), 404
 
         from getFrontnlast import HTMLContentExtractor
-        extractor = HTMLContentExtractor(first_page_path, thank_you_page_path_img)
+        extractor = HTMLContentExtractor(first_page_path, last_page_path)
         first_page_content, last_page_content = extractor.get_first_and_last_page_content()
 
         return jsonify({

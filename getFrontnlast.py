@@ -6,30 +6,7 @@ class HTMLContentExtractor:
         self.path1 = path1
         self.path2 = path2
 
-    def _is_image(self, path):
-        # Check for common image file extensions
-        image_extensions = ('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg')
-        return path.lower().endswith(image_extensions)
-
     def _get_body_and_style_content(self, path):
-        if self._is_image(path):
-            # Return an <img> HTML string using the image path
-            return f"""
-            <img  
-              src="{path}" 
-              alt="Cover Page" 
-              style="
-              display: block;
-            width: 100%;
-            max-width: 1000px;
-            height: auto;
-            margin: 0 auto;
-            object-fit: contain;
-            padding: 0;
-              "
-            >
-            """
-        else:
             try:
                 with open(path, 'r', encoding='utf-8') as file:
                     soup = BeautifulSoup(file, 'html.parser')

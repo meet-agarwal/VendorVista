@@ -314,7 +314,9 @@
                 try {
                     const data = await sendDataToServer(htmlContent);
                     console.log('HTML saved:', data);
-                    alert('pdf saved successfully!');
+                    // alert('pdf saved successfully!');
+
+                    window.close();
 
                     // Only proceed after successful save
                     if (data.status === 'success') {
