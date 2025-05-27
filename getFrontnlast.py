@@ -19,13 +19,13 @@ class HTMLContentExtractor:
               src="{path}" 
               alt="Cover Page" 
               style="
-                display: block;
-                width: 100%;
-                max-width: 1000px;
-                height: auto;
-                margin: 0 auto;
-                object-fit: contain;
-                padding: 40px 0;
+              display: block;
+            width: 100%;
+            max-width: 1000px;
+            height: auto;
+            margin: 0 auto;
+            object-fit: contain;
+            padding: 0;
               "
             >
             """
