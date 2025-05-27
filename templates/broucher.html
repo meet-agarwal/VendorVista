@@ -7,122 +7,130 @@
     <title>Document</title>
     <!-- <link rel="stylesheet" href="../static/broucher.css"> -->
 
-<style>
-body {
-    font-family: 'Georgia', serif;
-    background-color: #f5f3eb;
-    color: #4D1C17;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-}
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #f5f3eb;
+            color: #4D1C17;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
 
-.container {
-    width: 90%;
-    max-width: 1000px;
-    padding: 20px;
-}
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            padding: 20px;
+        }
 
-.item1, .item2 {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    background-color: #f5f3eb;
-    margin-bottom: 30px;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    gap: 20px;
-    align-items: center;
-}
+        .item1,
+        .item2 {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            background-color: #f5f3eb;
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            gap: 20px;
+            align-items: center;
+        }
 
-.item2 {
-    flex-direction: row-reverse;
-}
+        .item2 {
+            flex-direction: row-reverse;
+        }
 
-.item1 img, .item2 img {
-    width: 100%;
-    max-width: 300px;
-    height: auto;
-    border-radius: 10px;
-    object-fit: cover;
-}
+        .item1 img,
+        .item2 img {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            border-radius: 10px;
+            object-fit: cover;
+        }
 
-.product-details {
-    flex: 1;
-    padding: 20px;
-    border-radius: 10px;
-    border: 1px solid #0000002e;
-}
+        .product-details {
+            flex: 1;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #0000002e;
+        }
 
-.product-details h3 {
-    text-align: center;
-    font-size: 22px;
-    margin-bottom: 15px;
-    color: #6a1b9a;
-}
+        .product-details h3 {
+            text-align: center;
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #6a1b9a;
+        }
 
-.product-details table {
-    width: 100%;
-    border-collapse: collapse;
-}
+        .product-details table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-.product-details td {
-    padding: 8px 10px;
-    border-bottom: 1px solid #0000002e;
-}
+        .product-details td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #0000002e;
+        }
 
-.product-details td:first-child {
-    font-weight: bold;
-    color: #333;
-}
+        .product-details td:first-child {
+            font-weight: bold;
+            color: #333;
+        }
 
-@media print {
-    @page {
-        size: A4;
-        margin: 0;
-    }
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
 
-    html, body {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-    }
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+            }
 
-    .container {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-    }
+            .container {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+            }
 
-    #first_page,
-    .page_break,
-    #last_page {
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-        display: block;
-    }
+            #first_page,
+            .page_break,
+            #last_page {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                display: block;
+            }
 
-    .page_break {
-        padding-top: 3rem;
-        padding-bottom: 3rem;
-        margin: 50px 0;
-        border-top: 2px dashed #ccc;
-    }
+            #first_page {
+                page-break-before: always;
+                page-break-after: always;
+            }
 
-    .item1,
-    .item2 {
-        margin-top: 2rem;
-        page-break-inside: avoid !important;
-    }
+            .page_break {
+                padding-top: 3rem;
+                padding-bottom: 3rem;
+                margin: 50px 0;
+                border-top: 2px dashed #ccc;
+            }
 
-    .product-details td {
-        padding: 1px;
-        border-bottom: 1px solid #0000002e;
-    }
-}
-</style>
+            .item1,
+            .item2 {
+                margin-top: 2rem;
+                page-break-inside: avoid !important;
+            }
+
+            .product-details td {
+                padding: 1px;
+                border-bottom: 1px solid #0000002e;
+            }
+        }
+    </style>
 
 
 
@@ -239,122 +247,148 @@ body {
             </div>
         </div>
 
-       
+
 
     </div>
 
     <div id="State" donePopulating="false" Extrapage="false"></div>
 
-   <script>
-    const state = document.getElementById('State');
+    <script>
+        const state = document.getElementById('State');
 
-    async function sendDataToServer(htmlContent) {
-        state.setAttribute('donePopulating', 'false');
-        const response = await fetch('/save-template', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ html: htmlContent })
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to save template');
-        }
-
-        return await response.json();
-    }
-
-    async function getFIRSTnLAST() {
-        const response = await fetch('/api/getFIRSTnLAST', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to save template');
-        }
-
-        return await response.json();
-    }
-
-
-    async function checkPopulated() {
-        if (state.getAttribute('donePopulating') === 'true' && state.getAttribute('Extrapage') === 'true') {
-            // const lastPageElement = document.getElementById('last_page');
-            //     lastPageElement.innerHTML = lastPage;
-
-            const last_page  = document.createElement('div');
-            last_page.id = 'last_page';
-            last_page.innerHTML = lastPage;
-
-            document.querySelector('.container').appendChild(last_page);
-
-            console.log('Last page added to the container.');
-
+        async function sendDataToServer(htmlContent) {
             state.setAttribute('donePopulating', 'false');
-            const htmlContent = document.documentElement.outerHTML;
-            console.log('HTML Content:', htmlContent);
+            const response = await fetch('/save-template', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ html: htmlContent })
+            });
 
-            try {
-                const data = await sendDataToServer(htmlContent);
-                console.log('HTML saved:', data);
-                alert('pdf saved successfully!');
-
-                // Only proceed after successful save
-                if (data.status === 'success') {
-                    const images = document.getElementsByTagName('img');
-                    Array.from(images).forEach(img => {
-                        let src = img.getAttribute('src');
-                        if (src) {
-                            src = src.replace('C:\\Users\\dell\\Documents\\VendorVista', '');
-                            src = '../' + src;
-                            img.setAttribute('src', src);
-                        }
-                    });
-
-                    console.log('All image src attributes have been updated.');
-                } else {
-                    console.warn('Backend did not confirm save success.');
-                }
-
-                
-
-            } catch (error) {
-                console.error('Error during save or image update:', error);
+            if (!response.ok) {
+                throw new Error('Failed to save template');
             }
-        } else {
-            setTimeout(checkPopulated, 100);
+
+            return await response.json();
         }
-    }
 
-    let lastPage;
+        async function getFIRSTnLAST() {
+            const response = await fetch('/api/getFIRSTnLAST', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
 
-    getFIRSTnLAST().then(data => {
-        console.log('FIRSTnLAST data:', data);
-        const first = data.first_page;
-        lastPage = data.last_page;
+            if (!response.ok) {
+                throw new Error('Failed to save template');
+            }
 
-        const Firstoutput = first.replace(/<body>/g, '').replace(/<\/body>/g, '');
-        console.log(Firstoutput);
-        const Lastoutput = lastPage.replace(/<body>/g, '').replace(/<\/body>/g, '');
-        console.log(Lastoutput);
+            return await response.json();
+        }
 
-        lastPage = Lastoutput;
 
-        const firstPage = document.getElementById('first_page');
-        firstPage.innerHTML = Firstoutput;
-        document.getElementById('State').setAttribute('Extrapage', 'true');
-        checkPopulated();
+        async function checkPopulated() {
+            if (state.getAttribute('donePopulating') === 'true' && state.getAttribute('Extrapage') === 'true') {
+                // const lastPageElement = document.getElementById('last_page');
+                //     lastPageElement.innerHTML = lastPage;
 
-    }).catch(error => {
-        console.error('Error fetching FIRSTnLAST data:', error);
-    });
+                const last_page = document.createElement('div');
+                last_page.id = 'last_page';
+                last_page.innerHTML = lastPage;
 
-    
-</script>
+                document.querySelector('.container').appendChild(last_page);
+
+                console.log('Last page added to the container.');
+
+                state.setAttribute('donePopulating', 'false');
+                const htmlContent = document.documentElement.outerHTML;
+                console.log('HTML Content:', htmlContent);
+
+                try {
+                    const data = await sendDataToServer(htmlContent);
+                    console.log('HTML saved:', data);
+                    alert('pdf saved successfully!');
+
+                    // Only proceed after successful save
+                    if (data.status === 'success') {
+                        const images = document.getElementsByTagName('img');
+                        Array.from(images).forEach(img => {
+                            let src = img.getAttribute('src');
+                            if (src) {
+                                src = src.replace('C:\\Users\\dell\\Documents\\VendorVista', '');
+                                src = '../' + src;
+                                img.setAttribute('src', src);
+                            }
+                        });
+
+                        console.log('All image src attributes have been updated.');
+
+
+                        const div_first = document.getElementById('first_page');
+                        const img_first = div_first.querySelector('img'); // Finds the first <img> inside the div
+                        if (img_first) {
+                            let src = img_first.getAttribute('src');
+                            src = src.replace('../', '');
+                            img_first.setAttribute('src', src);
+                            // Optional: update alt or other attributes
+                            img_first.alt = 'Updated Image';
+                        } else {
+                            console.log('No image found inside the div.');
+                        }
+
+                        const div_last = document.getElementById('last_page');
+                        const img_last = div_last.querySelector('img'); // Finds the first <img> inside the div
+                        if (img_last) {
+                            let src = img_last.getAttribute('src');
+                            src = src.replace('../', '');
+                            img_first.setAttribute('src', src);
+                            // Optional: update alt or other attributes
+                            img_last.alt = 'Updated Image';
+                        } else {
+                            console.log('No image found inside the div.');
+                        }
+
+                    } else {
+                        console.warn('Backend did not confirm save success.');
+                    }
+
+
+
+                } catch (error) {
+                    console.error('Error during save or image update:', error);
+                }
+            } else {
+                setTimeout(checkPopulated, 100);
+            }
+        }
+
+        let lastPage;
+
+        getFIRSTnLAST().then(data => {
+            console.log('FIRSTnLAST data:', data);
+            const first = data.first_page;
+            lastPage = data.last_page;
+
+            const Firstoutput = first.replace(/<body>/g, '').replace(/<\/body>/g, '');
+            console.log(Firstoutput);
+            const Lastoutput = lastPage.replace(/<body>/g, '').replace(/<\/body>/g, '');
+            console.log(Lastoutput);
+
+            lastPage = Lastoutput;
+
+            const firstPage = document.getElementById('first_page');
+            firstPage.innerHTML = Firstoutput;
+            document.getElementById('State').setAttribute('Extrapage', 'true');
+            checkPopulated();
+
+        }).catch(error => {
+            console.error('Error fetching FIRSTnLAST data:', error);
+        });
+
+
+    </script>
 
 
 </body>

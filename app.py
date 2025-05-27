@@ -206,12 +206,13 @@ def getpages():
     try:
         first_page_path = r"C:\Users\dell\Documents\first.html"
         last_page_path = r"C:\Users\dell\Documents\last.html"
+        thank_you_page_path_img = r"C:\Users\dell\Documents\thankyou_page.jpg"
 
         if not os.path.exists(first_page_path) or not os.path.exists(last_page_path):
             return jsonify({'error': 'Required HTML files not found'}), 404
 
         from getFrontnlast import HTMLContentExtractor
-        extractor = HTMLContentExtractor(first_page_path, last_page_path)
+        extractor = HTMLContentExtractor(first_page_path, thank_you_page_path_img)
         first_page_content, last_page_content = extractor.get_first_and_last_page_content()
 
         return jsonify({
