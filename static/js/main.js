@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sorter = document.getElementById('sortDropdownContainer');
     sorter.style.display = 'flex'; // Show the sorting dropdown
 
-     const printButton = document.getElementById('printButton');
+    const printButton = document.getElementById('printButton');
 
     printButton.style.display = 'block';
   });
@@ -172,13 +172,13 @@ document.addEventListener('DOMContentLoaded', () => {
       showProducts(selectedData, settingKeys, imageDict);
     }
 
-   
+
   });
 
   document.getElementById("AllProductsNavFront")?.addEventListener("change", () => {
     showProducts(dataPro, settingKeys, imageDict);  // Shows all products again
 
-   
+
 
   });
 
@@ -275,130 +275,48 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
- 
+
   // Print Brochure Generator
   const printButton = document.getElementById('printButton');
   printButton.addEventListener('click', async () => {
     const selectedData = selectionManager.getSelectedProducts();
-    const entries = Object.entries(selectedData);
-    if (entries.length === 0) {
-      alert('No products selected for printing');
-      return;
+
+    printButton.disabled = true;
+    printButton.innerText = 'wait..'
+
+
+
+    const response = await fetch('/save-template', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        selectedData: selectedData,
+        imageDict: imageDict
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to save template');
     }
 
-    const printWin = window.open('/print-template', '_blank');
-    if (!printWin) {
-      alert('Popup blocked! Please allow popups for this site.');
-      return;
-    }
+    let dataRes = await response.json()
 
-    printWin.onload = () => {
-      const doc = printWin.document;
-      const template = doc.querySelector('.page_break');
-      if (!template) {
-        alert("Template .page_break not found");
-        return;
-      }
+    console.log('Saved template successfully');
+    console.log('Response from server:', dataRes);
+    alert(dataRes.message)
 
-      // Clone the full page template (so we preserve the original for each page)
-      const rawTemplate = template.cloneNode(true);
-      const parent = template.parentElement;
+    printButton.disabled = false;
+    printButton.innerText = 'Print'
 
-      // Read the list of row-IDs once from the page_break div
-      const rowIds = rawTemplate
-        .getAttribute('rows')
-        .split(',')
-        .map(id => id.trim());
-
-      // How many items per page
-      const productsPerPage = parseInt(rawTemplate.getAttribute('product'), 10);
-      const totalItems = entries.length;
-      const pageCount = Math.ceil(totalItems / productsPerPage);
-
-      // Remove the original placeholder
-      parent.removeChild(template);
-
-      // Build each page
-      for (let p = 0; p < pageCount; p++) {
-        const clone = rawTemplate.cloneNode(true);
-        const pageItems = entries.slice(p * productsPerPage, (p + 1) * productsPerPage);
-        const itemDivs = clone.querySelectorAll('[class^="item"]');
-
-        itemDivs.forEach((slot, idx) => {
-          const dataPair = pageItems[idx];
-          if (!dataPair) {
-            // No more items → drop this slot
-            slot.remove();
-            return;
-          }
-          const [key, data] = dataPair;
-
-          // Fill image
-          // Fill image
-          const folderName = data.Images;
-          const sources = Array.isArray(imageDict[folderName])
-            ? imageDict[folderName]
-            : [];
-          const imgEl = slot.querySelector('img#image');
-
-          // .replace('C:\\Users\\dell\\Documents\\VendorVista', '');
-
-          if (sources && sources[0]) {
-                const imageUrl = sources[0] ; 
-                const img = imgEl || document.createElement('img');
-                img.src = `${imageUrl}`;
-                img.alt = 'product Image';
-               // img.style.objectFit = 'cover';
-            // } else {
-            //     // Placeholder if image not found
-            //     imageSection.style.backgroundColor = '#f0f0f0';
-            //     imageSection.style.minHeight = '150px';
-            //     imageSection.textContent = 'No Image Available';
-            // }
-          }
-
-          // — Details table —
-          const table = slot.querySelector('table');
-          if (table) {
-            rowIds.forEach(id => {
-              const cell = table.querySelector(`#${id}`);
-              if (!cell) return;
-
-              // Convert “Main_Stone_Color” → “Main Stone Color”
-              const displayKey = id.replace(/_/g, ' ');
-              const value = data[displayKey];
-
-              if (value === undefined || value === null || value === '') {
-                // remove entire <tr>
-                const row = cell.closest('tr');
-                if (row) row.remove();
-              } else {
-                // set label + value
-                const labelCell = cell.previousElementSibling;
-                if (labelCell) labelCell.textContent = displayKey;
-                cell.textContent = value;
-              }
-            });
-          }
-        });
-
-        
-
-        parent.appendChild(clone);
-      }
-
-      let state = doc.getElementById('State');
-      state.setAttribute('donePopulating', 'true'); 
-      console.log('State attribute set to donePopulating inside the main.js file');
-      
-    };
   });
 
   document.getElementById('clearAllButton').addEventListener('click', () => {
     selectionManager.clearSelections();
     document.getElementById('selectedCount').textContent = '0'; // Reset the counter
     console.log('All selections cleared');
-    showProducts(dataPro, settingKeys, imageDict); 
+    showProducts(dataPro, settingKeys, imageDict);
   });
 
 });

@@ -13,6 +13,8 @@ import os
 import pdfkit
 from config import Config  # Import the configuration settings
 from datetime import datetime
+from HTMLprocessing import TemplateProcessor
+from template_processor import BrochureGenerator
 
 
 app = Flask(__name__)
@@ -22,6 +24,8 @@ hierarchy_manager = HierarchyManager()  # Create an instance of HierarchyManager
 
 # you can pass the exact column name from your Excel that holds folder names
 image_loader = GetImagesDict(image_column="Images")
+
+
 
 @app.route('/')
 def home():
@@ -136,9 +140,9 @@ def getImages():
 def custom_static(filename):
     return send_from_directory('resources', filename)
 
-@app.route('/print-template')
-def print_template():
-    return render_template('broucher.html')
+# @app.route('/print-template')
+# def print_template():
+#     return render_template('broucher.html')
 
 def savePDF(htmlPath, pdfPath):
     # Chrome executable path
@@ -162,17 +166,27 @@ def savePDF(htmlPath, pdfPath):
     
     
 @app.route('/save-template', methods=['POST'])
-def save_template():
+def save_template():  
     try:
         data = request.get_json()
-        html_content = data.get('html', '')
-        if not html_content:
-            return jsonify({'error': 'No HTML content provided'}), 400
+        selected_data = data.get('selectedData')
+        imageDict = data.get('imageDict')
+        if not selected_data:
+            return jsonify({'error': 'No selectedData provided'}), 400
 
-        # 1. Save HTML to temp folder
+        # Prepare template processor
+        # processor = TemplateProcessor(template_name='broucher.html')
+        # processor.load_data(selected_data)
+        first_path = r"C:\Users\dell\Documents\first.html"
+        last_path = r"C:\Users\dell\Documents\last.html"
+        gen = BrochureGenerator('broucher.html')
+        # html_content = processor.get_final_html(first_path, last_path)
+        html_content = gen.generate(selected_data, imageDict,
+                             first_path, last_path)
+
+        # Save HTML
         temp_dir = os.path.join(tempfile.gettempdir(), 'vendor_vista_brochures')
         os.makedirs(temp_dir, exist_ok=True)
-
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
         base_filename = f'brochure_{timestamp}'
         html_filename = f'{base_filename}.html'
@@ -180,26 +194,23 @@ def save_template():
         with open(html_filepath, 'w', encoding='utf-8') as f:
             f.write(html_content)
 
-        # 2. Prepare Downloads folder and target PDF path
+        # Generate PDF
         downloads_dir = os.path.join(os.path.expanduser('~'), 'Downloads', 'Vendor_VistaPDF')
         os.makedirs(downloads_dir, exist_ok=True)
         pdf_filename = f'{base_filename}.pdf'
         pdf_filepath = os.path.join(downloads_dir, pdf_filename)
-
         savePDF(html_filepath, pdf_filepath)
-        
 
-       
         return jsonify({
             'status': 'success',
             'message': 'HTML saved and PDF generated successfully',
             'html_path': html_filepath,
             'pdf_path': pdf_filepath
         })
-
     except Exception as e:
         app.logger.exception("save_template error")
         return jsonify({'error': str(e)}), 500
+
     
 @app.route('/api/getFIRSTnLAST', methods=['GET'])
 def getpages():
