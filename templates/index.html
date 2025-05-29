@@ -20,7 +20,7 @@
             </button>
             <div class="setting_div">
                 <div id="pathSetting">
-                    
+
                 </div>
                 <div class="settings-popup">
                     <div class="popup-content">
@@ -124,6 +124,90 @@
     <div>
         <button id="printButton" class="print_button">Print</button>
     </div>
+
+    <style>
+        #print_dailog_overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 999;
+        }
+
+        #print_dailog {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 500px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 30px 20px;
+            z-index: 1000;
+            display: none;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        #custom-dialog-content {
+            text-align: center;
+        }
+
+        #custom-dialog-content h2 {
+            margin: 10px 0;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        #custom-dialog-content .button-group {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        #custom-dialog-content button {
+            padding: 10px 24px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 6px;
+            background-color: #007BFF;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        #custom-dialog-content button:hover {
+            background-color: #0056b3;
+        }
+
+        #custom-dialog-content button:last-child {
+            background-color: #6c757d;
+        }
+
+        #custom-dialog-content button:last-child:hover {
+            background-color: #5a6268;
+        }
+    </style>
+
+    <div id="print_dailog_overlay"></div>
+    <div id="print_dailog">
+        <div id="custom-dialog-content">
+            <h2>PDF saved successfully</h2>
+            <h2>Do you want to open the PDF?</h2>
+            <div class="button-group">
+                <button id="openPdfBtn">Yes</button>
+                <button id="closeDialogBtn">No</button>
+            </div>
+
+        </div>
+    </div>
+
+
 
     <!-- <script src="../static/script.js"></script> -->
     <script src="../static/js/main.js" type="module"></script>

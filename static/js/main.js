@@ -10,6 +10,7 @@ import { imageGetter } from './modules/ImageGetter.js';
 
 // declaring global variables 
 window.selectionManager = selectionManager;
+let pdfBlobUrl = null;
 
 
 
@@ -276,41 +277,89 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 
-  // Print Brochure Generator
-  const printButton = document.getElementById('printButton');
+  // inside printButton event listener
   printButton.addEventListener('click', async () => {
     const selectedData = selectionManager.getSelectedProducts();
-
-    printButton.disabled = true;
-    printButton.innerText = 'wait..'
-
-
-
-    const response = await fetch('/save-template', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        selectedData: selectedData,
-        imageDict: imageDict
-      })
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to save template');
+    if (Object.keys(selectedData).length === 0) {
+      alert('No product selected');
+      return;
     }
 
-    let dataRes = await response.json()
+    printButton.disabled = true;
+    printButton.innerText = 'Wait..'
+    // printButton.style.display = 'none';
 
-    console.log('Saved template successfully');
-    console.log('Response from server:', dataRes);
-    alert(dataRes.message)
 
-    printButton.disabled = false;
-    printButton.innerText = 'Print'
+
+    try {
+      const response = await fetch('/save-template', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ selectedData, imageDict })
+      });
+
+      if (!response.ok) throw new Error('Failed to generate PDF');
+      const blob = await response.blob();
+
+      const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+      const defaultFileName = `brochure_${timestamp}.pdf`;
+
+      const fileHandle = await window.showSaveFilePicker({
+        suggestedName: defaultFileName,
+        types: [{
+          description: 'PDF Document',
+          accept: { 'application/pdf': ['.pdf'] }
+        }]
+      });
+
+      const writable = await fileHandle.createWritable();
+      await writable.write(blob);
+      await writable.close();
+
+      // Create Blob URL for opening in new tab
+      pdfBlobUrl = URL.createObjectURL(blob);
+
+      // Show confirmation dialog
+      const overlay = document.getElementById('print_dailog_overlay');
+      const dailogbox = document.getElementById('print_dailog');
+      overlay.style.display = 'block';
+      dailogbox.style.display = 'block';
+      printButton.style.display = 'none' ;
+
+    } catch (err) {
+      console.error('Save failed:', err);
+      alert('Failed to save PDF');
+    } finally {   
+
+    }
+
 
   });
+
+  document.getElementById('openPdfBtn').addEventListener('click', () => {
+    if (pdfBlobUrl) {
+      window.open(pdfBlobUrl, '_blank');
+    }
+
+    // Hide the dialog after opening
+    document.getElementById('print_dailog_overlay').style.display = 'none';
+    document.getElementById('print_dailog').style.display = 'none';
+    const printButton = document.getElementById('printButton');
+    printButton.disabled = false;
+    printButton.innerText = 'Print';
+    printButton.style.display = 'flask' ;
+  });
+
+  document.getElementById('closeDialogBtn').addEventListener('click', () => {
+    document.getElementById('print_dailog_overlay').style.display = 'none';
+    document.getElementById('print_dailog').style.display = 'none';
+    const printButton = document.getElementById('printButton');
+    printButton.disabled = false;
+    printButton.innerText = 'Print';
+    printButton.style.display = 'flask' ;
+  });
+
+
 
   document.getElementById('clearAllButton').addEventListener('click', () => {
     selectionManager.clearSelections();

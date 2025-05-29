@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request  , send_from_directory
+from flask import Flask, render_template, jsonify, request  , send_from_directory , send_file, Response
 import filterTypes
 import filter_hierarchy
 import getProductData
@@ -201,38 +201,19 @@ def save_template():
         pdf_filepath = os.path.join(downloads_dir, pdf_filename)
         savePDF(html_filepath, pdf_filepath)
 
-        return jsonify({
-            'status': 'success',
-            'message': 'HTML saved and PDF generated successfully',
-            'html_path': html_filepath,
-            'pdf_path': pdf_filepath
-        })
+        # return jsonify({
+        #     'status': 'success',
+        #     'message': 'HTML saved and PDF generated successfully',
+        #     'html_path': html_filepath,
+        #     'pdf_path': pdf_filepath
+        # })
+        
+        return send_file(pdf_filepath, mimetype='application/pdf', as_attachment=True, download_name=pdf_filename)
+        
     except Exception as e:
         app.logger.exception("save_template error")
         return jsonify({'error': str(e)}), 500
 
-    
-@app.route('/api/getFIRSTnLAST', methods=['GET'])
-def getpages():
-    try:
-        first_page_path = r"C:\Users\dell\Documents\first.html"
-        last_page_path = r"C:\Users\dell\Documents\last.html"
-        thank_you_page_path_img = r"C:\Users\dell\Documents\thankyou_page.jpg"
-
-        if not os.path.exists(first_page_path) or not os.path.exists(last_page_path):
-            return jsonify({'error': 'Required HTML files not found'}), 404
-
-        from getFrontnlast import HTMLContentExtractor
-        extractor = HTMLContentExtractor(first_page_path, last_page_path)
-        first_page_content, last_page_content = extractor.get_first_and_last_page_content()
-
-        return jsonify({
-            'first_page': first_page_content,
-            'last_page': last_page_content
-        })
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
