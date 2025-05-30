@@ -289,17 +289,15 @@ document.addEventListener('DOMContentLoaded', () => {
     printButton.innerText = 'Wait...';
 
     try {
-      // Show Save File dialog to let user choose where to save the PDF
-      const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
-      const defaultFileName = `brochure_${timestamp}.pdf`;
+      // Generate default filename
+      const now = new Date();
+      const options = { month: 'short', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
+      const readableTimestamp = now.toLocaleString('en-US', options)
+        .replace(/[, ]/g, '_')     // replace commas and spaces with underscores
+        .replace(/:/g, '-')        // replace colon with dash
+        .replace(/__/g, '_');      // fix any double underscores
 
-      const fileHandle = await window.showSaveFilePicker({
-        suggestedName: defaultFileName,
-        types: [{
-          description: 'PDF Document',
-          accept: { 'application/pdf': ['.pdf'] }
-        }]
-      });
+      const defaultFileName = `brochure_${readableTimestamp}.pdf`;
 
       // Fetch the generated PDF blob from the backend
       const response = await fetch('/save-template', {
@@ -308,17 +306,20 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify({ selectedData, imageDict })
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to generate PDF');
-      }
+      if (!response.ok) throw new Error('Failed to generate PDF');
 
       const pdfBlob = await response.blob();
       pdfBlobUrl = URL.createObjectURL(pdfBlob);
 
-      // Write the blob to the file selected by the user
-      const writable = await fileHandle.createWritable();
-      await writable.write(pdfBlob);
-      await writable.close();
+      // Create and auto-click a download link
+      const a = document.createElement('a');
+      a.href = pdfBlobUrl;
+      a.download = defaultFileName;
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
 
       // Show confirmation dialog
       const overlay = document.getElementById('print_dailog_overlay');
@@ -358,7 +359,7 @@ document.addEventListener('DOMContentLoaded', () => {
     printButton.style.display = 'block';
     printButton.disabled = false;
     printButton.innerText = 'Print';
-    
+
   });
 
 
