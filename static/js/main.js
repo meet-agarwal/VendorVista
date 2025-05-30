@@ -286,21 +286,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     printButton.disabled = true;
-    printButton.innerText = 'Wait..'
-    // printButton.style.display = 'none';
-
-
+    printButton.innerText = 'Wait...';
 
     try {
-      const response = await fetch('/save-template', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ selectedData, imageDict })
-      });
-
-      if (!response.ok) throw new Error('Failed to generate PDF');
-      const blob = await response.blob();
-
+      // Show Save File dialog to let user choose where to save the PDF
       const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
       const defaultFileName = `brochure_${timestamp}.pdf`;
 
@@ -312,28 +301,40 @@ document.addEventListener('DOMContentLoaded', () => {
         }]
       });
 
-      const writable = await fileHandle.createWritable();
-      await writable.write(blob);
-      await writable.close();
+      // Fetch the generated PDF blob from the backend
+      const response = await fetch('/save-template', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ selectedData, imageDict })
+      });
 
-      // Create Blob URL for opening in new tab
-      pdfBlobUrl = URL.createObjectURL(blob);
+      if (!response.ok) {
+        throw new Error('Failed to generate PDF');
+      }
+
+      const pdfBlob = await response.blob();
+      pdfBlobUrl = URL.createObjectURL(pdfBlob);
+
+      // Write the blob to the file selected by the user
+      const writable = await fileHandle.createWritable();
+      await writable.write(pdfBlob);
+      await writable.close();
 
       // Show confirmation dialog
       const overlay = document.getElementById('print_dailog_overlay');
       const dailogbox = document.getElementById('print_dailog');
       overlay.style.display = 'block';
       dailogbox.style.display = 'block';
-      printButton.style.display = 'none' ;
+      printButton.style.display = 'none';
 
     } catch (err) {
       console.error('Save failed:', err);
       alert('Failed to save PDF');
-    } finally {   
-
+    } finally {
+      // Reset button state even if something failed
+      printButton.disabled = false;
+      printButton.innerText = 'Print';
     }
-
-
   });
 
   document.getElementById('openPdfBtn').addEventListener('click', () => {
@@ -347,16 +348,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const printButton = document.getElementById('printButton');
     printButton.disabled = false;
     printButton.innerText = 'Print';
-    printButton.style.display = 'flask' ;
+    printButton.style.display = 'block';
   });
 
   document.getElementById('closeDialogBtn').addEventListener('click', () => {
     document.getElementById('print_dailog_overlay').style.display = 'none';
     document.getElementById('print_dailog').style.display = 'none';
     const printButton = document.getElementById('printButton');
+    printButton.style.display = 'block';
     printButton.disabled = false;
     printButton.innerText = 'Print';
-    printButton.style.display = 'flask' ;
+    
   });
 
 

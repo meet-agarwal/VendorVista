@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request  , send_from_directory , send_file, Response
+from flask import Flask, render_template, jsonify, make_response, request  , send_from_directory , send_file, Response
 import filterTypes
 import filter_hierarchy
 import getProductData
@@ -194,22 +194,25 @@ def save_template():
         with open(html_filepath, 'w', encoding='utf-8') as f:
             f.write(html_content)
 
-        # Generate PDF
-        downloads_dir = os.path.join(os.path.expanduser('~'), 'Downloads', 'Vendor_VistaPDF')
-        os.makedirs(downloads_dir, exist_ok=True)
-        pdf_filename = f'{base_filename}.pdf'
-        pdf_filepath = os.path.join(downloads_dir, pdf_filename)
+        # STEP 2: Create a temporary path to save the generated PDF
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as pdf_temp:
+            pdf_filepath = pdf_temp.name
+        
+        
         savePDF(html_filepath, pdf_filepath)
-
-        # return jsonify({
-        #     'status': 'success',
-        #     'message': 'HTML saved and PDF generated successfully',
-        #     'html_path': html_filepath,
-        #     'pdf_path': pdf_filepath
-        # })
         
-        return send_file(pdf_filepath, mimetype='application/pdf', as_attachment=True, download_name=pdf_filename)
-        
+        # STEP 4: Read the generated PDF as bytes and return it in the response
+        with open(pdf_filepath, 'rb') as f:
+            pdf_bytes = f.read()
+            
+        # Step 5: Clean up temp files
+        os.remove(pdf_filepath)
+    
+        response = make_response(pdf_bytes)
+        response.headers.set('Content-Type', 'application/pdf')
+        response.headers.set('Content-Disposition', 'inline; filename=brochure.pdf')
+        return response
+    
     except Exception as e:
         app.logger.exception("save_template error")
         return jsonify({'error': str(e)}), 500
