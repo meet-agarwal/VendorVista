@@ -53,7 +53,7 @@ export class ScrollableFilter {
             const radio = document.createElement('input');
             radio.type = 'radio';
             radio.id = radioId;
-            radio.name = this.filterLabel.toLowerCase().replace(/\s+/g, '-');
+            radio.name = this.filterLabel.toLowerCase().replace(/\s+/g, ' ');
             radio.value = option.toLowerCase().replace(/\s+/g, '-');
             
             // Add event listener to show child filters when selected
@@ -99,7 +99,7 @@ export class ScrollableFilter {
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             checkbox.id = checkboxId;
-            checkbox.name = this.filterLabel.toLowerCase().replace(/\s+/g, '-');
+            checkbox.name = this.filterLabel.toLowerCase().replace(/\s+/g, ' ');
             checkbox.value = option.toLowerCase().replace(/\s+/g, '-');
             
             const optionLabel = document.createElement('label');

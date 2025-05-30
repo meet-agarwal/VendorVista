@@ -1,4 +1,4 @@
-import { renderFilter } from './modules/renderFilter.js';
+import { renderFilter ,childFilterGroupList  } from './modules/renderFilter.js';
 import { collectSelectedFilters } from './modules/filterCollector.js';
 import { setupPriceFilter } from './modules/priceFilter.js';
 import { getProductsData } from './modules/api.js';
@@ -197,21 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!filterContent) return;
 
       // Define all group names exactly as they appear in the name attributes
-      const allGroups = [
-        "gemstone",
-        "ring-size",
-        "ring size",
-        "stone-creation",
-        "main-stone-color",
-        "main stone color",
-        "main-stone-shape",
-        "main stone shape",
-        "style",
-        "closure",
-        "design",
-        "stone creation",
-        "start price"
-      ];
+      const allGroups = childFilterGroupList ; 
 
       const result = {};
 
