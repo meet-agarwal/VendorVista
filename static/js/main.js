@@ -1,4 +1,4 @@
-import { renderFilter ,childFilterGroupList  } from './modules/renderFilter.js';
+import { renderFilter, childFilterGroupList } from './modules/renderFilter.js';
 import { collectSelectedFilters } from './modules/filterCollector.js';
 import { setupPriceFilter } from './modules/priceFilter.js';
 import { getProductsData } from './modules/api.js';
@@ -6,6 +6,7 @@ import { showProducts, selectionManager } from './modules/cardGeneratorClass.js'
 import { SettingsManager } from './modules/settingManager.js';
 import { get_updated_filter_options, updateFilterUI } from './modules/checkboxHandler.js';
 import { imageGetter } from './modules/ImageGetter.js';
+import { loadTableOptions, updateTableOptions } from './modules/tableOptions.js';
 // Importing necessary modules
 
 // declaring global variables 
@@ -17,9 +18,20 @@ let pdfBlobUrl = null;
 document.addEventListener('DOMContentLoaded', () => {
 
   let dataPro = []
-  let settingKeys = ['Adjustable', 'Design', 'Gemstone', 'Metal']
+  let settingKeys = [];
+  (async () => {
+    settingKeys = await loadTableOptions();
+    window.settingKeys = settingKeys;
+  })();
   let imageDict = {}
-  window.settingKeys = ['Adjustable', 'Design', 'Gemstone', 'Metal']
+  // settingKeys = [
+  //   "Adjustable",
+  //   "Design",
+  //   "Gemstone",
+  //   "Metal"
+  // ]
+  //   window.settingKeys = settingKeys;
+
 
   const settingsManager = new SettingsManager(
     '.settings-btn',        // Button to open popup
@@ -37,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
         id: option.toLowerCase().replace(/\s+/g, '_'),
         label: option
       }));
-      settingsManager.renderOptions(formattedOptions);
+      settingsManager.renderOptions(formattedOptions, settingKeys);
     })
     .catch(error => console.error('Settings error:', error));
 
@@ -53,6 +65,10 @@ document.addEventListener('DOMContentLoaded', () => {
     );
 
     settingKeys = formattedKeys;
+    (async () => {
+      updateTableOptions(formattedKeys);
+      console.log('Updated setting keys in front-end:', formattedKeys);
+    })();
     window.settingKeys = formattedKeys;
 
     const selectedTab = document.getElementById('SelectedProductsNavFront');
@@ -68,11 +84,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   });
 
+const filtersLoaderOverlay = document.getElementById('filters-fullscreen-loader');
+filtersLoaderOverlay.style.display = 'flex'; // Show the loader
+  // Fetch filter data from the API
   fetch('/api/filters')
     .then(res => res.json())
     .then(([masterFilterDataDict, parentFiltervalues]) => {
 
       renderFilter(masterFilterDataDict, parentFiltervalues);
+    
 
       console.log('Master Filter Data:', masterFilterDataDict);
       console.log('Parent Filter Values:', parentFiltervalues);
@@ -85,9 +105,12 @@ document.addEventListener('DOMContentLoaded', () => {
         console.warn('masterFilterDataDict is empty or invalid:', masterFilterDataDict);
       }
 
-    })
-    .catch(err => console.error('Error fetching filter data:', err));
-
+     filtersLoaderOverlay.style.display = 'none'; // Hide after filters render
+  })
+  .catch(err => {
+    console.error('Error fetching filter data:', err);
+    filtersLoaderOverlay.innerHTML = "<p>Failed to load filters. Please refresh.</p>";
+  });
   // setupPriceFilter();
 
   document.getElementById('apply_filters_button')?.addEventListener('click', async () => {
@@ -197,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!filterContent) return;
 
       // Define all group names exactly as they appear in the name attributes
-      const allGroups = childFilterGroupList ; 
+      const allGroups = childFilterGroupList;
 
       const result = {};
 

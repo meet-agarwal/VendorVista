@@ -163,6 +163,10 @@ def savePDF(htmlPath, pdfPath):
         print("PDF generated successfully.")
     except subprocess.CalledProcessError as e:
         print("Failed to generate PDF:", e)
+        
+
+
+
     
     
 @app.route('/save-template', methods=['POST'])
@@ -216,7 +220,59 @@ def save_template():
     except Exception as e:
         app.logger.exception("save_template error")
         return jsonify({'error': str(e)}), 500
+    
+    
+# Configuration
+TABLE_OPTIONS_FILE = 'table_options.json'
 
+DEFAULT_TAGS = {
+    "tags": [
+        "Adjustable",
+        "Design",
+        "Gemstone",
+        "Metal"
+    ]
+}
+
+def ensure_config():
+    """Ensure the config file exists, create it with defaults if missing."""
+    if not os.path.exists(TABLE_OPTIONS_FILE):
+        with open(TABLE_OPTIONS_FILE, 'w') as f:
+            json.dump(DEFAULT_TAGS, f, indent=2)
+        return True  # File was created
+    return False  # File already existed
+
+def read_tags():
+    """Read tags from file, return (tags_dict, created_flag)."""
+    if not os.path.exists(TABLE_OPTIONS_FILE):
+        # Create default file if missing
+        ensure_config()
+        return DEFAULT_TAGS, True
+    with open(TABLE_OPTIONS_FILE, 'r') as f:
+        return json.load(f), False
+
+def write_tags(tags):
+    """Write tags to file."""
+    with open(TABLE_OPTIONS_FILE, 'w') as f:
+        json.dump({"tags": tags}, f, indent=2)
+
+@app.route('/settings/tableOptions', methods=['GET', 'POST'])
+def settings_tableoptions():
+    if request.method == 'GET':
+        tags, created = read_tags()
+        response = {
+            'tags': tags['tags']
+        }
+        if created:
+            response['alert'] = 'Default configuration file was missing and has been created.'
+        return jsonify(response)
+
+    elif request.method == 'POST':
+        data = request.get_json(silent=True)
+        if not data or 'tags' not in data or not isinstance(data['tags'], list):
+            return jsonify({'error': 'Invalid format. Provide a JSON with a "tags" list.'}), 400
+        write_tags(data['tags'])
+        return jsonify({'message': 'Tags updated successfully', 'tags': data['tags']})
 
 if __name__ == '__main__':
     app.run(debug=True)
