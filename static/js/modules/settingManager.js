@@ -13,6 +13,8 @@ export class SettingsManager {
     this.apiEndpoint = apiEndpoint;
     this.selectedOptions = new Set();
     this.maxSelections = 5;
+    this.selectedSection = document.getElementById('popup_special_region'); // Reference to our selected options section
+    this.sortableInstance = null; // Reference to SortableJS instance
 
     this.initEventListeners();
   }
@@ -40,13 +42,16 @@ export class SettingsManager {
     }
   }
 
-  renderOptions(options, inital_selection) {
+  renderOptions(options, initial_selection) {
     this.clearContentArea();
 
-    /// Efficiently set selectedOptions using label match
-    if (Array.isArray(inital_selection) && inital_selection.length > 0) {
+    // Create the selected section
+    this.createSelectedSection();
+
+    // Efficiently set selectedOptions using label match
+    if (Array.isArray(initial_selection) && initial_selection.length > 0) {
       const labelToIdMap = new Map(options.map(opt => [opt.label, opt.id]));
-      inital_selection.forEach(label => {
+      initial_selection.forEach(label => {
         const id = labelToIdMap.get(label);
         if (id) this.selectedOptions.add(id);
       });
@@ -57,64 +62,156 @@ export class SettingsManager {
       return;
     }
 
+    // Create a container for available options
+    const availableOptionsContainer = document.createElement('div');
+    availableOptionsContainer.className = 'available-options-container';
+    this.contentArea.appendChild(availableOptionsContainer);
+
+    // First render selected options in the selected section
+    options.forEach(option => {
+      if (this.selectedOptions.has(option.id)) {
+        this.addOptionToSelectedSection(option);
+      }
+    });
+
+    // Then render remaining options in the available section
     options.forEach(option => {
       if (!option.id || !option.label) {
         console.warn('Invalid option format skipped:', option);
         return;
       }
 
-      const optionContainer = document.createElement('div');
-      optionContainer.className = 'option-container';
-
-      const checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.id = `option-${option.id}`;
-      checkbox.value = option.id;
-      checkbox.dataset.label = option.label;
-      checkbox.checked = this.selectedOptions.has(option.id);
-      checkbox.disabled = !this.selectedOptions.has(option.id) &&
-        this.selectedOptions.size >= this.maxSelections;
-
-      checkbox.addEventListener('change', (e) => this.handleCheckboxChange(e));
-
-      const label = document.createElement('label');
-      label.htmlFor = `option-${option.id}`;
-      label.textContent = option.label;
-      label.class = 'label'
-
-      optionContainer.appendChild(checkbox);
-      optionContainer.appendChild(label);
-      this.contentArea.appendChild(optionContainer);
+      if (!this.selectedOptions.has(option.id)) {
+        this.createOptionElement(option, availableOptionsContainer);
+      }
     });
 
     this.updateSelectionFeedback();
+    this.initSortable();
   }
 
-  handleCheckboxChange(event) {
+  createSelectedSection() {
+    // Remove existing selected section if it exists
+    if (this.selectedSection) {
+      this.selectedSection.innerHTML = ''; // Clear existing content
+    }
+    const optionsContainer = document.createElement('div');
+    optionsContainer.className = 'selected-options-container';
+    optionsContainer.id = 'selected-options-container';
+    this.selectedSection.appendChild(optionsContainer);
+    // // Insert at the beginning of content area
+    // this.contentArea.insertBefore(this.selectedSection, this.contentArea.firstChild);
+  }
+
+  addOptionToSelectedSection(option) {
+    const selectedContainer = this.selectedSection.querySelector('.selected-options-container');
+    this.createOptionElement(option, selectedContainer, true);
+  }
+
+  createOptionElement(option, container, isSelected = false) {
+    // Wrapper for each option
+    const optionContainer = document.createElement('div');
+    optionContainer.className = 'option-container';
+    optionContainer.dataset.id = option.id;
+    if (isSelected) {
+      optionContainer.classList.add('selected');
+    }
+
+
+
+
+    // Checkbox input
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.id = `option-${option.id}`;
+    checkbox.value = option.id;
+    checkbox.dataset.label = option.label;
+    checkbox.checked = isSelected;
+    // Disable unchecked boxes once limit reached
+    checkbox.disabled = !isSelected && this.selectedOptions.size >= this.maxSelections;
+    checkbox.addEventListener('change', (e) => this.handleCheckboxChange(e, option));
+    optionContainer.appendChild(checkbox);
+
+    // Label for the checkbox
+    const label = document.createElement('label');
+    label.htmlFor = `option-${option.id}`;
+    label.textContent = option.label;
+    optionContainer.appendChild(label);
+
+    // Finally, append to whatever container you passed in
+    container.appendChild(optionContainer);
+          if (isSelected) {
+    const dragHandle = document.createElement('i');
+    dragHandle.className = 'fas fa-grip-lines drag-handle';
+    dragHandle.title = 'Drag to reorder';
+    optionContainer.appendChild(dragHandle);
+  }
+  }
+
+
+  initSortable() {
+    const selectedContainer = this.selectedSection?.querySelector('.selected-options-container');
+    if (!selectedContainer) return;
+
+    // Destroy previous instance if it exists
+    if (this.sortableInstance) {
+      this.sortableInstance.destroy();
+    }
+
+    this.sortableInstance = new Sortable(selectedContainer, {
+      animation: 150,
+      handle: '.option-container',  // only this little icon will grab
+      onEnd: () => {
+        // You can save the new order if needed
+        console.log('Items reordered');
+      }
+    });
+  }
+
+  handleCheckboxChange(event, option) {
     const checkbox = event.target;
     const optionId = checkbox.value;
+    const optionContainer = checkbox.closest('.option-container');
 
     if (checkbox.checked) {
       if (this.selectedOptions.size < this.maxSelections) {
         this.selectedOptions.add(optionId);
+
+        // Move to selected section
+        optionContainer.remove();
+        this.addOptionToSelectedSection({
+          id: optionId,
+          label: checkbox.dataset.label
+        });
       } else {
         checkbox.checked = false;
         this.showLimitFeedback();
       }
     } else {
       this.selectedOptions.delete(optionId);
+
+      // Move back to available section
+      optionContainer.remove();
+      const availableContainer = this.contentArea.querySelector('.available-options-container');
+      this.createOptionElement({
+        id: optionId,
+        label: checkbox.dataset.label
+      }, availableContainer);
     }
 
-    // Update disabled state of all checkboxes
     this.updateCheckboxesState();
     this.updateSelectionFeedback();
   }
 
-  handleSubmit() {
-    const selectedIds = Array.from(this.selectedOptions);
-    this.closePopup();
-    return selectedIds;
-  }
+
+handleSubmit() {
+  const orderedSelectedIds = Array.from(
+    this.selectedSection.querySelectorAll('.option-container.selected input[type="checkbox"]')
+  ).map(cb => cb.value);
+
+  this.closePopup();
+  return orderedSelectedIds; // return ordered list
+}
 
   initEventListeners() {
     // Open popup when settings button is clicked
