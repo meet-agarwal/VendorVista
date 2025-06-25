@@ -50,11 +50,14 @@ export class SettingsManager {
 
     // Efficiently set selectedOptions using label match
     if (Array.isArray(initial_selection) && initial_selection.length > 0) {
-      const labelToIdMap = new Map(options.map(opt => [opt.label, opt.id]));
+      const labelToIdMap = new Map(
+        options.map(opt => [opt.label.trim().toLowerCase(), opt.id])
+      );
       initial_selection.forEach(label => {
-        const id = labelToIdMap.get(label);
+        const id = labelToIdMap.get(label.trim().toLowerCase());
         if (id) this.selectedOptions.add(id);
       });
+
     }
 
     if (!options || options.length === 0) {
@@ -140,12 +143,12 @@ export class SettingsManager {
 
     // Finally, append to whatever container you passed in
     container.appendChild(optionContainer);
-          if (isSelected) {
-    const dragHandle = document.createElement('i');
-    dragHandle.className = 'fas fa-grip-lines drag-handle';
-    dragHandle.title = 'Drag to reorder';
-    optionContainer.appendChild(dragHandle);
-  }
+    if (isSelected) {
+      const dragHandle = document.createElement('i');
+      dragHandle.className = 'fas fa-grip-lines drag-handle';
+      dragHandle.title = 'Drag to reorder';
+      optionContainer.appendChild(dragHandle);
+    }
   }
 
 
@@ -204,14 +207,14 @@ export class SettingsManager {
   }
 
 
-handleSubmit() {
-  const orderedSelectedIds = Array.from(
-    this.selectedSection.querySelectorAll('.option-container.selected input[type="checkbox"]')
-  ).map(cb => cb.value);
+  handleSubmit() {
+    const orderedSelectedIds = Array.from(
+      this.selectedSection.querySelectorAll('.option-container.selected input[type="checkbox"]')
+    ).map(cb => cb.value);
 
-  this.closePopup();
-  return orderedSelectedIds; // return ordered list
-}
+    this.closePopup();
+    return orderedSelectedIds; // return ordered list
+  }
 
   initEventListeners() {
     // Open popup when settings button is clicked
