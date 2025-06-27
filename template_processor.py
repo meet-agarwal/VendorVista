@@ -34,101 +34,100 @@ class BrochureGenerator:
         self.page_break = []
 
     def generate(self, selected_data: dict, image_data: dict,
-                 first_path: str, last_path: str) -> str:
+             first_path: str, last_path: str) -> str:
         """
         Build the brochure HTML string by populating data.
         - selected_data: dict mapping key -> field dict
         - image_data: dict mapping folder -> list of image URLs
         """
+        import json
+
+        # Step 1: Load tags from table_options.json
+        table_json_path = os.path.join(os.getcwd(), 'table_options.json')
+        with open(table_json_path, 'r', encoding='utf-8') as f:
+            tag_list = json.load(f).get('tags', [])
+
         entries = list(selected_data.items())
         total = len(entries)
         pages = math.ceil(total / self.items_per_page)
 
-    
-
-        # Build pages
         for p in range(pages):
             # Clone raw block
             clone = BeautifulSoup(str(self.raw_block), 'html.parser').div
 
             # Determine entries for this page
-            page_items = entries[p * self.items_per_page : (p + 1) * self.items_per_page]
+            page_items = entries[p * self.items_per_page: (p + 1) * self.items_per_page]
             slots = clone.select('[class^="item"]')
 
             for idx, slot in enumerate(slots):
-                # If no data for this slot, remove it
                 if idx >= len(page_items):
                     slot.decompose()
                     continue
 
                 key, data = page_items[idx]
 
-                # Fill image using image_data logic
+                # Fill image
                 img_tag = slot.find('img', id='image')
                 folder = data.get('Images')
                 sources = image_data.get(folder, [])
                 if img_tag and sources:
                     img_tag['src'] = sources[0]
 
-                # Fill text fields in table
+                # Fill table dynamically using tags
                 table = slot.find('table')
                 if table:
-                    for rid in self.row_ids:
-                        cell_id = rid.replace(' ', '_')
-                        cell = table.find(id=cell_id)
-                        if not cell:
-                            continue
-                        value = data.get(rid)
-                        if not value:
-                            row = cell.find_parent('tr')
-                            if row:
-                                row.decompose()
-                        else:
-                            # Set label and value
-                            label_cell = cell.find_previous_sibling('td')
-                            if label_cell:
-                                label_cell.string = rid
-                            cell.string = str(value)
+                    table.clear()  # Remove any template content
+                    for tag in tag_list:
+                        value = data.get(tag)
+                        if value:
+                            row = self.soup.new_tag("tr")
+
+                            label_cell = self.soup.new_tag("td")
+                            label_cell.string = tag
+
+                            value_cell = self.soup.new_tag("td")
+                            value_cell.string = str(value)
+
+                            row.append(label_cell)
+                            row.append(value_cell)
+                            table.append(row)
+                        
+                        # row = self.soup.new_tag("tr")
+
+                        # label_cell = self.soup.new_tag("td")
+                        # label_cell.string = tag
+
+                        # value_cell = self.soup.new_tag("td")
+                        # value_cell.string = str(value)
+
+                        # row.append(label_cell)
+                        # row.append(value_cell)
+                        # table.append(row)
+
 
             self.page_break.append(clone)
-        
-        
-        # # Insert generated pages at the original raw_block location
-        # self.parent.append(BeautifulSoup(self.page_break, 'html.parser'))
 
-        # Inject first and last page fragments
-        
-        # Check for existing <div id="last_page">, remove if found
-        first_div = self.soup.find('div', id='last_page')
+        # Clean and add first page
+        first_div = self.soup.find('div', id='first_page')
         if first_div:
-            first_div.decompose()  # Remove from the DOM
-
-        # Create and append a new empty <div id="last_page">
-        new_first_div = self.soup.new_tag("div", id="last_page")
-        self.parent.append(new_first_div)
-        
+            first_div.decompose()
+        new_first_div = self.soup.new_tag("div", id="first_page")
+        self.parent.insert(0, new_first_div)
         self._inject_fragment('first_page', first_path)
-        
+
         for block in self.page_break:
             self.parent.append(block)
-            
-        
-        
-        # Check for existing <div id="last_page">, remove if found
+
+        # Clean and add last page
         last_div = self.soup.find('div', id='last_page')
         if last_div:
-            last_div.decompose()  # Remove from the DOM
-
-        # Create and append a new empty <div id="last_page">
+            last_div.decompose()
         new_last_div = self.soup.new_tag("div", id="last_page")
         self.parent.append(new_last_div)
-        
-        
         self._inject_fragment('last_page', last_path)
-        
-        
 
         return str(self.soup)
+
 
     def _inject_fragment(self, div_id: str, fragment_path: str):
         """

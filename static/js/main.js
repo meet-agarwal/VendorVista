@@ -120,26 +120,27 @@ filtersLoaderOverlay.style.display = 'flex'; // Show the loader
     const productsData = await getProductsData(selectedFilters);
     console.log('Products to Display', productsData);
 
-    let min = document.getElementById('filter-input-min').value;
-    let max = document.getElementById('filter-input-max').value;
+    // let min = document.getElementById('filter-input-min').value;
+    // let max = document.getElementById('filter-input-max').value;
 
-    const filtered = productsData.filter(item =>
-      item["Start Price"] >= min &&
-      item["Start Price"] <= max
+    // const filtered = productsData.filter(item =>
+    //   item["Start Price"] >= min &&
+    //   item["Start Price"] <= max
 
-    );
+    // );
 
 
-    console.log('Filtered Products - Price Filter:', filtered);
+    // console.log('Filtered Products - Price Filter:', filtered);
 
-    // dataPro = productsData;
-    dataPro = filtered;
+    // // dataPro = productsData;
+    // dataPro = filtered;
 
     let ImageGetterDict = await imageGetter();
     console.log('ImageGetterDict:', ImageGetterDict);
     imageDict = ImageGetterDict;
 
-    showProducts(filtered, settingKeys, ImageGetterDict); // card generator call function
+    showProducts(productsData, settingKeys, ImageGetterDict); // to be removed later
+    // showProducts(filtered, settingKeys, ImageGetterDict); // card generator call function
 
     const sorter = document.getElementById('sortDropdownContainer');
     sorter.style.display = 'flex'; // Show the sorting dropdown

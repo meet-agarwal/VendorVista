@@ -184,7 +184,7 @@ def save_template():
         first_path = r"C:\Users\dell\Documents\first.html"
         last_path = r"C:\Users\dell\Documents\last.html"
         gen = BrochureGenerator('broucher.html')
-        # html_content = processor.get_final_html(first_path, last_path)
+        
         html_content = gen.generate(selected_data, imageDict,
                              first_path, last_path)
 
