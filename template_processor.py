@@ -14,11 +14,22 @@ class BrochureGenerator:
         with open(path, 'r', encoding='utf-8') as f:
             self.soup = BeautifulSoup(f.read(), 'html.parser')
 
+        # Capture header and footer elements
+        self.header = self.soup.find('div', attrs={'object': 'header'})
+        self.footer = self.soup.find('div', attrs={'object': 'footer'})
+        
         # Locate raw page_break section and its parent using object attribute
         self.raw_block = self.soup.find('div', attrs={'object': 'page_break'})
         if not self.raw_block:
             raise ValueError("Template must contain a <div object='page_break'> section")
-        self.parent = self.raw_block.parent
+        
+        # Get the page container (parent element with object="page")
+        self.page_container = self.soup.find('div', attrs={'object': 'page'})
+        if not self.page_container:
+            raise ValueError("Template must contain a <div object='page'> section")
+        
+        # Store the original page container structure
+        self.original_page_container = BeautifulSoup(str(self.page_container), 'html.parser').div
 
         # Read items per page and row IDs
         try:
@@ -28,10 +39,11 @@ class BrochureGenerator:
         rows_attr = self.raw_block.get('rows', '')
         self.row_ids = [r.strip().replace("_", " ") for r in rows_attr.split(',') if r.strip()]
 
-        # Remove placeholder block for regeneration
+        # Remove placeholder blocks for regeneration
         self.raw_block.extract()
+        self.page_container.extract()
         
-        self.page_break = []
+        self.page_breaks = []
 
     def generate(self, selected_data: dict, image_data: dict,
              first_path: str, last_path: str) -> str:
@@ -51,13 +63,28 @@ class BrochureGenerator:
         total = len(entries)
         pages = math.ceil(total / self.items_per_page)
 
+        # Create first page (without header/footer)
+        first_div = self.soup.new_tag("div", attrs={"object": "first_page"})
+        self.soup.body.append(first_div)
+        self._inject_fragment('first_page', first_path)
+
+        # Create product pages (with header/footer)
         for p in range(pages):
-            # Clone raw block
-            clone = BeautifulSoup(str(self.raw_block), 'html.parser').div
+            # Create a new page container for each page
+            page_container = BeautifulSoup(str(self.original_page_container), 'html.parser').div
+            
+            # Add header and footer to the page container
+            if self.header:
+                page_container.insert(0, BeautifulSoup(str(self.header), 'html.parser').div)
+            if self.footer:
+                page_container.append(BeautifulSoup(str(self.footer), 'html.parser').div)
+            
+            # Clone raw block for content
+            content_block = BeautifulSoup(str(self.raw_block), 'html.parser').div
 
             # Determine entries for this page
             page_items = entries[p * self.items_per_page: (p + 1) * self.items_per_page]
-            slots = clone.find_all(attrs={'object': lambda x: x and x.startswith('item')})
+            slots = content_block.find_all(attrs={'object': lambda x: x and x.startswith('item')})
 
             for idx, slot in enumerate(slots):
                 if idx >= len(page_items):
@@ -84,7 +111,7 @@ class BrochureGenerator:
                             if value:
                                 row = self.soup.new_tag("tr")
 
-                                label_cell = self.soup.new_tag("td")
+                                label_cell = self.soup.new_tag("th")  # Changed from td to th to match template
                                 label_cell.string = tag
 
                                 value_cell = self.soup.new_tag("td")
@@ -94,29 +121,28 @@ class BrochureGenerator:
                                 row.append(value_cell)
                                 table.append(row)
 
-            self.page_break.append(clone)
+            # Add content to the page container
+            content_div = page_container.find('div', attrs={'object': 'page_break'})
+            if content_div:
+                content_div.replace_with(content_block)
+            else:
+                # Find the position between header and footer
+                header = page_container.find('div', attrs={'object': 'header'})
+                if header:
+                    header.insert_after(content_block)
+                else:
+                    page_container.append(content_block)
+            
+            # Add the complete page to the document
+            self.soup.body.append(page_container)
+            self.page_breaks.append(page_container)
 
-        # Clean and add first page
-        first_div = self.soup.find(attrs={'object': 'first_page'})
-        if first_div:
-            first_div.decompose()
-        new_first_div = self.soup.new_tag("div", attrs={"object": "first_page"})
-        self.parent.insert(0, new_first_div)
-        self._inject_fragment('first_page', first_path)
-
-        for block in self.page_break:
-            self.parent.append(block)
-
-        # Clean and add last page
-        last_div = self.soup.find(attrs={'object': 'last_page'})
-        if last_div:
-            last_div.decompose()
-        new_last_div = self.soup.new_tag("div", attrs={"object": "last_page"})
-        self.parent.append(new_last_div)
+        # Create last page (without header/footer)
+        last_div = self.soup.new_tag("div", attrs={"object": "last_page"})
+        self.soup.body.append(last_div)
         self._inject_fragment('last_page', last_path)
 
         return str(self.soup)
-
 
     def _inject_fragment(self, div_id: str, fragment_path: str):
         """

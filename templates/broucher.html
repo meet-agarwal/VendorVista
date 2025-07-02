@@ -6,32 +6,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Luxury Jewelry Collection</title>
     <style>
-        /* ✅ Updated root variables */
         :root {
-            /* Theme Colors */
-            --color-background: #faf6ed;
-            --color-text: #333;
-            --color-page-gradient-top: #fff9e6;
-            --color-page-gradient-bottom: #fffdf5;
+            /* Base Theme Colors */
+            --color-background: #fbf8f2;
+            --color-text: #3f3a33;
+            --color-page-gradient-top: #fffaf1;
+            --color-page-gradient-bottom: #fefdf9;
 
             --color-product-bg: #ffffff;
-            --color-shadow: rgba(0, 0, 0, 0.1);
-            --color-border: #e8d9b5;
+            --color-shadow: rgba(0, 0, 0, 0.08);
+            --color-border: #e7dac2;
 
-            --color-image-bg: #f0e6d6;
-            --color-info-bg: #fffef9;
+            --color-image-bg: #f3ede3;
+            --color-info-bg: #fefbf6;
 
-            --color-table-border: #e8d9b5;
-            --color-table-header-bg: #f9f2e1;
-            --color-table-header-text: #8a7848;
-            --color-table-cell-bg: #fffef9;
+            --color-table-border: #e3d4b8;
+            --color-table-header-bg: #f9f2e4;
+            --color-table-header-text: #8a6d3b;
+            --color-table-cell-bg: #fefbf6;
+
+            --color-table-bg: #fcf8f3;
+            --color-table-th-text: #8a6d3b;
+            --color-table-td-text: #4f3c28;
+            --color-divider-line: #e9dcc1;
+            
+            --header-height: 30mm;
+            --footer-height: 20mm;
+            --content-height: calc(297mm - var(--header-height) - var(--footer-height));
         }
 
         @page {
             size: A4;
             margin: 0;
         }
-
 
         body {
             margin: 0;
@@ -41,38 +48,73 @@
             color: var(--color-text);
         }
 
-        #page {
-            align-items: center;
+        .page-container {
             width: 210mm;
             height: 297mm;
-            padding: 0;
+            margin: 0 auto;
+            position: relative;
+            background: linear-gradient(to bottom, var(--color-page-gradient-top), var(--color-page-gradient-bottom));
+            overflow: hidden;
+        }
 
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--color-product-bg);
+            border-bottom: 1px solid var(--color-border);
+            padding: 5mm;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: var(--footer-height);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--color-product-bg);
+            border-top: 1px solid var(--color-border);
+            padding: 5mm;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        #content {
+            position: absolute;
+            top: var(--header-height);
+            bottom: var(--footer-height);
+            left: 0;
+            right: 0;
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             grid-template-rows: repeat(3, 1fr);
-            margin: 0 auto;
-            page-break-after: always;
-            page-break-before: always;
-
             gap: 0;
             place-items: center;
             justify-content: center;
             align-items: center;
-
-            page-break-inside: avoid;
-            break-inside: avoid;
-            background: linear-gradient(to bottom, var(--color-page-gradient-top), var(--color-page-gradient-bottom));
+            padding: 5mm;
+            box-sizing: border-box;
+            overflow: hidden;
         }
 
         .product {
             width: fit-content;
-            margin: 1rem;
+            margin: 0.5rem;
             page-break-inside: avoid;
             break-inside: avoid;
             background-color: var(--color-product-bg);
             border-radius: 4px;
             box-shadow: 0 3px 12px var(--color-shadow);
-            /* overflow: hidden; */
             border: 1px solid var(--color-border);
         }
 
@@ -85,11 +127,10 @@
         }
 
         .product-image {
-            border: solid beige;
+            border: solid var(--color-border);
             aspect-ratio: 1 / 1;
-            height: 17rem;
-            width: 17rem;
-            /* padding: 0.5rem; */
+            height: 14rem;
+            width: 14rem;
             background-color: var(--color-image-bg);
             display: flex;
             align-items: center;
@@ -113,26 +154,38 @@
 
         table {
             width: 100%;
-            border-collapse: collapse;
-            font-size: 10px;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 12px;
+            background: var(--color-table-bg);
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 3px 6px var(--color-shadow);
+            font-family: 'Georgia', serif;
         }
 
         th,
         td {
-            border: 1px solid var(--color-table-border);
-            padding: 3mm 2mm;
+            padding: 8px 12px;
             text-align: left;
+            vertical-align: middle;
+            border-bottom: 1px solid var(--color-table-border);
         }
 
         th {
-            background-color: var(--color-table-header-bg);
-            color: var(--color-table-header-text);
-            width: 35%;
-            font-weight: bold;
+            color: var(--color-table-th-text);
+            font-weight: 600;
+            white-space: nowrap;
+            width: 30%;
         }
 
         td {
-            background-color: var(--color-table-cell-bg);
+            color: var(--color-table-td-text);
+        }
+
+        tr:last-child td,
+        tr:last-child th {
+            border-bottom: none;
         }
 
         .image-left {
@@ -144,141 +197,144 @@
         }
 
         @media print {
-            @media print {
-                * {
-                    -webkit-print-color-adjust: exact;
-                    print-color-adjust: exact;
-                }
-
-                @print {
-                    size: A4 portrait;
-                    margin: 0;
-                }
-
-                body,
-                html {
-                    background-color: var(--color-background);
-                    /* Or any color you want */
-                }
-
-                .page {
-                    background-color: linear-gradient(to bottom, var(--color-page-gradient-top), var(--color-page-gradient-bottom));
-                    /* Add your class name here */
-                    color: var(--color-text);
-                    page-break-after: always;
-                    page-break-before: always;
-                    width: 210mm;
-                    height: 297mm;
-                }
-            }
-
-
-            .product {
-                box-shadow: none;
+            * {
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
+
+            body, html {
+                background-color: var(--color-background);
+                margin: 0;
+                padding: 0;
+            }
+
+            .page-container {
+                page-break-after: always;
+                page-break-before: always;
+                box-shadow: none;
+            }
+
+            .product {
+                box-shadow: none;
+            }
+        }
+
+        /* Empty state styling */
+        .header:empty, .footer:empty {
+            visibility: hidden;
         }
     </style>
-
 </head>
 
 <body>
+    <div class="page-container" object="page">
+        <div class="header" object="header">
+            <!-- Your header content goes here -->
+            <h1>Luxury Jewelry Collection</h1>
+            <!-- <img src="your-logo.png" alt="Company Logo" style="max-height: 100%;"> -->
+             <img src="https://i.postimg.cc/TYzxfR0t/logo-trial-removebg-preview.png" alt="Company Logo" style="max-height: 100%; margin-left: 4rem; padding-bottom: 1rem;">
+        </div>
 
-    <div id="page" object="page_break" products="6">
-
-        <!-- product -->
-        <div class="product" object="item">
-            <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt="" object="image">
+        <div id="content" object="page_break" products="6">
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt="" object="image"></div>
+                <div class="product-info" object="product_details">
+                    <table>
+                        <tr>
+                            <th>Weight:</th>
+                            <td>5.2g</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
-            <div class="product-info" object="product_details">
-                <table>
-                    <tr>
-                        <th>Metal:</th>
-                        <td>Sterling Silver</td>
-                    </tr>
-                    <tr>
-                </table>
+
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt="" object="image"></div>
+                <div class="product-info" object="product_details">
+                    <table>
+                        <tr>
+                            <th>Metal:</th>
+                            <td>Sterling Silver</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt="" object="image"></div>
+                <div class="product-info" object="product_details">
+                    <table>
+                        <tr>
+                            <th>Metal:</th>
+                            <td>Sterling Silver</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt="" object="image"></div>
+                <div class="product-info" object="product_details">
+                    <table>
+                        <tr>
+                            <th>Metal:</th>
+                            <td>Sterling Silver</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt="" object="image"></div>
+                <div class="product-info" object="product_details">
+                    <table>
+                        <tr>
+                            <th>Metal:</th>
+                            <td>Sterling Silver</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt="" object="image"></div>
+                <div class="product-info" object="product_details">
+                    <table>
+                        <tr>
+                            <th>Metal:</th>
+                            <td>Sterling Silver</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
 
-        <!-- product -->
-        <div class="product" object="item">
-            <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt="" object="image">
-            </div>
-            <div class="product-info" object="product_details">
-                <table>
-                    <tr>
-                        <th>Metal:</th>
-                        <td>Sterling Silver</td>
-                    </tr>
-                    <tr>
-                </table>
-            </div>
+        <div class="footer" object="footer">
+            <!-- Your footer content goes here -->
+            <p>© 2023 Luxury Jewelry Collection. All rights reserved.</p>
+            <!-- <img src="footer-logo.png" alt="Footer Logo" style="max-height: 100%;"> -->
         </div>
-
-
-        <!-- product -->
-        <div class="product" object="item">
-            <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt="" object="image">
-            </div>
-            <div class="product-info" object="product_details">
-                <table>
-                    <tr>
-                        <th>Metal:</th>
-                        <td>Sterling Silver</td>
-                    </tr>
-                    <tr>
-                </table>
-            </div>
-        </div>
-
-        <!-- product -->
-        <div class="product" object="item">
-            <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt="" object="image">
-            </div>
-            <div class="product-info" object="product_details">
-                <table>
-                    <tr>
-                        <th>Metal:</th>
-                        <td>Sterling Silver</td>
-                    </tr>
-                    <tr>
-                </table>
-            </div>
-        </div>
-
-        <!-- product -->
-        <div class="product" object="item">
-            <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt="" object="image">
-            </div>
-            <div class="product-info" object="product_details">
-                <table>
-                    <tr>
-                        <th>Metal:</th>
-                        <td>Sterling Silver</td>
-                    </tr>
-                    <tr>
-                </table>
-            </div>
-        </div>
-
-        <!-- product -->
-        <div class="product" object="item">
-            <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt="" object="image">
-            </div>
-            <div class="product-info" object="product_details">
-                <table>
-                    <tr>
-                        <th>Metal:</th>
-                        <td>Sterling Silver</td>
-                    </tr>
-                    <tr>
-                </table>
-            </div>
-        </div>
-
     </div>
-</body>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Remove borders for single-row tables
+            document.querySelectorAll('table').forEach(table => {
+                const rows = table.querySelectorAll('tr');
+                if (rows.length === 1) {
+                    table.style.border = 'none';
+                    rows[0].querySelectorAll('td, th').forEach(cell => {
+                        cell.style.border = 'none';
+                    });
+                }
+            });
+        });
+    </script>
+</body>
 </html>
