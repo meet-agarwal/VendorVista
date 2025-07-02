@@ -14,17 +14,17 @@ class BrochureGenerator:
         with open(path, 'r', encoding='utf-8') as f:
             self.soup = BeautifulSoup(f.read(), 'html.parser')
 
-        # Locate raw page_break section and its parent
-        self.raw_block = self.soup.find('div', class_='page_break')
+        # Locate raw page_break section and its parent using object attribute
+        self.raw_block = self.soup.find('div', attrs={'object': 'page_break'})
         if not self.raw_block:
-            raise ValueError("Template must contain a <div class='page_break'> section")
+            raise ValueError("Template must contain a <div object='page_break'> section")
         self.parent = self.raw_block.parent
 
         # Read items per page and row IDs
         try:
-            self.items_per_page = int(self.raw_block['product'])
+            self.items_per_page = int(self.raw_block['products'])
         except Exception:
-            raise ValueError("Attribute 'product' on page_break must be an integer")
+            raise ValueError("Attribute 'products' on page_break must be an integer")
         rows_attr = self.raw_block.get('rows', '')
         self.row_ids = [r.strip().replace("_", " ") for r in rows_attr.split(',') if r.strip()]
 
@@ -57,7 +57,7 @@ class BrochureGenerator:
 
             # Determine entries for this page
             page_items = entries[p * self.items_per_page: (p + 1) * self.items_per_page]
-            slots = clone.select('[class^="item"]')
+            slots = clone.find_all(attrs={'object': lambda x: x and x.startswith('item')})
 
             for idx, slot in enumerate(slots):
                 if idx >= len(page_items):
@@ -67,51 +67,40 @@ class BrochureGenerator:
                 key, data = page_items[idx]
 
                 # Fill image
-                img_tag = slot.find('img', id='image')
+                img_tag = slot.find(attrs={'object': 'image'})
                 folder = data.get('Images')
                 sources = image_data.get(folder, [])
                 if img_tag and sources:
                     img_tag['src'] = sources[0]
 
                 # Fill table dynamically using tags
-                table = slot.find('table')
+                table = slot.find(attrs={'object': 'product_details'})
                 if table:
-                    table.clear()  # Remove any template content
-                    for tag in tag_list:
-                        value = data.get(tag)
-                        if value:
-                            row = self.soup.new_tag("tr")
+                    table = table.find('table')  # Find the table inside product_details
+                    if table:
+                        table.clear()  # Remove any template content
+                        for tag in tag_list:
+                            value = data.get(tag)
+                            if value:
+                                row = self.soup.new_tag("tr")
 
-                            label_cell = self.soup.new_tag("td")
-                            label_cell.string = tag
+                                label_cell = self.soup.new_tag("td")
+                                label_cell.string = tag
 
-                            value_cell = self.soup.new_tag("td")
-                            value_cell.string = str(value)
+                                value_cell = self.soup.new_tag("td")
+                                value_cell.string = str(value)
 
-                            row.append(label_cell)
-                            row.append(value_cell)
-                            table.append(row)
-                        
-                        # row = self.soup.new_tag("tr")
-
-                        # label_cell = self.soup.new_tag("td")
-                        # label_cell.string = tag
-
-                        # value_cell = self.soup.new_tag("td")
-                        # value_cell.string = str(value)
-
-                        # row.append(label_cell)
-                        # row.append(value_cell)
-                        # table.append(row)
-
+                                row.append(label_cell)
+                                row.append(value_cell)
+                                table.append(row)
 
             self.page_break.append(clone)
 
         # Clean and add first page
-        first_div = self.soup.find('div', id='first_page')
+        first_div = self.soup.find(attrs={'object': 'first_page'})
         if first_div:
             first_div.decompose()
-        new_first_div = self.soup.new_tag("div", id="first_page")
+        new_first_div = self.soup.new_tag("div", attrs={"object": "first_page"})
         self.parent.insert(0, new_first_div)
         self._inject_fragment('first_page', first_path)
 
@@ -119,10 +108,10 @@ class BrochureGenerator:
             self.parent.append(block)
 
         # Clean and add last page
-        last_div = self.soup.find('div', id='last_page')
+        last_div = self.soup.find(attrs={'object': 'last_page'})
         if last_div:
             last_div.decompose()
-        new_last_div = self.soup.new_tag("div", id="last_page")
+        new_last_div = self.soup.new_tag("div", attrs={"object": "last_page"})
         self.parent.append(new_last_div)
         self._inject_fragment('last_page', last_path)
 
@@ -132,11 +121,11 @@ class BrochureGenerator:
     def _inject_fragment(self, div_id: str, fragment_path: str):
         """
         Reads an HTML fragment and injects its <style> and <body>
-        contents into the <div id=div_id> placeholder.
+        contents into the <div object=div_id> placeholder.
         """
-        target_div = self.soup.find('div', id=div_id)
+        target_div = self.soup.find('div', attrs={'object': div_id})
         if not target_div:
-            raise ValueError(f"No <div id='{div_id}'> found in template")
+            raise ValueError(f"No <div object='{div_id}'> found in template")
 
         with open(fragment_path, 'r', encoding='utf-8') as f:
             frag_soup = BeautifulSoup(f.read(), 'html.parser')
@@ -149,4 +138,3 @@ class BrochureGenerator:
                     if isinstance(child, str) and child.strip() == '':
                         continue
                     target_div.append(child)
-            

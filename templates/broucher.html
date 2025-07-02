@@ -4,195 +4,281 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <!-- <link rel="stylesheet" href="../static/broucher.css"> -->
-
+    <title>Luxury Jewelry Collection</title>
     <style>
+        /* ✅ Updated root variables */
+        :root {
+            /* Theme Colors */
+            --color-background: #faf6ed;
+            --color-text: #333;
+            --color-page-gradient-top: #fff9e6;
+            --color-page-gradient-bottom: #fffdf5;
+
+            --color-product-bg: #ffffff;
+            --color-shadow: rgba(0, 0, 0, 0.1);
+            --color-border: #e8d9b5;
+
+            --color-image-bg: #f0e6d6;
+            --color-info-bg: #fffef9;
+
+            --color-table-border: #e8d9b5;
+            --color-table-header-bg: #f9f2e1;
+            --color-table-header-text: #8a7848;
+            --color-table-cell-bg: #fffef9;
+        }
+
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+
         body {
-            font-family: 'Georgia', serif;
-            background-color: #f5f3eb;
-            color: #4D1C17;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background-color: var(--color-background);
+            color: var(--color-text);
         }
 
-        .container {
-            width: 90%;
-            max-width: 1000px;
-            padding: 20px;
-        }
-
-        .item1,
-        .item2 {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            background-color: #f5f3eb;
-            margin-bottom: 30px;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            gap: 20px;
+        #page {
             align-items: center;
+            width: 210mm;
+            height: 297mm;
+            padding: 0;
+
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            margin: 0 auto;
+            page-break-after: always;
+            page-break-before: always;
+
+            gap: 0;
+            place-items: center;
+            justify-content: center;
+            align-items: center;
+
+            page-break-inside: avoid;
+            break-inside: avoid;
+            background: linear-gradient(to bottom, var(--color-page-gradient-top), var(--color-page-gradient-bottom));
         }
 
-        .item2 {
+        .product {
+            width: fit-content;
+            margin: 1rem;
+            page-break-inside: avoid;
+            break-inside: avoid;
+            background-color: var(--color-product-bg);
+            border-radius: 4px;
+            box-shadow: 0 3px 12px var(--color-shadow);
+            /* overflow: hidden; */
+            border: 1px solid var(--color-border);
+        }
+
+        .product-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .product-image {
+            border: solid beige;
+            aspect-ratio: 1 / 1;
+            height: 17rem;
+            width: 17rem;
+            /* padding: 0.5rem; */
+            background-color: var(--color-image-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .image-right .product-image {
+            border-left: 1px solid var(--color-border);
+        }
+
+        .product-info {
+            flex: 1;
+            padding: .5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: var(--color-info-bg);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid var(--color-table-border);
+            padding: 3mm 2mm;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--color-table-header-bg);
+            color: var(--color-table-header-text);
+            width: 35%;
+            font-weight: bold;
+        }
+
+        td {
+            background-color: var(--color-table-cell-bg);
+        }
+
+        .image-left {
+            flex-direction: row;
+        }
+
+        .image-right {
             flex-direction: row-reverse;
         }
 
-        .item1 img,
-        .item2 img {
-            width: 100%;
-            max-width: 300px;
-            height: auto;
-            border-radius: 10px;
-            object-fit: cover;
-        }
-
-        .product-details {
-            flex: 1;
-            padding: 20px;
-            border-radius: 10px;
-            border: 1px solid #0000002e;
-        }
-
-        .product-details h3 {
-            text-align: center;
-            font-size: 22px;
-            margin-bottom: 15px;
-            color: #6a1b9a;
-        }
-
-        .product-details table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .product-details td {
-            padding: 8px 10px;
-            border-bottom: 1px solid #0000002e;
-        }
-
-        .product-details td:first-child {
-            font-weight: bold;
-            color: #333;
-        }
-
         @media print {
-            @page {
-                size: A4;
-                margin: 0;
+            @media print {
+                * {
+                    -webkit-print-color-adjust: exact;
+                    print-color-adjust: exact;
+                }
+
+                @print {
+                    size: A4 portrait;
+                    margin: 0;
+                }
+
+                body,
+                html {
+                    background-color: var(--color-background);
+                    /* Or any color you want */
+                }
+
+                .page {
+                    background-color: linear-gradient(to bottom, var(--color-page-gradient-top), var(--color-page-gradient-bottom));
+                    /* Add your class name here */
+                    color: var(--color-text);
+                    page-break-after: always;
+                    page-break-before: always;
+                    width: 210mm;
+                    height: 297mm;
+                }
             }
 
-            html,
-            body {
-                margin: 0;
-                padding: 0;
-                height: 100%;
-            }
 
-            .container {
-                margin: 0;
-                padding: 0;
-                width: 100%;
-            }
-
-            #first_page,
-            .page_break,
-            #last_page {
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
-                display: block;
-            }
-
-            #first_page {
-                page-break-before: always;
-                page-break-after: always;
-            }
-             #last_page {
-                page-break-before: always;
-                page-break-after: always;
-                display: block;
-            }
-
-            .page_break {
-                padding-top: 3rem;
-                padding-bottom: 3rem;
-                margin: 50px 0;
-              
-            }
-
-            .item1,
-            .item2 {
-                margin-top: 2rem;
-                page-break-inside: avoid !important;
-            }
-
-            .product-details td {
-                padding: 1px;
-                border-bottom: 1px solid #0000002e;
+            .product {
+                box-shadow: none;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
         }
     </style>
+
 </head>
 
 <body>
-    <div class="container">
-        <div id="first_page"></div>
 
-        <div class="page_break" product="2" rows="Metal,Metal_Purity,Main_Stone,Main_Stone_Shape,Main_Stone_Color,Main_Stone_Creation,Weight,Ring_Size,Style,Store_Category">
-            <div class="item1">
-                <img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" id="image" alt="">
-                <div class="product-details">
-                    <h3>Product Details</h3>
-                    <table id="item_product_details">
-                        <tr>
-                            <td><strong>Metal</strong></td>
-                            <td id="Metal">18K Gold</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Main Stone</strong></td>
-                            <td id="Main_Stone">Burmese Ruby</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Main Stone Color</strong></td>
-                            <td id="Main_Stone_Color">Pigeon Blood Red</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Gross Weight(Gram)</strong></td>
-                            <td id="Weight">3.5g</td>
-                        </tr>
-                    </table>
-                </div>
+    <div id="page" object="page_break" products="6">
+
+        <!-- product -->
+        <div class="product" object="item">
+            <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt="" object="image">
             </div>
-
-            <div class="item2">
-                <img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" id="image" alt="">
-                <div class="product-details">
-                    <h3>Product Details</h3>
-                    <table id="item_product_details">
-                        <tr>
-                            <td><strong>Metal</strong></td>
-                            <td id="Metal">Vermeil</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Main Stone</strong></td>
-                            <td id="Main_Stone">Garnet</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Main Stone Color</strong></td>
-                            <td id="Main_Stone_Color">Cabernet</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Gross Weight(Gram)</strong></td>
-                            <td id="Weight">8.2g</td>
-                        </tr>
-                    </table>
-                </div>
+            <div class="product-info" object="product_details">
+                <table>
+                    <tr>
+                        <th>Metal:</th>
+                        <td>Sterling Silver</td>
+                    </tr>
+                    <tr>
+                </table>
             </div>
         </div>
+
+        <!-- product -->
+        <div class="product" object="item">
+            <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt="" object="image">
+            </div>
+            <div class="product-info" object="product_details">
+                <table>
+                    <tr>
+                        <th>Metal:</th>
+                        <td>Sterling Silver</td>
+                    </tr>
+                    <tr>
+                </table>
+            </div>
+        </div>
+
+
+        <!-- product -->
+        <div class="product" object="item">
+            <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt="" object="image">
+            </div>
+            <div class="product-info" object="product_details">
+                <table>
+                    <tr>
+                        <th>Metal:</th>
+                        <td>Sterling Silver</td>
+                    </tr>
+                    <tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- product -->
+        <div class="product" object="item">
+            <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt="" object="image">
+            </div>
+            <div class="product-info" object="product_details">
+                <table>
+                    <tr>
+                        <th>Metal:</th>
+                        <td>Sterling Silver</td>
+                    </tr>
+                    <tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- product -->
+        <div class="product" object="item">
+            <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt="" object="image">
+            </div>
+            <div class="product-info" object="product_details">
+                <table>
+                    <tr>
+                        <th>Metal:</th>
+                        <td>Sterling Silver</td>
+                    </tr>
+                    <tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- product -->
+        <div class="product" object="item">
+            <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt="" object="image">
+            </div>
+            <div class="product-info" object="product_details">
+                <table>
+                    <tr>
+                        <th>Metal:</th>
+                        <td>Sterling Silver</td>
+                    </tr>
+                    <tr>
+                </table>
+            </div>
+        </div>
+
     </div>
 </body>
+
 </html>

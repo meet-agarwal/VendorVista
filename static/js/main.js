@@ -132,7 +132,7 @@ filtersLoaderOverlay.style.display = 'flex'; // Show the loader
 
     // console.log('Filtered Products - Price Filter:', filtered);
 
-    // // dataPro = productsData;
+    dataPro = productsData; // to be commented later
     // dataPro = filtered;
 
     let ImageGetterDict = await imageGetter();

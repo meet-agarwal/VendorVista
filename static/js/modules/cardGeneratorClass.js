@@ -2,9 +2,7 @@
  * CardGenerator - A class to create styled cards with images and data tables
  */
 
-/**
- * CardGenerator - A class to create styled cards with images and data tables
- */
+
 export class CardGenerator {
     constructor(keysToDisplay, containerId) {
         this.imageUrlDict = {};
