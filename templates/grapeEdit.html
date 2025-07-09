@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Broucher Generator System</title>
+    <link rel="stylesheet" href="../static/editorStyle.css">
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #gjs {
+            min-height: 100%;
+            display: block;
+        }
+
+        .main_container {
+            width: 100vw;
+            height: 91vh;
+            margin-top: 9vh;
+
+        }
+
+        /* Style for resizing handles */
+        .gjs-resizer-h {
+            width: 8px;
+            height: 8px;
+            border: 2px solid #fff;
+            background: #4af;
+            border-radius: 50%;
+        }
+
+        /* Make the canvas more visible */
+        .gjs-cv-canvas {
+            background-color: #f5f5f5;
+        }
+    </style>
+
+    <!-- GrapesJS CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/grapesjs/0.21.7/css/grapes.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/grapesjs/0.21.7/grapes.min.js"></script>
+       <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <!-- Header with logo and title -->
+    <header>
+        <img src="https://listingbot.in/images/logo.png" alt="ListingBot Logo">
+        <button id="template_editor_btn"
+                class="bg-white/80 hover:bg-white text-blue-800 font-semibold py-2 px-4 rounded-2xl shadow-md transition-all duration-200">
+               Save Template
+        </button>
+
+
+    </header>
+
+
+    <div class="main_container" id="gjs">
+
+    </div>
+
+
+
+
+
+
+
+    <script type="module" src="../static/js/grapeEdit.js"></script>
+
+    <!-- Add these after the main GrapesJS script -->
+    <script src="https://cdn.jsdelivr.net/npm/grapesjs-style-bg@1.0.5/dist/grapesjs-style-bg.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/grapesjs-touch@0.1.1/dist/grapesjs-touch.min.js"></script>
+
+
+    <!-- 2 js filter
+    grapeEdit.js
+    editorInit.js -->
+
+
+
+</body>
+
+</html>

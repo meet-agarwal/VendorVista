@@ -31,6 +31,16 @@ image_loader = GetImagesDict(image_column="Images")
 def home():
     return render_template('index.html')
 
+
+@app.route('/editor')
+def editor():
+    return render_template('editorIndex.html')
+
+@app.route('/grapeEdit')
+def load_template():
+    return render_template('grapeEdit.html')
+
+
 @app.route('/api/filters')
 def get_filters():
     
@@ -273,6 +283,208 @@ def settings_tableoptions():
             return jsonify({'error': 'Invalid format. Provide a JSON with a "tags" list.'}), 400
         write_tags(data['tags'])
         return jsonify({'message': 'Tags updated successfully', 'tags': data['tags']})
+    
+CONFIG_FILE = 'templates_data.json'
+
+def read_editor_config():
+    with open(CONFIG_FILE, 'r', encoding='utf-8') as f:
+        return json.load(f)
+
+def write_editor_config(data):
+    with open(CONFIG_FILE, 'w', encoding='utf-8') as f:
+        json.dump(data, f, indent=2)
+
+@app.route('/api/editor-config', methods=['GET'])
+def get_editor_config():
+    try:
+        config = read_editor_config()
+        return jsonify(config)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+@app.route('/api/templates-selected', methods=['GET', 'POST'])
+def get_templates_selected():
+    if request.method == 'GET':
+        try:
+            config = read_editor_config()
+            templates_selected = config.get('templates_selected', {})
+
+            # Get the selected keys list
+            selected_keys = templates_selected.get('Selected_list', [])
+
+            # Filter templates_selected based on selected_keys
+            filtered_data = {
+                key: templates_selected.get(key, {}) 
+                for key in selected_keys
+            }
+
+            return jsonify({'templates_selected': filtered_data})
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+
+
+    elif request.method == 'POST':
+        try:
+            new_data = request.get_json()
+            if not new_data:
+                return jsonify({'error': 'No data provided'}), 400
+
+            config = read_editor_config()
+            current_selection = config.get('templates_selected', {})
+
+            # Ensure Selected_list is initialized correctly
+            selected_list = current_selection.get('Selected_list', [])
+
+            for page_key, new_value in new_data.items():
+                # Allow only "first", "product", or "last"
+                if page_key not in ['first', 'product', 'last']:
+                    return jsonify({'error': f'Invalid page: {page_key}'}), 400
+
+                existing_template = current_selection.get(page_key, {}).get('template', {})
+
+                # If already filled, block overwrite
+                if existing_template and isinstance(existing_template, dict) and len(existing_template) > 0:
+                    return jsonify({
+                        'error': f'"{page_key}" is already selected. Cannot overwrite.',
+                        'page': page_key
+                    }), 409  # HTTP 409 Conflict
+
+                # Save the new template
+                current_selection[page_key] = new_value
+
+                # Keep track of updated pages
+                if page_key not in selected_list:
+                    selected_list.append(page_key)
+
+            # Update the config with changes
+            current_selection['Selected_list'] = selected_list
+            config['templates_selected'] = current_selection
+
+            write_editor_config(config)
+
+            return jsonify({
+                'message': 'Template saved successfully.',
+                'templates_selected': config['templates_selected']
+            })
+
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+
+
+
+# @app.route('/api/templates-selected/delete', methods=['POST'])
+# def delete_selected_template():
+#     try:
+#         data = request.get_json()
+#         page_to_clear = data.get('page')  # "first" | "product" | "last"
+
+#         if page_to_clear not in ['first', 'product', 'last']:
+#             return jsonify({'error': 'Invalid page type'}), 400
+
+#         config = read_editor_config()
+#         if 'templates_selected' not in config:
+#             config['templates_selected'] = {}
+
+#         # Reset to empty structure
+#         config['templates_selected'][page_to_clear] = {
+#             "template": {},
+#             "links": {
+#                 "pdf": "",
+#                 "images": "",
+#                 "html": ""
+#             },
+#             "mode" : "" 
+#         }
+
+#         write_editor_config(config)
+#         return jsonify({'message': f'"{page_to_clear}" selection cleared.'})
+
+#     except Exception as e:
+#         return jsonify({'error': str(e)}), 500
+
+@app.route('/api/templates-selected/delete', methods=['POST'])
+def delete_selected_template():
+    try:
+        data = request.get_json()
+        page_to_clear = data.get('page')  # "first" | "product" | "last"
+        new_template = data.get('template', {})
+        new_mode = data.get('mode', '')
+        new_links = data.get('links', {})
+
+        VALID_PAGES = ['first', 'product', 'last']
+
+        if page_to_clear not in VALID_PAGES:
+            return jsonify({
+                "success": False,
+                "error": f'Invalid page type: "{page_to_clear}".'
+            }), 400
+
+        config = read_editor_config()
+        selected = config.get('templates_selected', {})
+
+        existing_data = selected.get(page_to_clear, {})
+        selected_list = selected.get("Selected_list", [])
+
+        if not existing_data:
+            return jsonify({
+                "success": False,
+                "error": f'No existing data found for page "{page_to_clear}".'
+            }), 404
+
+        # Check if data matches before deletion
+        match = (
+            existing_data.get('template', {}) == new_template and
+            existing_data.get('mode', '') == new_mode and
+            existing_data.get('links', {}) == new_links
+        )
+
+        if not match:
+            return jsonify({
+                "success": False,
+                "error": "Template data does not match the current selection.",
+                "details": {
+                    "expected": existing_data,
+                    "received": {
+                        "template": new_template,
+                        "mode": new_mode,
+                        "links": new_links
+                    }
+                }
+            }), 409
+
+        # Remove from Selected_list
+        if page_to_clear in selected_list:
+            selected_list.remove(page_to_clear)
+
+        selected["Selected_list"] = selected_list
+
+        # Clear the template data
+        selected[page_to_clear] = {
+            "template": {},
+            "links": {
+                "pdf": "",
+                "images": "",
+                "html": ""
+            },
+            "mode": ""
+        }
+
+        config['templates_selected'] = selected
+        write_editor_config(config)
+
+        return jsonify({
+            "success": True,
+            "message": f'{page_to_clear.capitalize()} page selection cleared.'
+        }), 200
+
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": "Server error while deleting template.",
+            "details": str(e)
+        }), 500  
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

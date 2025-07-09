@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- <link rel="stylesheet" href="../static/broucher.css"> -->
+
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #f5f3eb;
+            color: #4D1C17;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            padding: 20px;
+        }
+
+        .item1,
+        .item2 {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            background-color: #f5f3eb;
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            gap: 20px;
+            align-items: center;
+        }
+
+        .item2 {
+            flex-direction: row-reverse;
+        }
+
+        .item1 img,
+        .item2 img {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .product-details {
+            flex: 1;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #0000002e;
+        }
+
+        .product-details h3 {
+            text-align: center;
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #6a1b9a;
+        }
+
+        .product-details table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .product-details td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #0000002e;
+        }
+
+        .product-details td:first-child {
+            font-weight: bold;
+            color: #333;
+        }
+
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
+
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+            }
+
+            .container {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+            }
+
+            #first_page,
+            .page_break,
+            #last_page {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                display: block;
+            }
+
+            #first_page {
+                page-break-before: always;
+                page-break-after: always;
+            }
+             #last_page {
+                page-break-before: always;
+                page-break-after: always;
+                display: block;
+            }
+
+            .page_break {
+                padding-top: 3rem;
+                padding-bottom: 3rem;
+                margin: 50px 0;
+              
+            }
+
+            .item1,
+            .item2 {
+                margin-top: 2rem;
+                page-break-inside: avoid !important;
+            }
+
+            .product-details td {
+                padding: 1px;
+                border-bottom: 1px solid #0000002e;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div id="first_page"></div>
+
+        <div class="page_break" product="2" rows="Metal,Metal_Purity,Main_Stone,Main_Stone_Shape,Main_Stone_Color,Main_Stone_Creation,Weight,Ring_Size,Style,Store_Category">
+            <div class="item1">
+                <img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" id="image" alt="">
+                <div class="product-details">
+                    <h3>Product Details</h3>
+                    <table id="item_product_details">
+                        <tr>
+                            <td><strong>Metal</strong></td>
+                            <td id="Metal">18K Gold</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Main Stone</strong></td>
+                            <td id="Main_Stone">Burmese Ruby</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Main Stone Color</strong></td>
+                            <td id="Main_Stone_Color">Pigeon Blood Red</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Gross Weight(Gram)</strong></td>
+                            <td id="Weight">3.5g</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="item2">
+                <img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" id="image" alt="">
+                <div class="product-details">
+                    <h3>Product Details</h3>
+                    <table id="item_product_details">
+                        <tr>
+                            <td><strong>Metal</strong></td>
+                            <td id="Metal">Vermeil</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Main Stone</strong></td>
+                            <td id="Main_Stone">Garnet</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Main Stone Color</strong></td>
+                            <td id="Main_Stone_Color">Cabernet</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Gross Weight(Gram)</strong></td>
+                            <td id="Weight">8.2g</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

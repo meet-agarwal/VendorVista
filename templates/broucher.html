@@ -29,7 +29,7 @@
             --color-table-th-text: #8a6d3b;
             --color-table-td-text: #4f3c28;
             --color-divider-line: #e9dcc1;
-            
+
             --header-height: 30mm;
             --footer-height: 20mm;
             --content-height: calc(297mm - var(--header-height) - var(--footer-height));
@@ -96,20 +96,24 @@
             left: 0;
             right: 0;
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: repeat(3, 1fr);
-            gap: 0;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            row-gap: 0px;
+            column-gap: 5px;
             place-items: center;
             justify-content: center;
             align-items: center;
-            padding: 5mm;
+            /* padding: 5mm; */
             box-sizing: border-box;
             overflow: hidden;
+
+            margin: 3rem 0.5rem 3rem 0.5rem;
         }
 
         .product {
+
             width: fit-content;
-            margin: 0.5rem;
+            /* margin: 0.5rem; */
             page-break-inside: avoid;
             break-inside: avoid;
             background-color: var(--color-product-bg);
@@ -129,8 +133,8 @@
         .product-image {
             border: solid var(--color-border);
             aspect-ratio: 1 / 1;
-            height: 14rem;
-            width: 14rem;
+            /* height: 12rem;
+            width: 12rem; */
             background-color: var(--color-image-bg);
             display: flex;
             align-items: center;
@@ -176,7 +180,7 @@
             color: var(--color-table-th-text);
             font-weight: 600;
             white-space: nowrap;
-            width: 30%;
+            width: 40%;
         }
 
         td {
@@ -202,7 +206,8 @@
                 print-color-adjust: exact;
             }
 
-            body, html {
+            body,
+            html {
                 background-color: var(--color-background);
                 margin: 0;
                 padding: 0;
@@ -220,7 +225,8 @@
         }
 
         /* Empty state styling */
-        .header:empty, .footer:empty {
+        .header:empty,
+        .footer:empty {
             visibility: hidden;
         }
     </style>
@@ -231,89 +237,119 @@
         <div class="header" object="header">
             <!-- Your header content goes here -->
             <h1>Luxury Jewelry Collection</h1>
-            <!-- <img src="your-logo.png" alt="Company Logo" style="max-height: 100%;"> -->
-             <img src="https://i.postimg.cc/TYzxfR0t/logo-trial-removebg-preview.png" alt="Company Logo" style="max-height: 100%; margin-left: 4rem; padding-bottom: 1rem;">
+            <img src="https://i.postimg.cc/TYzxfR0t/logo-trial-removebg-preview.png" alt="Company Logo"
+                style="max-height: 100%; padding-bottom: 1rem; margin-left: 4rem;">
         </div>
 
-        <div id="content" object="page_break" products="6">
+        <div id="content" object="page_break" products="16">
             <!-- product -->
             <div class="product" object="item">
-                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt="" object="image"></div>
-                <div class="product-info" object="product_details">
-                    <table>
-                        <tr>
-                            <th>Weight:</th>
-                            <td>5.2g</td>
-                        </tr>
-                    </table>
-                </div>
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
             </div>
 
             <!-- product -->
             <div class="product" object="item">
-                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt="" object="image"></div>
-                <div class="product-info" object="product_details">
-                    <table>
-                        <tr>
-                            <th>Metal:</th>
-                            <td>Sterling Silver</td>
-                        </tr>
-                    </table>
-                </div>
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
             </div>
 
             <!-- product -->
             <div class="product" object="item">
-                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt="" object="image"></div>
-                <div class="product-info" object="product_details">
-                    <table>
-                        <tr>
-                            <th>Metal:</th>
-                            <td>Sterling Silver</td>
-                        </tr>
-                    </table>
-                </div>
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
             </div>
 
             <!-- product -->
             <div class="product" object="item">
-                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt="" object="image"></div>
-                <div class="product-info" object="product_details">
-                    <table>
-                        <tr>
-                            <th>Metal:</th>
-                            <td>Sterling Silver</td>
-                        </tr>
-                    </table>
-                </div>
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
             </div>
 
             <!-- product -->
             <div class="product" object="item">
-                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt="" object="image"></div>
-                <div class="product-info" object="product_details">
-                    <table>
-                        <tr>
-                            <th>Metal:</th>
-                            <td>Sterling Silver</td>
-                        </tr>
-                    </table>
-                </div>
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
+            </div>
+
+
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
+            </div>
+
+
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
+            </div>
+
+
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
+            </div>
+
+
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
+            </div>
+
+
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
+            </div>
+
+
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
+            </div>
+
+                        <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
             </div>
 
             <!-- product -->
             <div class="product" object="item">
-                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt="" object="image"></div>
-                <div class="product-info" object="product_details">
-                    <table>
-                        <tr>
-                            <th>Metal:</th>
-                            <td>Sterling Silver</td>
-                        </tr>
-                    </table>
-                </div>
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
             </div>
+
+
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
+            </div>
+
+
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
+            </div>
+
+
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
+            </div>
+
+
         </div>
+
 
         <div class="footer" object="footer">
             <!-- Your footer content goes here -->
@@ -337,4 +373,5 @@
         });
     </script>
 </body>
+
 </html>

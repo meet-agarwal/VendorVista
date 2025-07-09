@@ -1057,5 +1057,22 @@ header h1 {
 }
 
 
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0056b399;
+}
+
+::-webkit-scrollbar-thumb {
+    background:  #d0a8ec;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #ee9de4;
+}
 
 
