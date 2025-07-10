@@ -259,12 +259,10 @@ def save_template():
         product_path = os.path.join(app.root_path, product_link.lstrip('/'))
 
         # Initialize brochure generator
-        gen = BrochureGenerator('broucher.html')
+        gen = BrochureGenerator(product_path)
         # Generate HTML using selected paths
         html_content = gen.generate(selected_data, imageDict,
                                     first_path, last_path)
-
-        # (Optional) product_path is available for use if needed
 
         # Save HTML to a temp file
         temp_dir = os.path.join(tempfile.gettempdir(), 'vendor_vista_brochures')

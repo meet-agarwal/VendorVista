@@ -7,11 +7,24 @@ class BrochureGenerator:
     Generates a paginated HTML brochure by cloning and populating
     a repeatable page section within a base template.
     """
-    def __init__(self, template_name: str):
-        # Load and parse the base template
-        self.templates_dir = os.path.join(os.getcwd(), 'templates')
-        path = os.path.join(self.templates_dir, template_name)
-        with open(path, 'r', encoding='utf-8') as f:
+    def __init__(self, product_link: str):
+        """
+        Initialize with a product link instead of template name.
+        The product link can be either a relative or absolute path.
+        """
+        # Convert relative path to absolute path if needed
+        if not os.path.isabs(product_link):
+            # Get the directory of the current script
+            base_dir = os.path.dirname(os.path.abspath(__file__))
+            # Join with the relative path to get absolute path
+            product_link = os.path.join(base_dir, product_link)
+
+        # Ensure the path exists
+        if not os.path.exists(product_link):
+            raise FileNotFoundError(f"Product template not found at: {product_link}")
+
+        # Load and parse the product template
+        with open(product_link, 'r', encoding='utf-8') as f:
             self.soup = BeautifulSoup(f.read(), 'html.parser')
 
         # Capture header and footer elements
