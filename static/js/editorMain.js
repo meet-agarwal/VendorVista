@@ -386,12 +386,14 @@ function createSelectedCard(template, links, mode, page) {
     const card = document.createElement('div');
     card.className = 'product-card';
 
-    const metaItems = descKeys.map(key =>
-        key === 'products'
-            ? `<span>${template[key]} Products</span>`
-            : `<span>${template[key]}</span>`
-    ).join('');
-
+ const metaItems = descKeys
+  .filter(key => template[key] !== undefined && template[key] !== null && template[key] !== '')
+  .map(key =>
+    key === 'products'
+      ? `<span>${template[key]} Products</span>`
+      : `<span>${template[key]}</span>`
+  )
+  .join('');
     card.innerHTML = `
                 <div class="product-card-img">
                 <img src="${links.images}" alt="${template.displayName}">

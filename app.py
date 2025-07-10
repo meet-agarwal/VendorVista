@@ -179,8 +179,61 @@ def savePDF(htmlPath, pdfPath):
 
     
     
+# @app.route('/save-template', methods=['POST'])
+# def save_template():
+#     try:
+#         data = request.get_json()
+#         selected_data = data.get('selectedData')
+#         imageDict = data.get('imageDict')
+#         if not selected_data:
+#             return jsonify({'error': 'No selectedData provided'}), 400
+#
+#         # Prepare template processor
+#         # processor = TemplateProcessor(template_name='broucher.html')
+#         # processor.load_data(selected_data)
+#         first_path = r"C:\Users\dell\Documents\first.html"
+#         last_path = r"C:\Users\dell\Documents\last.html"
+#         gen = BrochureGenerator('broucher.html')
+#
+#         html_content = gen.generate(selected_data, imageDict,
+#                              first_path, last_path)
+#
+#         # Save HTML
+#         temp_dir = os.path.join(tempfile.gettempdir(), 'vendor_vista_brochures')
+#         os.makedirs(temp_dir, exist_ok=True)
+#         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+#         base_filename = f'brochure_{timestamp}'
+#         html_filename = f'{base_filename}.html'
+#         html_filepath = os.path.join(temp_dir, html_filename)
+#         with open(html_filepath, 'w', encoding='utf-8') as f:
+#             f.write(html_content)
+#
+#         # STEP 2: Create a temporary path to save the generated PDF
+#         with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as pdf_temp:
+#             pdf_filepath = pdf_temp.name
+#
+#
+#         savePDF(html_filepath, pdf_filepath)
+#
+#         # STEP 4: Read the generated PDF as bytes and return it in the response
+#         with open(pdf_filepath, 'rb') as f:
+#             pdf_bytes = f.read()
+#
+#         # Step 5: Clean up temp files
+#         os.remove(pdf_filepath)
+#
+#         response = make_response(pdf_bytes)
+#         response.headers.set('Content-Type', 'application/pdf')
+#         response.headers.set('Content-Disposition', 'inline; filename=brochure.pdf')
+#         return response
+#
+#     except Exception as e:
+#         app.logger.exception("save_template error")
+#         return jsonify({'error': str(e)}), 500
+
+
 @app.route('/save-template', methods=['POST'])
-def save_template():  
+def save_template():
     try:
         data = request.get_json()
         selected_data = data.get('selectedData')
@@ -188,17 +241,32 @@ def save_template():
         if not selected_data:
             return jsonify({'error': 'No selectedData provided'}), 400
 
-        # Prepare template processor
-        # processor = TemplateProcessor(template_name='broucher.html')
-        # processor.load_data(selected_data)
-        first_path = r"C:\Users\dell\Documents\first.html"
-        last_path = r"C:\Users\dell\Documents\last.html"
-        gen = BrochureGenerator('broucher.html')
-        
-        html_content = gen.generate(selected_data, imageDict,
-                             first_path, last_path)
+        # Load editor configuration and selected templates
+        config = read_editor_config()
+        selected = config.get('templates_selected', {})
 
-        # Save HTML
+        # Read HTML link paths for first, last, and product pages
+        first_link = selected.get('first', {}).get('links', {}).get('html', '')
+        last_link = selected.get('last', {}).get('links', {}).get('html', '')
+        product_link = selected.get('product', {}).get('links', {}).get('html', '')
+
+        if not first_link or not last_link:
+            return jsonify({'error': 'First or last template not selected'}), 400
+
+        # Convert relative URL paths to absolute file system paths
+        first_path = os.path.join(app.root_path, first_link.lstrip('/'))
+        last_path = os.path.join(app.root_path, last_link.lstrip('/'))
+        product_path = os.path.join(app.root_path, product_link.lstrip('/'))
+
+        # Initialize brochure generator
+        gen = BrochureGenerator('broucher.html')
+        # Generate HTML using selected paths
+        html_content = gen.generate(selected_data, imageDict,
+                                    first_path, last_path)
+
+        # (Optional) product_path is available for use if needed
+
+        # Save HTML to a temp file
         temp_dir = os.path.join(tempfile.gettempdir(), 'vendor_vista_brochures')
         os.makedirs(temp_dir, exist_ok=True)
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
@@ -208,30 +276,28 @@ def save_template():
         with open(html_filepath, 'w', encoding='utf-8') as f:
             f.write(html_content)
 
-        # STEP 2: Create a temporary path to save the generated PDF
+        # Create PDF
         with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as pdf_temp:
             pdf_filepath = pdf_temp.name
-        
-        
         savePDF(html_filepath, pdf_filepath)
-        
-        # STEP 4: Read the generated PDF as bytes and return it in the response
+
+        # Read PDF bytes and return response
         with open(pdf_filepath, 'rb') as f:
             pdf_bytes = f.read()
-            
-        # Step 5: Clean up temp files
         os.remove(pdf_filepath)
-    
+
         response = make_response(pdf_bytes)
         response.headers.set('Content-Type', 'application/pdf')
         response.headers.set('Content-Disposition', 'inline; filename=brochure.pdf')
         return response
-    
+
     except Exception as e:
         app.logger.exception("save_template error")
         return jsonify({'error': str(e)}), 500
-    
-    
+
+
+
+
 # Configuration
 TABLE_OPTIONS_FILE = 'table_options.json'
 
@@ -301,26 +367,7 @@ def get_editor_config():
         return jsonify(config)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-    
-# @app.route('/api/templates-selected', methods=['GET', 'POST'])
-# def get_templates_selected():
-#     if request.method == 'GET':
-#         try:
-#             config = read_editor_config()
-#             templates_selected = config.get('templates_selected', {})
 
-#             # Get the selected keys list
-#             selected_keys = templates_selected.get('Selected_list', [])
-
-#             # Filter templates_selected based on selected_keys
-#             filtered_data = {
-#                 key: templates_selected.get(key, {}) 
-#                 for key in selected_keys
-#             }
-
-#             return jsonify({'templates_selected': filtered_data})
-#         except Exception as e:
-#             return jsonify({'error': str(e)}), 500
 
 @app.route('/api/templates-selected', methods=['GET', 'POST'])
 def get_templates_selected():

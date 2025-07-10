@@ -83,6 +83,17 @@ btnPopup.addEventListener('click', () => {
     `;
     document.body.appendChild(modal);
 
+    const input = document.getElementById('filenameInput');
+const saveBtn = document.getElementById('saveTheTemplateToMemory');
+
+input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        saveBtn.click();
+    }
+});
+
+
     // Now the modal is in the DOM, so bind event listeners
     document.getElementById('cancelBtn').addEventListener('click', () => {
         modal.remove();
@@ -95,10 +106,21 @@ btnPopup.addEventListener('click', () => {
             return;
         }
 
-        modal.remove();
+modal.remove();
 
-        const html = editor.getHtml();
-        const css = editor.getCss();
+// Show loading spinner and overlay
+const spinner = document.getElementById('loadingSpinner');
+spinner.classList.remove('hidden');
+
+// Add full-screen overlay to block interaction
+const overlay = document.createElement('div');
+overlay.id = 'interactionOverlay';
+overlay.className = 'fixed inset-0 bg-black bg-opacity-30 z-40';
+document.body.appendChild(overlay);
+
+const html = editor.getHtml();
+const css = editor.getCss();
+
 
         try {
             const response = await fetch('/api/Edited_templates/save', {
@@ -115,7 +137,12 @@ btnPopup.addEventListener('click', () => {
 
             const result = await response.json();
             if (response.ok) {
+                 // Hide loading and overlay
+                    spinner.classList.add('hidden');
+                    overlay.remove();
+
                 alert('Saved to: ' + result.path);
+
 
                 // Open the saved HTML file in a new tab
                 const htmlUrl = `/editor`;
@@ -126,14 +153,19 @@ btnPopup.addEventListener('click', () => {
                     window.close();
                 }, 1000);
             } else {
+                spinner.classList.add('hidden');
+                overlay.remove();
                 alert('Save failed: ' + (result.message || 'Unknown error'));
             }
         } catch (err) {
             console.error('Save error:', err);
+            spinner.classList.add('hidden');
+            overlay.remove();
             alert('Network error while saving.');
         }
     });
 });
+
 
 
 });
