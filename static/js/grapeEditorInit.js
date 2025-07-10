@@ -1,12 +1,14 @@
 // editorInit.js
 
+export let editor ;
+
 /**
  * Initializes the GrapesJS editor and loads template if given
  * @param {string} mountId - HTML element ID to mount GrapesJS editor
  * @param {string|null} templatePath - Optional HTML template path to load
  */
 export function initializeEditor(mountId = 'gjs', templatePath = null) {
-  const editor = grapesjs.init({
+    editor = grapesjs.init({
     container: `#${mountId}`,
     fromElement: false,
     height: '100%',

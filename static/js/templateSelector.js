@@ -40,7 +40,7 @@ export function createTemplateCard(template, descKeys) {
     .addEventListener('click', () => selectTemplate(template));
 
   card.querySelector('.edit-btn')
-    .addEventListener('click', () => EditTemplate(template.name));
+    .addEventListener('click', () => EditTemplate(template.id));
 
   return card;
 }

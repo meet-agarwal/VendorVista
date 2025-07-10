@@ -49,15 +49,16 @@ header h1 {
 
 /* Main container */
 .container {
-    display: flex;
+    /* display: flex; */
     /* justify-content: space-between; */
     /* max-width: 1400px; */
-    margin: 40px auto 20px;
+    margin: 20px auto 20px;
     /* top margin increased */
     background-color: white;
     border-radius: 12px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
     overflow: visible;
+    padding-top: 1rem;
 }
 
 
@@ -67,6 +68,7 @@ header h1 {
 .product-listing {
     width: 100%;
     padding: 20px;
+    padding-top: 0;
 }
 
 .product-grid {
@@ -100,11 +102,15 @@ header h1 {
 .filter-section {
     background-color: white;
     padding: 20px;
-    margin: 90px auto 0;
+    margin: 0 auto 0;
     width: 100%;
     max-width: 1400px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     border-radius: 8px;
+    border: solid 1px beige;
+}
+#sel_container{
+    margin-top: 6rem;
 }
 
 .filters-container {
@@ -277,3 +283,45 @@ html, body {
   overflow-y: scroll;
   overflow-x: hidden; /* optional: hide horizontal scrollbar */
 }
+
+
+#alert-container {
+  position: fixed;
+  top: 100px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  z-index: 9999;
+}
+
+/* Base alert styles + combined slide/fade */
+.alert-box {
+  padding: 1rem;
+  border-left: 4px solid;
+  border-radius: 0.375rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  
+  /* start off-screen right & slightly up, invisible */
+  opacity: 0;
+  transform: translateX(100%) translateY(-20px);
+  margin-top: 0;
+
+  /* animate opacity, transform and margin */
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease,
+    margin-top 0.3s ease;
+}
+
+/* add gap between alerts via margin */
+.alert-box + .alert-box {
+  margin-top: 8px;
+}
+
+/* Variants */
+.alert-box.success { background: #ecfdf5; border-color: #10b981; color: #065f46; }
+.alert-box.error   { background: #fef2f2; border-color: #ef4444; color: #7f1d1d; }
+.alert-box.info    { background: #eff6ff; border-color: #3b82f6; color: #1e3a8a; }
+
+.alert-box strong { display: block; margin-bottom: 0.25rem; }

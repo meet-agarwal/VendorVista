@@ -302,105 +302,215 @@ def get_editor_config():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     
+# @app.route('/api/templates-selected', methods=['GET', 'POST'])
+# def get_templates_selected():
+#     if request.method == 'GET':
+#         try:
+#             config = read_editor_config()
+#             templates_selected = config.get('templates_selected', {})
+
+#             # Get the selected keys list
+#             selected_keys = templates_selected.get('Selected_list', [])
+
+#             # Filter templates_selected based on selected_keys
+#             filtered_data = {
+#                 key: templates_selected.get(key, {}) 
+#                 for key in selected_keys
+#             }
+
+#             return jsonify({'templates_selected': filtered_data})
+#         except Exception as e:
+#             return jsonify({'error': str(e)}), 500
+
 @app.route('/api/templates-selected', methods=['GET', 'POST'])
 def get_templates_selected():
     if request.method == 'GET':
         try:
+            # Debug: Log request
+            app.logger.info("GET request for templates-selected received")
+            
             config = read_editor_config()
             templates_selected = config.get('templates_selected', {})
+            
+            # Validate data structure
+            if not isinstance(templates_selected, dict):
+                app.logger.error("Invalid templates_selected data structure")
+                return jsonify({
+                    'status': 'error',
+                    'message': 'Invalid configuration format',
+                    'debug': {
+                        'issue': 'templates_selected is not a dictionary',
+                        'received_type': type(templates_selected).__name__
+                    }
+                }), 500
 
             # Get the selected keys list
             selected_keys = templates_selected.get('Selected_list', [])
+            
+            # Validate selected_keys
+            if not isinstance(selected_keys, list):
+                app.logger.error("Invalid Selected_list format")
+                return jsonify({
+                    'status': 'error',
+                    'message': 'Invalid Selected_list format',
+                    'debug': {
+                        'expected_type': 'list',
+                        'received_type': type(selected_keys).__name__
+                    }
+                }), 500
 
             # Filter templates_selected based on selected_keys
             filtered_data = {
                 key: templates_selected.get(key, {}) 
                 for key in selected_keys
+                if key in ['first', 'product', 'last']  # Only allow valid page types
             }
 
-            return jsonify({'templates_selected': filtered_data})
+            # Debug: Log successful response
+            app.logger.info("Successfully processed GET request for templates-selected")
+            
+            return jsonify({
+                'status': 'success',
+                'templates_selected': filtered_data,
+                'metadata': {
+                    'count': len(filtered_data),
+                    'pages_available': selected_keys
+                }
+            })
+
         except Exception as e:
-            return jsonify({'error': str(e)}), 500
-
-
+            app.logger.exception("Critical error in get_templates_selected")
+            return jsonify({
+                'status': 'error',
+                'message': 'Internal server error',
+                'error_details': str(e),
+                'debug_info': {
+                    'endpoint': '/api/templates-selected',
+                    'method': 'GET'
+                }
+            }), 500
+            
     elif request.method == 'POST':
         try:
+            app.logger.info("POST request to templates-selected received")
+            
             new_data = request.get_json()
             if not new_data:
-                return jsonify({'error': 'No data provided'}), 400
+                app.logger.error("No data provided in POST request")
+                return jsonify({
+                    'status': 'error',
+                    'message': 'No data provided',
+                    'debug': {
+                        'request_content_type': request.content_type,
+                        'request_size': request.content_length
+                    }
+                }), 400
 
             config = read_editor_config()
             current_selection = config.get('templates_selected', {})
-
-            # Ensure Selected_list is initialized correctly
             selected_list = current_selection.get('Selected_list', [])
 
+            # Validate new_data structure
+            if not isinstance(new_data, dict):
+                app.logger.error("Invalid POST data format")
+                return jsonify({
+                    'status': 'error',
+                    'message': 'Invalid data format',
+                    'debug': {
+                        'expected': 'dictionary with page keys',
+                        'received_type': type(new_data).__name__
+                    }
+                }), 400
+
+            response_info = {
+                'updated_pages': [],
+                'skipped_pages': [],
+                'errors': []
+            }
+
             for page_key, new_value in new_data.items():
-                # Allow only "first", "product", or "last"
+                # Validate page key
                 if page_key not in ['first', 'product', 'last']:
-                    return jsonify({'error': f'Invalid page: {page_key}'}), 400
+                    response_info['errors'].append({
+                        'page': page_key,
+                        'error': 'Invalid page type',
+                        'allowed_values': ['first', 'product', 'last']
+                    })
+                    continue
+
+                # Validate new_value structure
+                required_keys = ['template', 'links', 'mode']
+                if not all(key in new_value for key in required_keys):
+                    missing = [k for k in required_keys if k not in new_value]
+                    response_info['errors'].append({
+                        'page': page_key,
+                        'error': 'Missing required fields',
+                        'missing_fields': missing
+                    })
+                    continue
 
                 existing_template = current_selection.get(page_key, {}).get('template', {})
 
-                # If already filled, block overwrite
-                if existing_template and isinstance(existing_template, dict) and len(existing_template) > 0:
-                    return jsonify({
-                        'error': f'"{page_key}" is already selected. Cannot overwrite.',
-                        'page': page_key
-                    }), 409  # HTTP 409 Conflict
+                # Check for existing template
+                if existing_template and existing_template.get('name'):
+                    response_info['skipped_pages'].append({
+                        'page': page_key,
+                        'reason': 'Template already exists',
+                        'existing_template': existing_template.get('name')
+                    })
+                    continue
 
                 # Save the new template
                 current_selection[page_key] = new_value
 
-                # Keep track of updated pages
+                # Update selected list if not already present
                 if page_key not in selected_list:
                     selected_list.append(page_key)
+
+                response_info['updated_pages'].append(page_key)
 
             # Update the config with changes
             current_selection['Selected_list'] = selected_list
             config['templates_selected'] = current_selection
-
             write_editor_config(config)
 
+            app.logger.info("Template selection updated successfully")
+            
             return jsonify({
-                'message': 'Template saved successfully.',
-                'templates_selected': config['templates_selected']
+                'status': 'success',
+                'message': 'Template selection updated',
+                'details': response_info,
+                'metadata': {
+                    'total_pages_processed': len(new_data),
+                    'templates_now_selected': selected_list
+                }
             })
 
+        except json.JSONDecodeError as e:
+            app.logger.error(f"JSON decode error: {str(e)}")
+            return jsonify({
+                'status': 'error',
+                'message': 'Invalid JSON data',
+                'error_details': str(e),
+                'debug': {
+                    'content_type': request.content_type,
+                    'sample_data': request.data[:100] if request.data else None
+                }
+            }), 400
+            
         except Exception as e:
-            return jsonify({'error': str(e)}), 500
+            app.logger.exception("Critical error saving template selection")
+            return jsonify({
+                'status': 'error',
+                'message': 'Internal server error',
+                'error_details': str(e),
+                'debug_info': {
+                    'endpoint': '/api/templates-selected',
+                    'method': 'POST',
+                    'system_time': datetime.now().isoformat()
+                }
+            }), 500
 
-
-
-# @app.route('/api/templates-selected/delete', methods=['POST'])
-# def delete_selected_template():
-#     try:
-#         data = request.get_json()
-#         page_to_clear = data.get('page')  # "first" | "product" | "last"
-
-#         if page_to_clear not in ['first', 'product', 'last']:
-#             return jsonify({'error': 'Invalid page type'}), 400
-
-#         config = read_editor_config()
-#         if 'templates_selected' not in config:
-#             config['templates_selected'] = {}
-
-#         # Reset to empty structure
-#         config['templates_selected'][page_to_clear] = {
-#             "template": {},
-#             "links": {
-#                 "pdf": "",
-#                 "images": "",
-#                 "html": ""
-#             },
-#             "mode" : "" 
-#         }
-
-#         write_editor_config(config)
-#         return jsonify({'message': f'"{page_to_clear}" selection cleared.'})
-
-#     except Exception as e:
-#         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/templates-selected/delete', methods=['POST'])
 def delete_selected_template():
@@ -483,6 +593,412 @@ def delete_selected_template():
             "error": "Server error while deleting template.",
             "details": str(e)
         }), 500  
+
+@app.route('/api/getGrapeEditortemplateData', methods=['POST'])
+def getGrapeEditortemplateData():
+    try:
+        data = request.get_json()
+        if not data or 'templateID' not in data:
+            return jsonify({'status': 'error', 'message': 'Missing "templateID".'}), 400
+
+        template_id = data['templateID']
+        id_parts = template_id.split('_')  # e.g., ['default', 'product', '1']
+        if len(id_parts) < 3:
+            return jsonify({'status': 'error', 'message': 'Invalid templateID format.'}), 400
+
+        source = id_parts[0]     # 'default' or 'edited'
+        page = id_parts[1]       # 'first', 'product', or 'last'
+
+        if page not in ['first', 'product', 'last']:
+            return jsonify({'status': 'error', 'message': f'Invalid page type: {page}'}), 400
+
+        config = read_editor_config()
+
+        # 1. Look in templates_default or templates_edited
+        key_name = f'templates_{source}'
+        template_list = config.get(key_name, {}).get(page, [])
+
+        matched_template = next((t for t in template_list if t.get('id') == template_id), None)
+
+        if matched_template:
+            # Build HTML link based on known structure
+            html_link = f"/static/assets/templates/{source.capitalize()}_Templates/{page.capitalize()}_page/{matched_template['name']}"
+            return jsonify({
+                'status': 'success',
+                'source': source,
+                'page': page,
+                'templateID': template_id,
+                'html_link': html_link,
+                'mode': source,
+                'template_meta': matched_template
+            })
+
+        # 2. If not found, fallback to templates_selected
+        selected_data = config.get('templates_selected', {}).get(page, {})
+        if selected_data.get('template', {}).get('id') == template_id:
+            return jsonify({
+                'status': 'success',
+                'source': 'selected',
+                'page': page,
+                'templateID': template_id,
+                'html_link': selected_data.get('links', {}).get('html', ''),
+                'mode': selected_data.get('mode', ''),
+                'template_meta': selected_data.get('template', {})
+            })
+
+        # Not found anywhere
+        return jsonify({'status': 'error', 'message': f'Template with ID "{template_id}" not found.'}), 404
+
+    except Exception as e:
+        app.logger.exception("Error in getGrapeEditortemplateData")
+        return jsonify({'status': 'error', 'message': 'Internal server error', 'error': str(e)}), 500
+
+
+import os
+import tempfile
+import subprocess
+from datetime import datetime
+from PIL import Image
+import fitz  # PyMuPDF for PDF to image conversion
+
+
+@app.route('/api/Edited_templates/save', methods=['POST'])
+def Edited_templates_save():
+    try:
+        # Get JSON data from the request
+        data = request.get_json()
+
+        # Validate that data exists
+        if not data:
+            return jsonify({
+                'status': 'error',
+                'message': 'No data provided'
+            }), 400
+
+        # Extract data from the frontend request
+        filename = data.get('filename')
+        html_content = data.get('html')
+        css_content = data.get('css')
+        page_type = data.get('page')
+        previous_temp_id = data.get('previousTempID')
+
+        # Validate required fields
+        required_fields = ['filename', 'html', 'css', 'page']
+        missing_fields = [field for field in required_fields if not data.get(field)]
+
+        if missing_fields:
+            return jsonify({
+                'status': 'error',
+                'message': f'Missing required fields: {", ".join(missing_fields)}'
+            }), 400
+
+        # Validate page type
+        valid_pages = ['first', 'product', 'last']
+        if page_type not in valid_pages:
+            return jsonify({
+                'status': 'error',
+                'message': f'Invalid page type. Must be one of: {", ".join(valid_pages)}'
+            }), 400
+
+        # Log the received data for debugging
+        app.logger.info(f"Saving edited template: {filename}")
+        app.logger.info(f"Page type: {page_type}")
+        app.logger.info(f"Previous template ID: {previous_temp_id}")
+
+        # Step 1: Combine HTML and CSS
+        combined_html = combine_html_css(html_content, css_content)
+
+        # Step 2: Read configuration and get file paths
+        config = read_editor_config()
+        links = config.get('links', {})
+
+        # Get the directory paths for edited templates
+        html_dir = links.get('templates', {}).get('edited', {}).get(page_type, '')
+        pdf_dir = links.get('pdf', {}).get('edited', {}).get(page_type, '')
+        image_dir = links.get('images', {}).get('edited', {}).get(page_type, '')
+
+        if not all([html_dir, pdf_dir, image_dir]):
+            return jsonify({
+                'status': 'error',
+                'message': 'Invalid configuration: missing directory paths'
+            }), 500
+
+        # Convert relative paths to absolute paths
+        html_dir = os.path.join(app.root_path, html_dir.lstrip('/'))
+        pdf_dir = os.path.join(app.root_path, pdf_dir.lstrip('/'))
+        image_dir = os.path.join(app.root_path, image_dir.lstrip('/'))
+
+        # # Create directories if they don't exist
+        # os.makedirs(html_dir, exist_ok=True)
+        # os.makedirs(pdf_dir, exist_ok=True)
+        # os.makedirs(image_dir, exist_ok=True)
+
+        # Step 3: Save files
+        base_name = os.path.splitext(filename)[0]
+
+        # Save HTML file
+        html_path = os.path.join(html_dir, filename)
+        with open(html_path, 'w', encoding='utf-8') as f:
+            f.write(combined_html)
+
+        # Convert HTML to PDF
+        pdf_filename = f"{base_name}.pdf"
+        pdf_path = os.path.join(pdf_dir, pdf_filename)
+        success = convert_html_to_pdf(html_path, pdf_path)
+
+        if not success:
+            return jsonify({
+                'status': 'error',
+                'message': 'Failed to convert HTML to PDF'
+            }), 500
+
+        # Convert PDF to image
+        image_filename = f"{base_name}.png"
+        image_path = os.path.join(image_dir, image_filename)
+        success = convert_pdf_to_image(pdf_path, image_path)
+
+        if not success:
+            return jsonify({
+                'status': 'error',
+                'message': 'Failed to convert PDF to image'
+            }), 500
+
+        # Step 4: Update templates_edited configuration
+        success = update_templates_edited_config(
+            config, page_type, previous_temp_id, filename,
+            pdf_filename, image_filename, base_name
+        )
+
+        if not success:
+            return jsonify({
+                'status': 'error',
+                'message': 'Failed to update configuration'
+            }), 500
+
+        # Return success response
+        return jsonify({
+            'status': 'success',
+            'message': 'Template saved successfully',
+            'path': html_path,
+            'filename': filename,
+            'page': page_type,
+            'files_created': {
+                'html': filename,
+                'pdf': pdf_filename,
+                'image': image_filename
+            }
+        }), 200
+
+    except Exception as e:
+        app.logger.exception("Error in Edited_templates_save")
+        return jsonify({
+            'status': 'error',
+            'message': 'Internal server error',
+            'error': str(e)
+        }), 500
+
+
+def combine_html_css(html_content, css_content):
+    """Combine HTML and CSS into a single HTML file"""
+    # Check if HTML already has a style tag
+    if '<style>' in html_content.lower():
+        # Find the closing </style> tag and insert CSS before it
+        style_end = html_content.lower().find('</style>')
+        if style_end != -1:
+            combined_html = (
+                    html_content[:style_end] +
+                    '\n' + css_content + '\n' +
+                    html_content[style_end:]
+            )
+        else:
+            # Add style tag with CSS in head
+            combined_html = add_css_to_head(html_content, css_content)
+    else:
+        # Add style tag with CSS in head
+        combined_html = add_css_to_head(html_content, css_content)
+
+    return combined_html
+
+
+def add_css_to_head(html_content, css_content):
+    """Add CSS to HTML head section"""
+    head_end = html_content.lower().find('</head>')
+    if head_end != -1:
+        combined_html = (
+                html_content[:head_end] +
+                f'\n<style>\n{css_content}\n</style>\n' +
+                html_content[head_end:]
+        )
+    else:
+        # If no head tag, add it at the beginning
+        combined_html = f'''<!DOCTYPE html>
+<html>
+<head>
+<style>
+{css_content}
+</style>
+</head>
+<body>
+{html_content}
+</body>
+</html>'''
+
+    return combined_html
+
+
+def convert_html_to_pdf(html_path, pdf_path):
+    """Convert HTML to PDF using headless Chrome"""
+    try:
+        # Chrome executable path
+        chrome_path = r'C:\Program Files\Google\Chrome\Application\chrome.exe'
+
+        # Construct the command
+        cmd = [
+            chrome_path,
+            '--headless',
+            '--disable-gpu',
+            '--no-sandbox',
+            '--disable-dev-shm-usage',
+            f'--print-to-pdf={pdf_path}',
+            f'file:///{html_path.replace(os.sep, "/")}'
+        ]
+
+        # Run the command
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+
+        if result.returncode == 0 and os.path.exists(pdf_path):
+            app.logger.info(f"PDF generated successfully: {pdf_path}")
+            return True
+        else:
+            app.logger.error(f"Failed to generate PDF. Return code: {result.returncode}")
+            app.logger.error(f"Error output: {result.stderr}")
+            return False
+
+    except subprocess.TimeoutExpired:
+        app.logger.error("PDF conversion timed out")
+        return False
+    except Exception as e:
+        app.logger.error(f"Error converting HTML to PDF: {str(e)}")
+        return False
+
+
+def convert_pdf_to_image(pdf_path, image_path):
+    """Convert PDF to image using PyMuPDF"""
+    try:
+        # Open PDF document
+        doc = fitz.open(pdf_path)
+
+        # Get first page
+        page = doc[0]
+
+        # Set resolution (DPI)
+        mat = fitz.Matrix(2.0, 2.0)  # 2x zoom for better quality
+
+        # Render page to image
+        pix = page.get_pixmap(matrix=mat)
+
+        # Save as PNG
+        pix.save(image_path)
+
+        # Close document
+        doc.close()
+
+        app.logger.info(f"Image generated successfully: {image_path}")
+        return True
+
+    except Exception as e:
+        app.logger.error(f"Error converting PDF to image: {str(e)}")
+        return False
+
+
+def find_original_template(config, page_type, template_id):
+    """Find original template from either templates_default or templates_edited"""
+    if not template_id:
+        return None
+
+    # Check in templates_default first
+    default_templates = config.get('templates_default', {}).get(page_type, [])
+    original_template = next((t for t in default_templates if t.get('id') == template_id), None)
+
+    if original_template:
+        return original_template
+
+    # Check in templates_edited if not found in default
+    edited_templates = config.get('templates_edited', {}).get(page_type, [])
+    original_template = next((t for t in edited_templates if t.get('id') == template_id), None)
+
+    if original_template:
+        return original_template
+
+    # Check in templates_selected if not found in either
+    selected_templates = config.get('templates_selected', {}).get(page_type, {})
+    selected_template = selected_templates.get('template', {})
+    if selected_template.get('id') == template_id:
+        return selected_template
+
+    return None
+
+
+def update_templates_edited_config(config, page_type, previous_temp_id, html_filename, pdf_filename, image_filename,
+                                   base_name):
+    """Update the templates_edited configuration"""
+    try:
+        # Get existing templates_edited
+        templates_edited = config.get('templates_edited', {})
+
+        # Initialize page list if it doesn't exist
+        if page_type not in templates_edited:
+            templates_edited[page_type] = []
+
+        # Find original template from any source
+        original_template = find_original_template(config, page_type, previous_temp_id)
+
+        # Generate new template ID
+        existing_ids = [t.get('id', '') for t in templates_edited[page_type]]
+        new_id_num = len(existing_ids) + 1
+        new_id = f"edited_{page_type}_{new_id_num}"
+
+        # Create new template metadata by copying original and updating necessary fields
+        if original_template:
+            # Start with a copy of the original template
+            new_template = original_template.copy()
+
+            # Update with new file information
+            new_template.update({
+                "id": new_id,
+                "name": html_filename,
+                "image": image_filename,
+                "pdf": pdf_filename,
+                "created_at": datetime.now().isoformat(),
+                "original_template_id": previous_temp_id
+            })
+        else:
+            # If no original template found, create a basic one
+            new_template = {
+                "id": new_id,
+                "name": html_filename,
+                "displayName": base_name,
+                "image": image_filename,
+                "pdf": pdf_filename,
+                "created_at": datetime.now().isoformat(),
+                "original_template_id": previous_temp_id
+            }
+
+        # Add to templates_edited
+        templates_edited[page_type].append(new_template)
+
+        # Update config
+        config['templates_edited'] = templates_edited
+
+        # Save configuration
+        write_editor_config(config)
+
+        app.logger.info(f"Updated templates_edited configuration for {page_type} page")
+        return True
+
+    except Exception as e:
+        app.logger.error(f"Error updating templates_edited configuration: {str(e)}")
+        return False
 
 
 

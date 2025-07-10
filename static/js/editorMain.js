@@ -1,323 +1,3 @@
-// const filters = {
-//     "products": [2, 3, 4, 6, 9, 12, 16, 20],
-//     "theme": ["Modern", "Minimal", "Professional", "Classic"]
-// };
-// const templatesDataProduct =
-//     [
-//         {
-//             "name": "4_2rows_2cols.html",
-//             "displayName": "Elegant Brochure",
-//             "image": "4_2rows_2cols.png",
-//             "pdf": "4_2rows_2cols.pdf",
-//             "products": 4,
-//             "theme": "Modern",
-//             "grid": "2rows_2cols"
-//         },
-//         {
-//             "name": "6_3rows_2cols.html",
-//             "displayName": "Minimalist Style",
-//             "image": "6_3rows_2cols.png",
-//             "pdf": "6_3rows_2cols.pdf",
-//             "products": 6,
-//             "theme": "Minimal",
-//             "grid": "3rows_2cols"
-//         },
-//         {
-//             "name": "9_3rows_3cols.html",
-//             "displayName": "Professional Layout",
-//             "image": "9_3rows_3cols.png",
-//             "pdf": "9_3rows_3cols.pdf",
-//             "products": 9,
-//             "theme": "Professional",
-//             "grid": "3rows_3cols"
-//         },
-//         {
-//             "name": "12_4rows_3cols.html",
-//             "displayName": "Modern Grid",
-//             "image": "12_4rows_3cols.png",
-//             "pdf": "12_4rows_3cols.pdf",
-//             "products": 12,
-//             "theme": "Modern",
-//             "grid": "4rows_3cols"
-//         },
-//         {
-//             "name": "16_4rows_4cols.html",
-//             "displayName": "Simple & Clean",
-//             "image": "16_4rows_4cols.png",
-//             "pdf": "16_4rows_4cols.pdf",
-//             "products": 16,
-//             "theme": "Minimal",
-//             "grid": "4rows_4cols"
-//         },
-//         {
-//             "name": "2_2rows_1cols_sameSide.html",
-//             "displayName": "Same Side products",
-//             "image": "2_2rows_1cols_SameSide.png",
-//             "pdf": "2_2rows_1cols_sameSide.pdf",
-//             "products": 2,
-//             "theme": "Minimal",
-//             "grid": "2rows_1cols"
-//         },
-//         {
-//             "name": "2_2rows_1cols_zigZag.html",
-//             "displayName": "Zig Zag products",
-//             "image": "2_2rows_1cols_ZigZag.png",
-//             "pdf": "2_2rows_1cols_zigZag.pdf",
-//             "products": 2,
-//             "theme": "Minimal",
-//             "grid": "2rows_1cols"
-//         },
-//         {
-//             "name": "3_3rows_1cols_zigZag.html",
-//             "displayName": "Zig Zag products",
-//             "image": "3_3rows_1cols_zigZag.png",
-//             "pdf": "3_3rows_1cols_zigZag.pdf",
-//             "products": 3,
-//             "theme": "Minimal",
-//             "grid": "3rows_1cols"
-//         },
-//         {
-//             "name": "3_3rows_1cols_sameSide.html",
-//             "displayName": "Same Side products",
-//             "image": "3_3rows_1cols_sameSide.png",
-//             "pdf": "3_3rows_1cols_sameSide.pdf",
-//             "products": 3,
-//             "theme": "Minimal",
-//             "grid": "3rows_1cols"
-//         },
-//         {
-//             "name": "20_5rows_4cols.html",
-//             "displayName": "Product Gallery",
-//             "image": "20_5rows_4cols.png",
-//             "pdf": "20_5rows_4cols.pdf",
-//             "products": 20,
-//             "theme": "Minimal",
-//             "grid": "5rows_4cols"
-//         }
-//     ];
-// const templatesDataFirstPage = [
-//     {
-//         "name": "4_2rows_2cols.html",
-//         "displayName": "Elegant Brochure",
-//         "image": "4_2rows_2cols.png",
-//         "pdf": "4_2rows_2cols.pdf",
-//         "products": 4,
-//         "theme": "Modern",
-//         "grid": "2rows_2cols"
-//     },
-//     {
-//         "name": "6_3rows_2cols.html",
-//         "displayName": "Minimalist Style",
-//         "image": "6_3rows_2cols.png",
-//         "pdf": "6_3rows_2cols.pdf",
-//         "products": 6,
-//         "theme": "Minimal",
-//         "grid": "3rows_2cols"
-//     },
-//     {
-//         "name": "9_3rows_3cols.html",
-//         "displayName": "Professional Layout",
-//         "image": "9_3rows_3cols.png",
-//         "pdf": "9_3rows_3cols.pdf",
-//         "products": 9,
-//         "theme": "Professional",
-//         "grid": "3rows_3cols"
-//     },
-//     {
-//         "name": "12_4rows_3cols.html",
-//         "displayName": "Modern Grid",
-//         "image": "12_4rows_3cols.png",
-//         "pdf": "12_4rows_3cols.pdf",
-//         "products": 12,
-//         "theme": "Modern",
-//         "grid": "4rows_3cols"
-//     },
-//     {
-//         "name": "16_4rows_4cols.html",
-//         "displayName": "Simple & Clean",
-//         "image": "16_4rows_4cols.png",
-//         "pdf": "16_4rows_4cols.pdf",
-//         "products": 16,
-//         "theme": "Minimal",
-//         "grid": "4rows_4cols"
-//     },
-//     {
-//         "name": "2_2rows_1cols_sameSide.html",
-//         "displayName": "Same Side products",
-//         "image": "2_2rows_1cols_SameSide.png",
-//         "pdf": "2_2rows_1cols_sameSide.pdf",
-//         "products": 2,
-//         "theme": "Minimal",
-//         "grid": "2rows_1cols"
-//     },
-//     {
-//         "name": "2_2rows_1cols_zigZag.html",
-//         "displayName": "Zig Zag products",
-//         "image": "2_2rows_1cols_ZigZag.png",
-//         "pdf": "2_2rows_1cols_zigZag.pdf",
-//         "products": 2,
-//         "theme": "Minimal",
-//         "grid": "2rows_1cols"
-//     },
-//     {
-//         "name": "3_3rows_1cols_zigZag.html",
-//         "displayName": "Zig Zag products",
-//         "image": "3_3rows_1cols_zigZag.png",
-//         "pdf": "3_3rows_1cols_zigZag.pdf",
-//         "products": 3,
-//         "theme": "Minimal",
-//         "grid": "3rows_1cols"
-//     },
-//     {
-//         "name": "3_3rows_1cols_sameSide.html",
-//         "displayName": "Same Side products",
-//         "image": "3_3rows_1cols_sameSide.png",
-//         "pdf": "3_3rows_1cols_sameSide.pdf",
-//         "products": 3,
-//         "theme": "Minimal",
-//         "grid": "3rows_1cols"
-//     },
-//     {
-//         "name": "20_5rows_4cols.html",
-//         "displayName": "Product Gallery",
-//         "image": "20_5rows_4cols.png",
-//         "pdf": "20_5rows_4cols.pdf",
-//         "products": 20,
-//         "theme": "Minimal",
-//         "grid": "5rows_4cols"
-//     }
-// ];
-// const templatesDataLastPage = [
-//     {
-//         "name": "4_2rows_2cols.html",
-//         "displayName": "Elegant Brochure",
-//         "image": "4_2rows_2cols.png",
-//         "pdf": "4_2rows_2cols.pdf",
-//         "products": 4,
-//         "theme": "Modern",
-//         "grid": "2rows_2cols"
-//     },
-//     {
-//         "name": "6_3rows_2cols.html",
-//         "displayName": "Minimalist Style",
-//         "image": "6_3rows_2cols.png",
-//         "pdf": "6_3rows_2cols.pdf",
-//         "products": 6,
-//         "theme": "Minimal",
-//         "grid": "3rows_2cols"
-//     },
-//     {
-//         "name": "9_3rows_3cols.html",
-//         "displayName": "Professional Layout",
-//         "image": "9_3rows_3cols.png",
-//         "pdf": "9_3rows_3cols.pdf",
-//         "products": 9,
-//         "theme": "Professional",
-//         "grid": "3rows_3cols"
-//     },
-//     {
-//         "name": "12_4rows_3cols.html",
-//         "displayName": "Modern Grid",
-//         "image": "12_4rows_3cols.png",
-//         "pdf": "12_4rows_3cols.pdf",
-//         "products": 12,
-//         "theme": "Modern",
-//         "grid": "4rows_3cols"
-//     },
-//     {
-//         "name": "16_4rows_4cols.html",
-//         "displayName": "Simple & Clean",
-//         "image": "16_4rows_4cols.png",
-//         "pdf": "16_4rows_4cols.pdf",
-//         "products": 16,
-//         "theme": "Minimal",
-//         "grid": "4rows_4cols"
-//     },
-//     {
-//         "name": "2_2rows_1cols_sameSide.html",
-//         "displayName": "Same Side products",
-//         "image": "2_2rows_1cols_SameSide.png",
-//         "pdf": "2_2rows_1cols_sameSide.pdf",
-//         "products": 2,
-//         "theme": "Minimal",
-//         "grid": "2rows_1cols"
-//     },
-//     {
-//         "name": "2_2rows_1cols_zigZag.html",
-//         "displayName": "Zig Zag products",
-//         "image": "2_2rows_1cols_ZigZag.png",
-//         "pdf": "2_2rows_1cols_zigZag.pdf",
-//         "products": 2,
-//         "theme": "Minimal",
-//         "grid": "2rows_1cols"
-//     },
-//     {
-//         "name": "3_3rows_1cols_zigZag.html",
-//         "displayName": "Zig Zag products",
-//         "image": "3_3rows_1cols_zigZag.png",
-//         "pdf": "3_3rows_1cols_zigZag.pdf",
-//         "products": 3,
-//         "theme": "Minimal",
-//         "grid": "3rows_1cols"
-//     },
-//     {
-//         "name": "3_3rows_1cols_sameSide.html",
-//         "displayName": "Same Side products",
-//         "image": "3_3rows_1cols_sameSide.png",
-//         "pdf": "3_3rows_1cols_sameSide.pdf",
-//         "products": 3,
-//         "theme": "Minimal",
-//         "grid": "3rows_1cols"
-//     },
-//     {
-//         "name": "20_5rows_4cols.html",
-//         "displayName": "Product Gallery",
-//         "image": "20_5rows_4cols.png",
-//         "pdf": "20_5rows_4cols.pdf",
-//         "products": 20,
-//         "theme": "Minimal",
-//         "grid": "5rows_4cols"
-//     }
-// ];
-// export const links = {
-//     "images": {
-//         "default": {
-//             "first": "/static/assets/images/Default_Templates/First_page",
-//             "product": "/static/assets/images/Default_Templates/Product_page",
-//             "last": "/static/assets/images/Default_Templates/Last_page"
-//         },
-//         "edited": {
-//             "first": "/static/assets/images/Edited_Templates/First_page",
-//             "product": "/static/assets/images/Edited_Templates/Product_page",
-//             "last": "/static/assets/images/Edited_Templates/Last_page"
-//         }
-//     },
-//     "pdf": {
-//         "default": {
-//             "first": "/static/assets/templatesPDF/Default_Templates/First_page",
-//             "product": "/static/assets/templatesPDF/Default_Templates/Product_page",
-//             "last": "/static/assets/templatesPDF/Default_Templates/Last_page"
-//         },
-//         "edited": {
-//             "first": "/static/assets/templatesPDF/Edited_Templates/First_page",
-//             "product": "/static/assets/templatesPDF/Edited_Templates/Product_page",
-//             "last": "/static/assets/templatesPDF/Edited_Templates/Last_page"
-//         }
-//     },
-//     "templates": {
-//         "default": {
-//             "first": "/static/assets/templates/Default_Templates/First_page",
-//             "product": "/static/assets/templates/Default_Templates/Product_page",
-//             "last": "/static/assets/templates/Default_Templates/Last_page"
-//         },
-//         "edited": {
-//             "first": "/static/assets/templates/Edited_Templates/First_page",
-//             "product": "/static/assets/templates/Edited_Templates/Product_page",
-//             "last": "/static/assets/templates/Edited_Templates/Last_page"
-//         }
-//     }
-// }
-
 import { createTemplateCard, initializeFilters } from './templateSelector.js';
 
 const allTemplatesBtn = document.getElementById('allTemplatesBtn');
@@ -339,8 +19,6 @@ export let config = {
     links: links
 };
 
-
-
 window.addEventListener('DOMContentLoaded', async () => {
 
 
@@ -357,8 +35,8 @@ window.addEventListener('DOMContentLoaded', async () => {
     console.log(pageData);
     console.log(editedPage);
 
-    
-   
+
+
 
     const templateButtons = [allTemplatesBtn, savedTemplatesBtn];
     const pageButtons = [firstPageButton, productPageButton, thankYouPageButton];
@@ -434,28 +112,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
 
 });
-// export const loadTemplates = (templates) => {
-//     gridContainer.innerHTML = '';
 
-//     // Apply filters if any
-//     if (Object.keys(config.filter).length > 0) {
-//         templates = templates.filter(template => {
-//             return Object.entries(config.filter).every(([key, value]) => {
-//                 // Convert to string for safe comparison
-//                 return String(template[key]) === String(value);
-//             });
-//         });
-//     }
-
-//     templates.forEach(template => {
-//         const card = createTemplateCard(template, descKeys);
-//         gridContainer.appendChild(card);
-//     });
-// };
-
-
-
-// Handle preview and select globally
 
 export const loadTemplates = (templates) => {
     // Prevent crash if templates is undefined or not an array
@@ -487,8 +144,6 @@ export const loadTemplates = (templates) => {
     });
 };
 
-
-
 window.previewTemplate = function (pdfFilename, mode, pageType) {
     const pdfUrl = `${links.pdf[mode][pageType]}/${pdfFilename}`;
     const popup = window.open(pdfUrl, '_blank', 'width=800,height=600');
@@ -499,6 +154,13 @@ window.previewTemplate = function (pdfFilename, mode, pageType) {
 window.selectTemplate = async function (template) {
     const page = config.page;
     const mode = config.mode;
+
+    // Validate template object before sending
+    if (!template || !template.name || !template.pdf || !template.image) {
+        console.error("Invalid template object:", template);
+        showAlert('error', 'Invalid template data', 'The template information is incomplete.');
+        return;
+    }
 
     const baseLinks = links.templates[mode][page];
     const pdfLink = links.pdf[mode][page];
@@ -512,91 +174,225 @@ window.selectTemplate = async function (template) {
                 images: `${imageLink}/${template.image}`,
                 html: `${baseLinks}/${template.name}`
             },
-            mode : mode
+            mode: mode
         }
     };
 
     try {
+        console.log("Sending template selection:", { page, mode, payload });
+
         const res = await fetch('/api/templates-selected', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Debug-Info': JSON.stringify({
+                    client_time: new Date().toISOString(),
+                    user_agent: navigator.userAgent
+                })
+            },
             body: JSON.stringify(payload)
         });
 
         const result = await res.json();
-        if (result = "Selected Succesfully") {
-            alert("Template selected successfully");
-        } else if( result = "Already Selected fot the page") {
-            alert("Already Selected fot the page");
+        console.log("Server response:", result);
+
+        if (!res.ok) {
+            // Handle server-side errors (4xx, 5xx)
+            let errorMsg = result.message || 'Failed to select template';
+
+            if (result.details?.errors?.length) {
+                errorMsg += `\n• ${result.details.errors.map(e => e.error).join('\n• ')}`;
+            }
+
+            throw new Error(errorMsg);
         }
+
+        // Validate successful response
+        if (result.status !== 'success') {
+            throw new Error(result.message || 'Unexpected response from server');
+        }
+
+        // Show appropriate success message
+        if (result.details?.updated_pages?.includes(page)) {
+            showAlert('success', 'Template Selected',
+                `${template.displayName} was successfully selected for the ${page} page.`);
+        }
+        else if (result.details?.skipped_pages?.some(item => item.page === page)) {
+            const skipReason = result.details.skipped_pages.find(item => item.page === page).reason;
+            showAlert('info', 'Template Not Changed',
+                `Template not updated for ${page} page: ${skipReason}`);
+        }
+
+        // Refresh the selected templates display
+        renderSelectedTemplatesCard();
+
     } catch (err) {
-        console.error("Failed to update selected template:", err);
-        alert("Failed to update selected template");
+        console.error("Template selection failed:", err);
+
+        showAlert('error', 'Selection Failed',
+            `Could not select template: ${err.message}\n\n` +
+            `Template: ${template.name}\n` +
+            `Page: ${page}\n` +
+            `Mode: ${mode}`);
     }
-
-
-    renderSelectedTemplatesCard() ; 
 };
 
+const MAX_ALERTS = 8;
+const container  = document.getElementById('alert-container');
 
-window.EditTemplate = function (htmlFileName) {
-    let mode_con = config.mode;        // 'default' or 'edited'
-    let page_con = config.page;        // 'first', 'product', or 'last'
+function showAlert(type, title, message) {
+  // 1) Create the alert element
+  const alertBox = document.createElement('div');
+  alertBox.className = `alert-box ${type}`;
+  alertBox.innerHTML = `
+    <strong>${title}</strong>
+    <p>${message}</p>
+  `;
 
-    let link_con = links.templates[mode_con][page_con];
+  // 2) Prepend it (new alert at top)
+  container.prepend(alertBox);
 
-    // Construct full template path
-    let finalLINK = `${link_con}/${htmlFileName}`;
+  // 3) Enforce max alerts
+  while (container.children.length > MAX_ALERTS) {
+    // Remove the oldest (bottom) alert immediately
+    container.lastElementChild.remove();
+  }
 
-    window.location.href = `/grapeEdit?template=${encodeURIComponent(finalLINK)}&mode=${mode_con}&page=${page_con}`;
-};
+  // 4) Trigger slide‑in & push‑down
+  //    On next frame, clear the initial transform/opacity
+  requestAnimationFrame(() => {
+    alertBox.style.opacity   = '1';
+    alertBox.style.transform = 'translateX(0) translateY(0)';
+    // Existing alerts will gain margin-top and animate down
+  });
 
+  // 5) Auto-remove after 5s with slide‑out & pull‑up
+  setTimeout(() => {
+    // Slide this one out to the right
+    alertBox.style.opacity   = '0';
+    alertBox.style.transform = 'translateX(100%) translateY(0)';
+
+    // Once its own transition ends, remove it
+    alertBox.addEventListener('transitionend', () => {
+      alertBox.remove();
+      // Remaining alerts will lose that first margin and animate up
+    }, { once: true });
+  }, 5000);
+}
 
 window.renderSelectedTemplatesCard = async function () {
     const container = document.getElementById('selected_products');
     container.innerHTML = ''; // clear existing
 
     try {
+        console.log("Fetching selected templates...");
         const res = await fetch('/api/templates-selected');
+
+        if (!res.ok) {
+            const errorData = await res.json().catch(() => ({}));
+            throw new Error(
+                `Server error: ${res.status} ${res.statusText}\n` +
+                `Details: ${errorData.message || 'No details provided'}\n` +
+                `Debug: ${JSON.stringify(errorData.debug_info || {}, null, 2)}`
+            );
+        }
+
         const data = await res.json();
+        console.log("API Response:", data);
 
-        console.log("data fetched", data);
+        // Validate response structure
+        if (data.status !== 'success' || !data.templates_selected) {
+            throw new Error(
+                `Invalid API response structure\n` +
+                `Expected 'status: success' and 'templates_selected' field\n` +
+                `Received: ${JSON.stringify(data, null, 2)}`
+            );
+        }
 
-        if (!data || !data.templates_selected || Object.keys(data.templates_selected).length === 0) {
-            container.innerHTML = '<p class="text-gray-500">No selected templates yet.</p>';
+        console.log(`Found ${Object.keys(data.templates_selected).length} selected templates`);
+
+        if (Object.keys(data.templates_selected).length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <p class="text-gray-500">No templates selected yet</p>
+                    <p class="text-sm text-gray-400">
+                        Select templates from the gallery above to get started
+                    </p>
+                </div>
+            `;
             return;
         }
 
+        // Process each template
         Object.entries(data.templates_selected).forEach(([page, entry]) => {
             const template = entry.template;
             const links = entry.links;
             const mode_ = entry.mode;
-            const page_ = page
+            const page_ = page;
 
-            if (template && Object.keys(template).length > 0) {
-                const card = createSelectedCard(template, links , mode_ , page_);
+            if (!template || Object.keys(template).length === 0) {
+                console.warn(`Empty template found for page: ${page}`);
+                return;
+            }
+
+            if (!links || !links.images || !links.pdf || !links.html) {
+                console.warn(`Incomplete links for page: ${page}`, links);
+                return;
+            }
+
+            try {
+                const card = createSelectedCard(template, links, mode_, page_);
                 container.appendChild(card);
+            } catch (cardError) {
+                console.error(`Failed to create card for ${page}:`, cardError);
+                container.appendChild(createErrorCard(page, cardError));
             }
         });
 
     } catch (err) {
         console.error("Error loading selected templates:", err);
-        container.innerHTML = '<p class="text-red-500">Failed to load selected templates.</p>';
+
+        container.innerHTML = `
+            <div class="error-state bg-red-50 p-4 rounded-lg">
+                <h3 class="text-red-600 font-medium">Error loading templates</h3>
+                <p class="text-red-500 text-sm">${err.message.split('\n')[0]}</p>
+                <details class="text-xs text-gray-500 mt-2">
+                    <summary>Technical details</summary>
+                    <pre class="bg-gray-100 p-2 mt-1 rounded">${err.message}</pre>
+                </details>
+                <button onclick="window.renderSelectedTemplatesCard()" 
+                    class="mt-2 text-sm text-blue-600 hover:text-blue-800">
+                    Try again
+                </button>
+            </div>
+        `;
     }
 };
 
-function createSelectedCard ( template , links , mode, page){
+function createErrorCard(page, error) {
+    const card = document.createElement('div');
+    card.className = 'error-card bg-yellow-50 p-3 rounded border border-yellow-200';
+    card.innerHTML = `
+        <div class="text-yellow-700">
+            <p class="font-medium">Error displaying template for ${page}</p>
+            <p class="text-sm">${error.message.split('\n')[0]}</p>
+        </div>
+    `;
+    return card;
+}
+
+function createSelectedCard(template, links, mode, page) {
     // Create card
-        const card = document.createElement('div');
-        card.className = 'product-card';
+    const card = document.createElement('div');
+    card.className = 'product-card';
 
-          const metaItems = descKeys.map(key =>
-                key === 'products'
-                ? `<span>${template[key]} Products</span>`
-                : `<span>${template[key]}</span>`
-            ).join('');
+    const metaItems = descKeys.map(key =>
+        key === 'products'
+            ? `<span>${template[key]} Products</span>`
+            : `<span>${template[key]}</span>`
+    ).join('');
 
-            card.innerHTML = `
+    card.innerHTML = `
                 <div class="product-card-img">
                 <img src="${links.images}" alt="${template.displayName}">
                 </div>
@@ -611,18 +407,18 @@ function createSelectedCard ( template , links , mode, page){
                 </div>
             `;
 
-              // Button Event Bindings
-            card.querySelector('.preview-btn')
-                .addEventListener('click', () => previewTemplate(template.pdf, mode, page));
+    // Button Event Bindings
+    card.querySelector('.preview-btn')
+        .addEventListener('click', () => previewTemplate(template.pdf, mode, page));
 
-            card.querySelector('.select-btn')
-                .addEventListener('click', () => removeSelectedTemplateCard (page, template , mode , links  ));
+    card.querySelector('.select-btn')
+        .addEventListener('click', () => removeSelectedTemplateCard(page, template, mode, links));
 
-            card.querySelector('.edit-btn')
-                .addEventListener('click', () => EditTemplate(template.name));
+    card.querySelector('.edit-btn')
+        .addEventListener('click', () => EditTemplate(template.id));
 
-        return card ;
-        
+    return card;
+
 }
 
 window.removeSelectedTemplateCard = async function (pageKey, template, mode, links) {
@@ -642,23 +438,41 @@ window.removeSelectedTemplateCard = async function (pageKey, template, mode, lin
         console.log("delete_selected, Backend response:", result);
 
         if (res.ok && result.success) {
-            alert(result.message || "Template removed successfully.");
+            showAlert(
+                'success',
+                'Template Removed',
+                result.message || `${template.displayName} was successfully removed from ${pageKey} page.`
+            );
         } else {
-            const errorMsg = result.error || "Failed to remove template.";
-            alert("error:" + errorMsg);
-
+            let errorDetails = '';
             if (result.details) {
-                console.warn("delete_selected, Debug Details:", result.details);
+                errorDetails = `\n\nDetails: ${JSON.stringify(result.details, null, 2)}`;
             }
+
+            showAlert(
+                'error',
+                'Removal Failed',
+                (result.error || "Failed to remove template.") + errorDetails
+            );
         }
 
         renderSelectedTemplatesCard(); // Refresh UI
 
     } catch (err) {
         console.error("Network/JS error in removeSelectedTemplateCard:", err);
-        alert("Error while removing selected template.");
+        showAlert(
+            'error',
+            'Removal Error',
+            `Error while removing selected template:\n${err.message}\n\n` +
+            `Template: ${template.name}\n` +
+            `Page: ${pageKey}`
+        );
     }
 };
 
+window.EditTemplate = function (templateID) {
 
-
+    // Sending the TemplateID to the Editor , Where the grapeEditor will call route to the backend to get the
+    // link , template metadata and the mode & page
+    window.location.href = `/grapeEdit?templateID=${encodeURIComponent(templateID)}`;
+};
