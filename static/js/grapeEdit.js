@@ -116,6 +116,15 @@ btnPopup.addEventListener('click', () => {
             const result = await response.json();
             if (response.ok) {
                 alert('Saved to: ' + result.path);
+
+                // Open the saved HTML file in a new tab
+                const htmlUrl = `/editor`;
+                window.open(htmlUrl, '_blank');
+
+                // Close current window after a short delay
+                setTimeout(() => {
+                    window.close();
+                }, 1000);
             } else {
                 alert('Save failed: ' + (result.message || 'Unknown error'));
             }

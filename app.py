@@ -969,7 +969,7 @@ def update_templates_edited_config(config, page_type, previous_temp_id, html_fil
                 "name": html_filename,
                 "image": image_filename,
                 "pdf": pdf_filename,
-                "created_at": datetime.now().isoformat(),
+                "created_at": datetime.now().strftime("%d %B %Y, %I:%M%p"),
                 "original_template_id": previous_temp_id
             })
         else:
@@ -980,10 +980,9 @@ def update_templates_edited_config(config, page_type, previous_temp_id, html_fil
                 "displayName": base_name,
                 "image": image_filename,
                 "pdf": pdf_filename,
-                "created_at": datetime.now().isoformat(),
+                "created_at": datetime.now().strftime("%d %B %Y, %I:%M%p"),
                 "original_template_id": previous_temp_id
             }
-
         # Add to templates_edited
         templates_edited[page_type].append(new_template)
 

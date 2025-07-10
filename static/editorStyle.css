@@ -15,6 +15,14 @@ body {
       scrollbar-gutter: stable;
 }
 
+    #blocks {
+      width: 200px;
+      background-color: #f4f4f4;
+      border-right: 1px solid #ddd;
+      overflow-y: auto;
+      padding: 10px;
+    }
+
 /* Header styles */
 header {
     background: linear-gradient(102deg, #007bff63, #0056b399);

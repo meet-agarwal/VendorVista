@@ -11,18 +11,21 @@ export function createTemplateCard(template, descKeys) {
 
   const imgBase = links.images[mode][pageType];
 
-  const metaItems = descKeys.map(key =>
+  const metaItems = descKeys
+  .filter(key => template[key] !== undefined && template[key] !== null && template[key] !== '')
+  .map(key =>
     key === 'products'
       ? `<span>${template[key]} Products</span>`
       : `<span>${template[key]}</span>`
-  ).join('');
+  )
+  .join('');
 
   card.innerHTML = `
     <div class="product-card-img">
       <img src="${imgBase}/${template.image}" alt="${template.displayName}">
     </div>
     <div class="product-card-body">
-      <div class="product-card-title">${template.displayName}</div>
+      <div class="product-card-title">${template.name}</div>
       <div class="product-card-meta">${metaItems}</div>
       <div class="product-card-buttons">
         <button class="preview-btn">Preview</button>
