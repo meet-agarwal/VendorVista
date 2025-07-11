@@ -1,0 +1,44 @@
+---
+
+in the html you have to add attribute
+
+ <div class="" object="page">
+        <div class="header" object="header"></div>
+
+        <div id="" object="page_break" products="4">
+
+            <div class="" object="item">
+                <div class="product-image"><img src="" alt="" object="image"></div>
+                <div class="product-info" object="product_details">
+                    <table></table>
+                </div>
+            </div>
+
+            <div class="" object="item">
+                <div class="product-image"><img src="" alt="" object="image"></div>
+                <div class="product-info" object="product_details">
+                    <table></table>
+                </div>
+            </div>
+
+            <div class="" object="item">
+                <div class="product-image"><img src="" alt="" object="image"></div>
+                <div class="product-info" object="product_details">
+                    <table></table>
+                </div>
+            </div>
+
+            <div class="" object="item">
+                <div class="product-image"><img src="" alt="" object="image"></div>
+                <div class="product-info" object="product_details">
+                    <table></table>
+                </div>
+            </div>
+        </div>
+        <div class="footer" object="footer"></div>
+    </div>
+
+
+    // object page_break is a single page to be printed , so any content inside the page_break must be inside this
+    // product are the number of products
+    attribute object is important to fetch the details div from the code

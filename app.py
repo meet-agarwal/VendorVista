@@ -983,6 +983,69 @@ def find_original_template(config, page_type, template_id):
 
     return None
 
+import uuid
+
+# def update_templates_edited_config(config, page_type, previous_temp_id, html_filename, pdf_filename, image_filename,
+#                                    base_name):
+#     """Update the templates_edited configuration"""
+#     try:
+#         # Get existing templates_edited
+#         templates_edited = config.get('templates_edited', {})
+#
+#         # Initialize page list if it doesn't exist
+#         if page_type not in templates_edited:
+#             templates_edited[page_type] = []
+#
+#         # Find original template from any source
+#         original_template = find_original_template(config, page_type, previous_temp_id)
+#
+#         # Generate new template ID
+#         # existing_ids = [t.get('id', '') for t in templates_edited[page_type]]
+#         # new_id_num = len(existing_ids) + 1
+#         # new_id = f"edited_{page_type}_{new_id_num}"
+#
+#         new_id = f"edited_{page_type}_{uuid.uuid4().hex}"
+#
+#         # Create new template metadata by copying original and updating necessary fields
+#         if original_template:
+#             # Start with a copy of the original template
+#             new_template = original_template.copy()
+#
+#             # Update with new file information
+#             new_template.update({
+#                 "id": new_id,
+#                 "name": html_filename,
+#                 "image": image_filename,
+#                 "pdf": pdf_filename,
+#                 "created_at": datetime.now().strftime("%d %B %Y, %I:%M%p"),
+#                 "original_template_id": previous_temp_id
+#             })
+#         else:
+#             # If no original template found, create a basic one
+#             new_template = {
+#                 "id": new_id,
+#                 "name": html_filename,
+#                 "displayName": base_name,
+#                 "image": image_filename,
+#                 "pdf": pdf_filename,
+#                 "created_at": datetime.now().strftime("%d %B %Y, %I:%M%p"),
+#                 "original_template_id": previous_temp_id
+#             }
+#         # Add to templates_edited
+#         templates_edited[page_type].append(new_template)
+#
+#         # Update config
+#         config['templates_edited'] = templates_edited
+#
+#         # Save configuration
+#         write_editor_config(config)
+#
+#         app.logger.info(f"Updated templates_edited configuration for {page_type} page")
+#         return True
+#
+#     except Exception as e:
+#         app.logger.error(f"Error updating templates_edited configuration: {str(e)}")
+#         return False
 
 def update_templates_edited_config(config, page_type, previous_temp_id, html_filename, pdf_filename, image_filename,
                                    base_name):
@@ -999,35 +1062,50 @@ def update_templates_edited_config(config, page_type, previous_temp_id, html_fil
         original_template = find_original_template(config, page_type, previous_temp_id)
 
         # Generate new template ID
-        existing_ids = [t.get('id', '') for t in templates_edited[page_type]]
-        new_id_num = len(existing_ids) + 1
-        new_id = f"edited_{page_type}_{new_id_num}"
+        new_id = f"edited_{page_type}_{uuid.uuid4().hex}"
 
-        # Create new template metadata by copying original and updating necessary fields
+        # Create the new template data that we want to store
+        new_template_data = {
+            "id": new_id,
+            "name": html_filename,
+            "image": image_filename,
+            "pdf": pdf_filename,
+            "created_at": datetime.now().strftime("%d %B %Y, %I:%M%p"),
+            "original_template_id": previous_temp_id
+        }
+
+        # If no displayName is provided, use the base_name
+        if "displayName" not in new_template_data:
+            new_template_data["displayName"] = base_name
+
         if original_template:
+            # Compare keys between original and new data
+            original_keys = set(original_template.keys())
+            new_keys = set(new_template_data.keys())
+
+            # Find matched and unmatched keys
+            matched_keys = original_keys.intersection(new_keys)
+            unmatched_keys = new_keys.difference(original_keys)
+
+            app.logger.info(f"Matched keys: {matched_keys}")
+            app.logger.info(f"Unmatched keys: {unmatched_keys}")
+
             # Start with a copy of the original template
             new_template = original_template.copy()
 
-            # Update with new file information
-            new_template.update({
-                "id": new_id,
-                "name": html_filename,
-                "image": image_filename,
-                "pdf": pdf_filename,
-                "created_at": datetime.now().strftime("%d %B %Y, %I:%M%p"),
-                "original_template_id": previous_temp_id
-            })
+            # Update matched keys with new values
+            for key in matched_keys:
+                if key in new_template_data:
+                    new_template[key] = new_template_data[key]
+
+            # Add unmatched keys from new data
+            for key in unmatched_keys:
+                if key in new_template_data:
+                    new_template[key] = new_template_data[key]
         else:
-            # If no original template found, create a basic one
-            new_template = {
-                "id": new_id,
-                "name": html_filename,
-                "displayName": base_name,
-                "image": image_filename,
-                "pdf": pdf_filename,
-                "created_at": datetime.now().strftime("%d %B %Y, %I:%M%p"),
-                "original_template_id": previous_temp_id
-            }
+            # If no original template found, use the new data as is
+            new_template = new_template_data
+
         # Add to templates_edited
         templates_edited[page_type].append(new_template)
 
@@ -1043,7 +1121,6 @@ def update_templates_edited_config(config, page_type, previous_temp_id, html_fil
     except Exception as e:
         app.logger.error(f"Error updating templates_edited configuration: {str(e)}")
         return False
-
 
 
 if __name__ == '__main__':

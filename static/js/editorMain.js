@@ -399,7 +399,7 @@ function createSelectedCard(template, links, mode, page) {
                 <img src="${links.images}" alt="${template.displayName}">
                 </div>
                 <div class="product-card-body">
-                <div class="product-card-title">${template.displayName} - {${page}}</div>
+                <div class="product-card-title">${template.name} - {${page}}</div>
                 <div class="product-card-meta">${metaItems}</div>
                 <div class="product-card-buttons">
                     <button class="preview-btn">Preview</button>

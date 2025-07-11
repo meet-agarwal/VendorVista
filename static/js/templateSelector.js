@@ -21,17 +21,17 @@ export function createTemplateCard(template, descKeys) {
   .join('');
 
   card.innerHTML = `
-    <div class="product-card-img">
-      <img src="${imgBase}/${template.image}" alt="${template.displayName}">
-    </div>
-    <div class="product-card-body">
-      <div class="product-card-title">${template.name}</div>
-      <div class="product-card-meta">${metaItems}</div>
-      <div class="product-card-buttons">
-        <button class="preview-btn">Preview</button>
-        <button class="select-btn">Select</button>
-        <button class="edit-btn">Edit</button>
-      </div>
+              <div class="product-card-img">
+                <img src="${imgBase}/${template.image}" alt="${template.displayName}">
+              </div>
+              <div class="product-card-body">
+                <div class="product-card-title">${template.name}</div>
+                <div class="product-card-meta">${metaItems}</div>
+                <div class="product-card-buttons">
+                  <button class="preview-btn">Preview</button>
+                  <button class="select-btn">Select</button>
+                  <button class="edit-btn">Edit</button>
+                </div>
     </div>
   `;
 
