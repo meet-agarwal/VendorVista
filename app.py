@@ -497,11 +497,11 @@ def get_templates_selected():
                 existing_template = current_selection.get(page_key, {}).get('template', {})
 
                 # Check for existing template
-                if existing_template and existing_template.get('name'):
+                if existing_template and existing_template.get('id'):
                     response_info['skipped_pages'].append({
                         'page': page_key,
                         'reason': 'Template already exists',
-                        'existing_template': existing_template.get('name')
+                        'existing_template': existing_template.get('id')
                     })
                     continue
 
@@ -667,7 +667,7 @@ def getGrapeEditortemplateData():
 
         if matched_template:
             # Build HTML link based on known structure
-            html_link = f"/static/assets/templates/{source.capitalize()}_Templates/{page.capitalize()}_page/{matched_template['name']}"
+            html_link = f"/static/assets/templates/{source.capitalize()}_Templates/{page.capitalize()}_page/{matched_template['html']}"
             return jsonify({
                 'status': 'success',
                 'source': source,
@@ -707,27 +707,157 @@ from PIL import Image
 import fitz  # PyMuPDF for PDF to image conversion
 
 
+# @app.route('/api/Edited_templates/save', methods=['POST'])
+# def Edited_templates_save():
+#     try:
+#         # Get JSON data from the request
+#         data = request.get_json()
+#
+#         # Validate that data exists
+#         if not data:
+#             return jsonify({
+#                 'status': 'error',
+#                 'message': 'No data provided'
+#             }), 400
+#
+#         # Extract data from the frontend request
+#         filename = data.get('filename')
+#         html_content = data.get('html')
+#         css_content = data.get('css')
+#         page_type = data.get('page')
+#         previous_temp_id = data.get('previousTempID')
+#
+#         # Validate required fields
+#         required_fields = ['filename', 'html', 'css', 'page']
+#         missing_fields = [field for field in required_fields if not data.get(field)]
+#
+#         if missing_fields:
+#             return jsonify({
+#                 'status': 'error',
+#                 'message': f'Missing required fields: {", ".join(missing_fields)}'
+#             }), 400
+#
+#         # Validate page type
+#         valid_pages = ['first', 'product', 'last']
+#         if page_type not in valid_pages:
+#             return jsonify({
+#                 'status': 'error',
+#                 'message': f'Invalid page type. Must be one of: {", ".join(valid_pages)}'
+#             }), 400
+#
+#         # Log the received data for debugging
+#         app.logger.info(f"Saving edited template: {filename}")
+#         app.logger.info(f"Page type: {page_type}")
+#         app.logger.info(f"Previous template ID: {previous_temp_id}")
+#
+#         # Step 1: Combine HTML and CSS
+#         combined_html = combine_html_css(html_content, css_content)
+#
+#         # Step 2: Read configuration and get file paths
+#         config = read_editor_config()
+#         links = config.get('links', {})
+#
+#         # Get the directory paths for edited templates
+#         html_dir = links.get('templates', {}).get('edited', {}).get(page_type, '')
+#         pdf_dir = links.get('pdf', {}).get('edited', {}).get(page_type, '')
+#         image_dir = links.get('images', {}).get('edited', {}).get(page_type, '')
+#
+#         if not all([html_dir, pdf_dir, image_dir]):
+#             return jsonify({
+#                 'status': 'error',
+#                 'message': 'Invalid configuration: missing directory paths'
+#             }), 500
+#
+#         # Convert relative paths to absolute paths
+#         html_dir = os.path.join(app.root_path, html_dir.lstrip('/'))
+#         pdf_dir = os.path.join(app.root_path, pdf_dir.lstrip('/'))
+#         image_dir = os.path.join(app.root_path, image_dir.lstrip('/'))
+#
+#         # # Create directories if they don't exist
+#         # os.makedirs(html_dir, exist_ok=True)
+#         # os.makedirs(pdf_dir, exist_ok=True)
+#         # os.makedirs(image_dir, exist_ok=True)
+#
+#         # Step 3: Save files
+#         base_name = os.path.splitext(filename)[0]
+#
+#         # Save HTML file
+#         html_path = os.path.join(html_dir, filename)
+#         with open(html_path, 'w', encoding='utf-8') as f:
+#             f.write(combined_html)
+#
+#         # Convert HTML to PDF
+#         pdf_filename = f"{base_name}.pdf"
+#         pdf_path = os.path.join(pdf_dir, pdf_filename)
+#         success = convert_html_to_pdf(html_path, pdf_path)
+#
+#         if not success:
+#             return jsonify({
+#                 'status': 'error',
+#                 'message': 'Failed to convert HTML to PDF'
+#             }), 500
+#
+#         # Convert PDF to image
+#         image_filename = f"{base_name}.png"
+#         image_path = os.path.join(image_dir, image_filename)
+#         success = convert_pdf_to_image(pdf_path, image_path)
+#
+#         if not success:
+#             return jsonify({
+#                 'status': 'error',
+#                 'message': 'Failed to convert PDF to image'
+#             }), 500
+#
+#         # Step 4: Update templates_edited configuration
+#         success = update_templates_edited_config(
+#             config, page_type, previous_temp_id, filename,
+#             pdf_filename, image_filename, base_name
+#         )
+#
+#         if not success:
+#             return jsonify({
+#                 'status': 'error',
+#                 'message': 'Failed to update configuration'
+#             }), 500
+#
+#         # Return success response
+#         return jsonify({
+#             'status': 'success',
+#             'message': 'Template saved successfully',
+#             'path': html_path,
+#             'filename': filename,
+#             'page': page_type,
+#             'files_created': {
+#                 'html': filename,
+#                 'pdf': pdf_filename,
+#                 'image': image_filename
+#             }
+#         }), 200
+#
+#     except Exception as e:
+#         app.logger.exception("Error in Edited_templates_save")
+#         return jsonify({
+#             'status': 'error',
+#             'message': 'Internal server error',
+#             'error': str(e)
+#         }), 500
+
 @app.route('/api/Edited_templates/save', methods=['POST'])
 def Edited_templates_save():
     try:
-        # Get JSON data from the request
         data = request.get_json()
 
-        # Validate that data exists
         if not data:
-            return jsonify({
-                'status': 'error',
-                'message': 'No data provided'
-            }), 400
+            return jsonify({'status': 'error', 'message': 'No data provided'}), 400
 
-        # Extract data from the frontend request
+        # Required inputs
         filename = data.get('filename')
         html_content = data.get('html')
         css_content = data.get('css')
         page_type = data.get('page')
         previous_temp_id = data.get('previousTempID')
+        mode = 'edited' # default mode if not sent
 
-        # Validate required fields
         required_fields = ['filename', 'html', 'css', 'page']
         missing_fields = [field for field in required_fields if not data.get(field)]
 
@@ -737,7 +867,6 @@ def Edited_templates_save():
                 'message': f'Missing required fields: {", ".join(missing_fields)}'
             }), 400
 
-        # Validate page type
         valid_pages = ['first', 'product', 'last']
         if page_type not in valid_pages:
             return jsonify({
@@ -745,90 +874,62 @@ def Edited_templates_save():
                 'message': f'Invalid page type. Must be one of: {", ".join(valid_pages)}'
             }), 400
 
-        # Log the received data for debugging
-        app.logger.info(f"Saving edited template: {filename}")
-        app.logger.info(f"Page type: {page_type}")
-        app.logger.info(f"Previous template ID: {previous_temp_id}")
+        # Log
+        app.logger.info(f"Saving edited template: {filename} ({page_type})")
 
-        # Step 1: Combine HTML and CSS
+        # Combine HTML and CSS
         combined_html = combine_html_css(html_content, css_content)
 
-        # Step 2: Read configuration and get file paths
+        # Read config
         config = read_editor_config()
         links = config.get('links', {})
 
-        # Get the directory paths for edited templates
-        html_dir = links.get('templates', {}).get('edited', {}).get(page_type, '')
-        pdf_dir = links.get('pdf', {}).get('edited', {}).get(page_type, '')
-        image_dir = links.get('images', {}).get('edited', {}).get(page_type, '')
+        html_dir = os.path.join(app.root_path, links.get('templates', {}).get('edited', {}).get(page_type, '').lstrip('/'))
+        pdf_dir = os.path.join(app.root_path, links.get('pdf', {}).get('edited', {}).get(page_type, '').lstrip('/'))
+        image_dir = os.path.join(app.root_path, links.get('images', {}).get('edited', {}).get(page_type, '').lstrip('/'))
 
         if not all([html_dir, pdf_dir, image_dir]):
-            return jsonify({
-                'status': 'error',
-                'message': 'Invalid configuration: missing directory paths'
-            }), 500
+            return jsonify({'status': 'error', 'message': 'Missing directory paths in config'}), 500
 
-        # Convert relative paths to absolute paths
-        html_dir = os.path.join(app.root_path, html_dir.lstrip('/'))
-        pdf_dir = os.path.join(app.root_path, pdf_dir.lstrip('/'))
-        image_dir = os.path.join(app.root_path, image_dir.lstrip('/'))
+        # Generate unique base name once
+        unique_id = uuid.uuid4().hex[:8]
+        base_name = f"{mode}_{page_type}_{filename}_{unique_id}"
 
-        # # Create directories if they don't exist
-        # os.makedirs(html_dir, exist_ok=True)
-        # os.makedirs(pdf_dir, exist_ok=True)
-        # os.makedirs(image_dir, exist_ok=True)
+        # Final filenames
+        html_filename = f"{base_name}.html"
+        pdf_filename = f"{base_name}.pdf"
+        image_filename = f"{base_name}.png"
 
-        # Step 3: Save files
-        base_name = os.path.splitext(filename)[0]
-
-        # Save HTML file
-        html_path = os.path.join(html_dir, filename)
+        # Save HTML
+        html_path = os.path.join(html_dir, html_filename)
         with open(html_path, 'w', encoding='utf-8') as f:
             f.write(combined_html)
 
-        # Convert HTML to PDF
-        pdf_filename = f"{base_name}.pdf"
+        # Convert to PDF
         pdf_path = os.path.join(pdf_dir, pdf_filename)
-        success = convert_html_to_pdf(html_path, pdf_path)
+        if not convert_html_to_pdf(html_path, pdf_path):
+            return jsonify({'status': 'error', 'message': 'Failed to convert HTML to PDF'}), 500
 
-        if not success:
-            return jsonify({
-                'status': 'error',
-                'message': 'Failed to convert HTML to PDF'
-            }), 500
-
-        # Convert PDF to image
-        image_filename = f"{base_name}.png"
+        # Convert to Image
         image_path = os.path.join(image_dir, image_filename)
-        success = convert_pdf_to_image(pdf_path, image_path)
+        if not convert_pdf_to_image(pdf_path, image_path):
+            return jsonify({'status': 'error', 'message': 'Failed to convert PDF to image'}), 500
 
-        if not success:
-            return jsonify({
-                'status': 'error',
-                'message': 'Failed to convert PDF to image'
-            }), 500
+        # Update config
+        if not update_templates_edited_config(
+            config, page_type, previous_temp_id,
+            html_filename, pdf_filename, image_filename, filename
+        ):
+            return jsonify({'status': 'error', 'message': 'Failed to update configuration'}), 500
 
-        # Step 4: Update templates_edited configuration
-        success = update_templates_edited_config(
-            config, page_type, previous_temp_id, filename,
-            pdf_filename, image_filename, base_name
-        )
-
-        if not success:
-            return jsonify({
-                'status': 'error',
-                'message': 'Failed to update configuration'
-            }), 500
-
-        # Return success response
         return jsonify({
             'status': 'success',
             'message': 'Template saved successfully',
             'path': html_path,
-            'filename': filename,
+            'filename': html_filename,
             'page': page_type,
             'files_created': {
-                'html': filename,
+                'html': html_filename,
                 'pdf': pdf_filename,
                 'image': image_filename
             }
@@ -1067,16 +1168,17 @@ def update_templates_edited_config(config, page_type, previous_temp_id, html_fil
         # Create the new template data that we want to store
         new_template_data = {
             "id": new_id,
-            "name": html_filename,
+            "displayName" : base_name,
+            "html": html_filename,
             "image": image_filename,
             "pdf": pdf_filename,
             "created_at": datetime.now().strftime("%d %B %Y, %I:%M%p"),
             "original_template_id": previous_temp_id
         }
 
-        # If no displayName is provided, use the base_name
-        if "displayName" not in new_template_data:
-            new_template_data["displayName"] = base_name
+        # # If no displayName is provided, use the base_name
+        # if "displayName" not in new_template_data:
+        #     new_template_data["displayName"] = base_name
 
         if original_template:
             # Compare keys between original and new data
@@ -1121,6 +1223,31 @@ def update_templates_edited_config(config, page_type, previous_temp_id, html_fil
     except Exception as e:
         app.logger.error(f"Error updating templates_edited configuration: {str(e)}")
         return False
+
+@app.route('/api/template-row-count', methods=['GET'])
+def get_template_row_count():
+    """
+    Returns the `table` field from templates_selected.product.template
+    as `templates_table`.
+    """
+    try:
+        config = read_editor_config()
+        templates_selected = config.get('templates_selected', {})
+
+        # Directly grab the “product” → “template” → “table” value
+        table_count = (
+            templates_selected
+            .get('product', {})
+            .get('template', {})
+            .get('table', 0)
+        )
+
+        return jsonify({'templates_table': table_count}), 200
+
+    except Exception:
+        app.logger.exception("Error fetching template table count")
+        return jsonify({'error': 'Internal server error'}), 500
+
 
 
 if __name__ == '__main__':

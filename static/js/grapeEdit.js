@@ -127,7 +127,7 @@ const css = editor.getCss();
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    filename: filename + '.html',
+                    filename: filename ,
                     html: html,
                     css: css,
                     page : temp_page,

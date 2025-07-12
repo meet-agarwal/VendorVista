@@ -156,7 +156,7 @@ window.selectTemplate = async function (template) {
     const mode = config.mode;
 
     // Validate template object before sending
-    if (!template || !template.name || !template.pdf || !template.image) {
+    if (!template || !template.html || !template.pdf || !template.image) {
         console.error("Invalid template object:", template);
         showAlert('error', 'Invalid template data', 'The template information is incomplete.');
         return;
@@ -172,7 +172,7 @@ window.selectTemplate = async function (template) {
             links: {
                 pdf: `${pdfLink}/${template.pdf}`,
                 images: `${imageLink}/${template.image}`,
-                html: `${baseLinks}/${template.name}`
+                html: `${baseLinks}/${template.html}`
             },
             mode: mode
         }
@@ -399,7 +399,7 @@ function createSelectedCard(template, links, mode, page) {
                 <img src="${links.images}" alt="${template.displayName}">
                 </div>
                 <div class="product-card-body">
-                <div class="product-card-title">${template.name} - {${page}}</div>
+                <div class="product-card-title">${template.displayName} - {${page}}</div>
                 <div class="product-card-meta">${metaItems}</div>
                 <div class="product-card-buttons">
                     <button class="preview-btn">Preview</button>

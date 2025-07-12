@@ -223,6 +223,37 @@
         <p>Loading filters...</p>
     </div>
 
+      <!-- Overlay -->
+<div id="popup-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+  <!-- Popup Card -->
+  <div class="bg-white rounded-3xl shadow-2xl w-full max-w-lg p-8 relative transition-transform scale-100 animate-fadeIn" id="popup-card">
+    <!-- Close Button -->
+    <button id="popup-close" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl transition-colors duration-200">&times;</button>
+
+    <!-- Icon & Title -->
+    <div class="flex items-center gap-3 mb-4">
+      <div class="bg-red-100 text-red-500 rounded-full p-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-1.414 1.414M6.343 17.657l-1.414 1.414M3 12h2m14 0h2M12 3v2m0 14v2m7.071-7.071l-1.414-1.414M5.636 5.636L4.222 4.222" />
+        </svg>
+      </div>
+      <h2 class="text-2xl font-bold text-gray-800">Template Conflict</h2>
+    </div>
+
+    <!-- Message -->
+    <p class="text-gray-600 leading-relaxed mb-6">
+      There's a mismatch between the number of table rows in your selected template and the currently selected data.<br><br>
+      <span class="font-medium text-gray-800">Templates:</span> <span id="template-count" class="text-blue-600 font-semibold">3</span><br>
+      <span class="font-medium text-gray-800">Current Selection:</span> <span id="current-count" class="text-blue-600 font-semibold">2</span>
+    </p>
+
+    <!-- Buttons -->
+    <div class="flex justify-end gap-4">
+      <button id="proceed-btn" class="bg-gray-100 text-gray-800 px-5 py-2.5 rounded-xl hover:bg-gray-200 transition">Proceed Anyway</button>
+      <button id="editor-btn" class="bg-blue-600 text-white px-5 py-2.5 rounded-xl hover:bg-blue-700 transition">Open Template Editor</button>
+    </div>
+  </div>
+</div>
 
 
     <!-- <script src="../static/script.js"></script> -->

@@ -25,7 +25,7 @@ export function createTemplateCard(template, descKeys) {
                 <img src="${imgBase}/${template.image}" alt="${template.displayName}">
               </div>
               <div class="product-card-body">
-                <div class="product-card-title">${template.name}</div>
+                <div class="product-card-title">${template.displayName}</div>
                 <div class="product-card-meta">${metaItems}</div>
                 <div class="product-card-buttons">
                   <button class="preview-btn">Preview</button>

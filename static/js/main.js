@@ -295,6 +295,26 @@ filtersLoaderOverlay.style.display = 'flex'; // Show the loader
       return;
     }
 
+  const templateCount = await fetchTemplateCount();
+  if (templateCount === null) {
+    // could not check count — either bail or just proceed
+    console.warn('Skipping conflict check due to fetch error.');
+  } else if (templateCount !== settingKeys.length) {
+    // show popup & wait for user choice
+    const choice = await showConflictPopup(templateCount, settingKeys.length);
+
+    if (choice === 'cancel') {
+      // user closed popup — do not continue
+      return;
+    }
+    if (choice === 'editor') {
+      // simulate click on your “Template Editor” button in the header
+      document.getElementById('template_editor_btn')?.click();
+      return;
+    }
+    // else 'proceed' → fall through
+  }
+
     printButton.disabled = true;
     printButton.innerText = 'Wait...';
 
@@ -382,4 +402,66 @@ filtersLoaderOverlay.style.display = 'flex'; // Show the loader
   });
 
 });
+
+
+/**
+ * Call backend to get the number of rows in the selected template.
+ * @returns {Promise<number|null>} the number, or null on error.
+ */
+async function fetchTemplateCount() {
+  try {
+    const res = await fetch('/api/template-row-count', { method: 'GET' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();      // { templates_table: number }
+    return data.templates_table;
+  } catch (err) {
+    console.error('Failed to fetch template count:', err);
+    return null;
+  }
+}
+
+/**
+ * Show the conflict popup and wait for user action.
+ * @param {number} templateCount
+ * @param {number} currentCount
+ * @returns {Promise<'proceed'|'editor'|'cancel'>}
+ */
+function showConflictPopup(templateCount, currentCount) {
+  const overlay = document.getElementById('popup-overlay');
+  const card    = document.getElementById('popup-card');
+  const btnX    = document.getElementById('popup-close');
+  const btnProceed = document.getElementById('proceed-btn');
+  const btnEditor  = document.getElementById('editor-btn');
+
+  // set counts
+  document.getElementById('template-count').textContent = templateCount;
+  document.getElementById('current-count').textContent  = currentCount;
+
+  overlay.classList.remove('hidden');
+
+  return new Promise(resolve => {
+    // Close = cancel
+    btnX.onclick = () => {
+      overlay.classList.add('hidden');
+      resolve('cancel');
+    };
+    // Click outside = cancel
+    overlay.onclick = e => {
+      if (!card.contains(e.target)) {
+        overlay.classList.add('hidden');
+        resolve('cancel');
+      }
+    };
+    // Proceed
+    btnProceed.onclick = () => {
+      overlay.classList.add('hidden');
+      resolve('proceed');
+    };
+    // Editor
+    btnEditor.onclick = () => {
+      overlay.classList.add('hidden');
+      resolve('editor');
+    };
+  });
+}
 
