@@ -1,7 +1,7 @@
 import { generateUniqueId } from './idUtils.js';
 import { ScrollableFilter } from './ScrollableFilter.js';
 import { addToggleEventListeners } from './toggleEvents.js';
-import { } from './PriceFilterSlider.js'
+import { get_updated_price_options } from './PriceFilterSlider.js'
 
 export function renderFilter(masterFilterDataDict, parentFiltervalues) {
     // ... logic to render parent filter
@@ -52,10 +52,10 @@ export function renderFilter(masterFilterDataDict, parentFiltervalues) {
                     if (radio.checked) {
                         renderChildFilters(option, masterFilterDataDict[option]);
                         // Hide other child filters
-                        // get_updated_price_options(this.masterFilterDataDict[option]);
+                        get_updated_price_options(masterFilterDataDict[option]);
 
-                        // const PriceFilterDiv = document.querySelector('.price-filter');
-                        // PriceFilterDiv.style = "display: block";
+                        const PriceFilterDiv = document.querySelector('.price-filter');
+                        PriceFilterDiv.style = "display: block";
 
                         const SubmitButton = document.getElementById('apply_filters_button');
                         SubmitButton.style = "display: block";
