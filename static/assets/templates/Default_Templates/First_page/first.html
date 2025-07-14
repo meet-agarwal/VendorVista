@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jewelry Collection</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        
+        @page {
+            size: a4;
+            margin-top: 0px;
+            margin-right: 0px;
+            margin-bottom: 0px;
+            margin-left: 0px;
+        }
+
+        
+        .cover {
+            width: 210mm;
+            height: 297mm; /* A4 size */
+            position: relative;
+            background: #f5f3eb;
+            color: #4D1C17;
+            margin: 0 auto;
+            box-sizing: border-box;
+            font-family: Georgia, serif;
+            overflow: hidden;
+            page-break-after: avoid;
+            page-break-inside: avoid;
+        }
+
+        .logo {
+            position: absolute;
+            top: 15mm;
+            left: 15mm;
+            z-index: 3;
+        }
+
+        .logo img {
+            max-width: 150px;
+            height: auto;
+        }
+
+        .main-content {
+            position: absolute;
+            top: 25%;
+            left: 15mm;
+            right: 35%;
+            z-index: 2;
+        }
+
+        .title {
+            font-size: 2.8em;
+            font-weight: normal;
+            color: #6a1b9a;
+            margin: 0 0 0.3em 0;
+            line-height: 1.1;
+            text-align: left;
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            font-weight: 300;
+            color: #4D1C17;
+            margin: 0 0 1.5em 0;
+            font-style: italic;
+            text-align: left;
+        }
+
+        .intro-text {
+            font-size: 1em;
+            line-height: 1.7;
+            color: #4D1C17;
+            margin: 0;
+            text-align: left;
+            max-width: 90%;
+        }
+
+        .background-accent {
+            position: absolute;
+            top: 15%;
+            right: -5mm;
+            width: 45%;
+            height: 75%;
+            background: linear-gradient(135deg, 
+                rgba(106, 27, 154, 0.08) 0%, 
+                rgba(77, 28, 23, 0.05) 50%, 
+                rgba(106, 27, 154, 0.12) 100%);
+            border-radius: 60% 40% 70% 30%;
+            transform: rotate(8deg);
+            z-index: 1;
+        }
+        @media print {
+    @page {
+        size: A4;
+        margin: 0;
+    }
+
+    * {
+        box-shadow: none !important;
+        border: none !important;
+    }
+
+    body, .cover {
+        margin: 0;
+        padding: 0;
+        width: 210mm;
+        height: 297mm;
+    }
+
+    .cover {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="cover">
+        <div class="logo"><img src="https://i.postimg.cc/TYzxfR0t/logo-trial-removebg-preview.png" alt="Company Logo"></div>
+        
+        <div class="main-content">
+            <h1 class="title">Welcome to Our Jewelry Collection</h1>
+            <h2 class="subtitle">Elegance Redefined</h2>
+            <p class="intro-text">
+                Discover our exquisite collection of handcrafted jewelry, where timeless elegance meets 
+                contemporary design. Each piece tells a story of exceptional craftsmanship and attention 
+                to detail, created to celebrate life's most precious moments.
+            </p>
+        </div>
+        
+        <div class="background-accent"></div>
+    </div>
+</body>
+</html>

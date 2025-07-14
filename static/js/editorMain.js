@@ -280,6 +280,96 @@ function showAlert(type, title, message) {
   }, 5000);
 }
 
+// window.renderSelectedTemplatesCard = async function () {
+//     const container = document.getElementById('selected_products');
+//     container.innerHTML = ''; // clear existing
+//
+//     try {
+//         console.log("Fetching selected templates...");
+//         const res = await fetch('/api/templates-selected');
+//
+//         if (!res.ok) {
+//             const errorData = await res.json().catch(() => ({}));
+//             throw new Error(
+//                 `Server error: ${res.status} ${res.statusText}\n` +
+//                 `Details: ${errorData.message || 'No details provided'}\n` +
+//                 `Debug: ${JSON.stringify(errorData.debug_info || {}, null, 2)}`
+//             );
+//         }
+//
+//         const data = await res.json();
+//         console.log("API Response:", data);
+//
+//         // Validate response structure
+//         if (data.status !== 'success' || !data.templates_selected) {
+//             throw new Error(
+//                 `Invalid API response structure\n` +
+//                 `Expected 'status: success' and 'templates_selected' field\n` +
+//                 `Received: ${JSON.stringify(data, null, 2)}`
+//             );
+//         }
+//
+//         console.log(`Found ${Object.keys(data.templates_selected).length} selected templates`);
+//
+//         if (Object.keys(data.templates_selected).length === 0) {
+//             container.innerHTML = `
+//                 <div class="empty-state">
+//                     <p class="text-gray-500">No templates selected yet</p>
+//                     <p class="text-sm text-gray-400">
+//                         Select templates from the gallery above to get started
+//                     </p>
+//                 </div>
+//             `;
+//             return;
+//         }
+//
+//         // Process each template
+//         Object.entries(data.templates_selected).forEach(([page, entry]) => {
+//             const template = entry.template;
+//             const links = entry.links;
+//             const mode_ = entry.mode;
+//             const page_ = page;
+//
+//             if (!template || Object.keys(template).length === 0) {
+//                 console.warn(`Empty template found for page: ${page}`);
+//                 return;
+//             }
+//
+//             if (!links || !links.images || !links.pdf || !links.html) {
+//                 console.warn(`Incomplete links for page: ${page}`, links);
+//                 return;
+//             }
+//
+//             try {
+//                 const card = createSelectedCard(template, links, mode_, page_);
+//                 container.appendChild(card);
+//             } catch (cardError) {
+//                 console.error(`Failed to create card for ${page}:`, cardError);
+//                 container.appendChild(createErrorCard(page, cardError));
+//             }
+//         });
+//
+//     } catch (err) {
+//         console.error("Error loading selected templates:", err);
+//
+//         container.innerHTML = `
+//             <div class="error-state bg-red-50 p-4 rounded-lg">
+//                 <h3 class="text-red-600 font-medium">Error loading templates</h3>
+//                 <p class="text-red-500 text-sm">${err.message.split('\n')[0]}</p>
+//                 <details class="text-xs text-gray-500 mt-2">
+//                     <summary>Technical details</summary>
+//                     <pre class="bg-gray-100 p-2 mt-1 rounded">${err.message}</pre>
+//                 </details>
+//                 <button onclick="window.renderSelectedTemplatesCard()"
+//                     class="mt-2 text-sm text-blue-600 hover:text-blue-800">
+//                     Try again
+//                 </button>
+//             </div>
+//         `;
+//     }
+// };
+
+
 window.renderSelectedTemplatesCard = async function () {
     const container = document.getElementById('selected_products');
     container.innerHTML = ''; // clear existing
@@ -309,9 +399,10 @@ window.renderSelectedTemplatesCard = async function () {
             );
         }
 
-        console.log(`Found ${Object.keys(data.templates_selected).length} selected templates`);
+        const templates = data.templates_selected;
+        console.log(`Found ${Object.keys(templates).length} selected templates`);
 
-        if (Object.keys(data.templates_selected).length === 0) {
+        if (Object.keys(templates).length === 0) {
             container.innerHTML = `
                 <div class="empty-state">
                     <p class="text-gray-500">No templates selected yet</p>
@@ -323,11 +414,17 @@ window.renderSelectedTemplatesCard = async function () {
             return;
         }
 
-        // Process each template
-        Object.entries(data.templates_selected).forEach(([page, entry]) => {
-            const template = entry.template;
-            const links = entry.links;
-            const mode_ = entry.mode;
+        // Define desired rendering order
+        const renderOrder = ['first', 'product', 'last'];
+
+        renderOrder.forEach(page => {
+            const entry = templates[page];
+            if (!entry) {
+                console.warn(`No entry for page: ${page}`);
+                return;
+            }
+
+            const { template, links, mode: mode_, /* page key already in "page" */ } = entry;
             const page_ = page;
 
             if (!template || Object.keys(template).length === 0) {
@@ -386,6 +483,16 @@ function createSelectedCard(template, links, mode, page) {
     const card = document.createElement('div');
     card.className = 'product-card';
 
+    let placeHoldername ;
+
+    if(page == "first"){
+        placeHoldername = "First Page";
+    }else if (page == "last"){
+        placeHoldername = "Last Page";
+    }else{
+        placeHoldername = "Product Page";
+    }
+
  const metaItems = descKeys
   .filter(key => template[key] !== undefined && template[key] !== null && template[key] !== '')
   .map(key =>
@@ -399,7 +506,8 @@ function createSelectedCard(template, links, mode, page) {
                 <img src="${links.images}" alt="${template.displayName}">
                 </div>
                 <div class="product-card-body">
-                <div class="product-card-title">${template.displayName} - {${page}}</div>
+                <div class="product-card-page">[${placeHoldername}]</div>
+                <div class="product-card-title">${template.displayName}</div>
                 <div class="product-card-meta">${metaItems}</div>
                 <div class="product-card-buttons">
                     <button class="preview-btn">Preview</button>

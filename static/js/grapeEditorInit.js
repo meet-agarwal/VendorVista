@@ -116,6 +116,11 @@ export function initializeEditor(mountId = 'gjs', templatePath = null) {
   editor.StyleManager.removeSector('general');
   editor.StyleManager.removeSector('extra');
   editor.StyleManager.removeSector('flex');
+//   // Hide the Classes & State selector in the Style Manager
+// editor.Panels.removeButton('views', 'open-sm');  // 'open-sm' is the Style Manager button
+
+// // Optionally, remove the Traits panel too if not needed
+// editor.Panels.removeButton('views', 'open-tm');
 
   // Restrict drag/drop on template-loaded components, but allow for blocks
   editor.on('component:add', (component) => {

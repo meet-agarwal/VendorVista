@@ -126,6 +126,7 @@ export function updateFilterUI(updatedOptions, checkedFilters = {}) {
         checkedValues = checkedValues.map(v => parseFloat(v)).filter(v => !isNaN(v));
       }
 
+
       // 1. Partition and sort: checked items first, then unchecked
       const sorted = [
         ...values.filter(v => checkedValues.includes(v)),
@@ -150,11 +151,26 @@ export function updateFilterUI(updatedOptions, checkedFilters = {}) {
       });
 
       // 3. Update the counter
-      document.querySelectorAll('.filter-block').forEach(block => {
-        const numItems = block.querySelectorAll('.filter-content .filter-option').length;
-        block.querySelector('.filter-item-counter')
-              .textContent = `${numItems} items`;
-      });
+// 3. Update the counter (skipping start price)
+document.querySelectorAll('.filter-block').forEach(block => {
+  // find the filter key for this block
+  const content = block.querySelector('.filter-content.scrollable-content');
+  const key = content
+    && content.getAttribute('aria-labelledby')
+    && content.getAttribute('aria-labelledby').trim().toLowerCase();
+
+  // if it's the start price filter, ignore it ,
+    // why i am doing this as startPrice i have designed and update later it
+    // entirely new way like the sliding pointer 
+  if (key === 'start price') return;
+
+  // otherwise update as usual (and guard against missing counter)
+  const counterEl = block.querySelector('.filter-item-counter');
+  if (!counterEl) return;
+
+  const numItems = content.querySelectorAll('.filter-option').length;
+  counterEl.textContent = `${numItems} items`;
+});
     });
   });
 }

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin-top: 0px;
+            margin-right: 0px;
+            margin-bottom: 0px;
+            margin-left: 0px;
+            padding-top: 0px;
+            padding-right: 0px;
+            padding-bottom: 0px;
+            padding-left: 0px;
+        }
+
+        .cover {
+            width: 210mm;
+            height: 297mm;
+            position: relative;
+            background-image: initial;
+            background-position-x: initial;
+            background-position-y: initial;
+            background-size: initial;
+            background-repeat: initial;
+            background-attachment: initial;
+            background-origin: initial;
+            background-clip: initial;
+            background-color: rgba(163, 219, 218, 0.43);
+            color: rgb(77, 28, 23);
+            margin-top: 0px;
+            margin-right: auto;
+            margin-bottom: 0px;
+            margin-left: auto;
+            box-sizing: border-box;
+            font-family: Georgia, serif;
+            overflow-x: hidden;
+            overflow-y: hidden;
+            break-after: avoid;
+            break-inside: avoid;
+        }
+
+        .logo {
+            position: absolute;
+            top: 15mm;
+            left: 15mm;
+            z-index: 3;
+        }
+
+        .logo img {
+            max-width: 150px;
+            height: auto;
+        }
+
+        .main-content {
+            position: absolute;
+            top: 25%;
+            left: 15mm;
+            right: 35%;
+            z-index: 2;
+        }
+
+        .title {
+            font-size: 2.8em;
+            font-weight: normal;
+            color: rgb(106, 27, 154);
+            margin-top: 0px;
+            margin-right: 0px;
+            margin-bottom: 0.3em;
+            margin-left: 0px;
+            line-height: 1.1;
+            text-align: left;
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            font-weight: 300;
+            color: rgb(77, 28, 23);
+            margin-top: 0px;
+            margin-right: 0px;
+            margin-bottom: 1.5em;
+            margin-left: 0px;
+            font-style: italic;
+            text-align: left;
+        }
+
+        .intro-text {
+            font-size: 1em;
+            line-height: 1.7;
+            color: rgb(77, 28, 23);
+            margin-top: 0px;
+            margin-right: 0px;
+            margin-bottom: 0px;
+            margin-left: 0px;
+            text-align: left;
+            max-width: 90%;
+        }
+
+        .background-accent {
+            position: absolute;
+            top: 15%;
+            right: -5mm;
+            width: 45%;
+            height: 75%;
+            background-image: linear-gradient(135deg, rgba(106, 27, 154, 0.08) 0%, rgba(77, 28, 23, 0.05) 50%, rgba(106, 27, 154, 0.12) 100%);
+            background-position-x: initial;
+            background-position-y: initial;
+            background-size: initial;
+            background-repeat: initial;
+            background-attachment: initial;
+            background-origin: initial;
+            background-clip: initial;
+            background-color: #a6a6a6;
+            border-top-left-radius: 60%;
+            border-top-right-radius: 40%;
+            border-bottom-right-radius: 70%;
+            border-bottom-left-radius: 30%;
+            transform: rotate(8deg);
+            z-index: 1;
+        }
+
+        #i1jq {
+            width: 335px;
+            height: 147px;
+            margin-top: 0px;
+            margin-right: 0px;
+            margin-bottom: 0px;
+            margin-left: 2rem;
+        }
+
+        #iem2h {
+            padding-top: 10px;
+            padding-right: 10px;
+            padding-bottom: 10px;
+            padding-left: 10px;
+            margin-top: 15rem;
+            margin-right: 0px;
+            margin-bottom: 0px;
+            margin-left: 0px;
+            font-family: "Brush Script MT", sans-serif;
+            font-size: 2rem;
+            color: rgb(129, 131, 78);
+        }
+
+        @page {
+            size: a4;
+            margin-top: 0px;
+            margin-right: 0px;
+            margin-bottom: 0px;
+            margin-left: 0px;
+        }
+
+        @media print {
+            size:a4;
+            margin-top:0px;
+            margin-right:0px;
+            margin-bottom:0px;
+            margin-left:0px;
+            width:210mm;
+            height:297mm;
+            padding-top:0px;
+            padding-right:0px;
+            padding-bottom:0px;
+            padding-left:0px;
+        }
+
+        @media print {
+
+            .cover,
+            body {
+                margin-top: 0px;
+                margin-right: 0px;
+                margin-bottom: 0px;
+                margin-left: 0px;
+                padding-top: 0px;
+                padding-right: 0px;
+                padding-bottom: 0px;
+                padding-left: 0px;
+                width: 210mm;
+                height: 297mm;
+            }
+
+            .cover {
+                print-color-adjust: exact;
+            }
+
+            * {
+                box-shadow: none !important;
+                border-top-width: initial !important;
+                border-right-width: initial !important;
+                border-bottom-width: initial !important;
+                border-left-width: initial !important;
+                border-top-style: none !important;
+                border-right-style: none !important;
+                border-bottom-style: none !important;
+                border-left-style: none !important;
+                border-top-color: initial !important;
+                border-right-color: initial !important;
+                border-bottom-color: initial !important;
+                border-left-color: initial !important;
+                border-image-source: initial !important;
+                border-image-slice: initial !important;
+                border-image-width: initial !important;
+                border-image-outset: initial !important;
+                border-image-repeat: initial !important;
+            }
+        }
+
+        * {
+            -webkit-print-color-adjust: exact !important;
+            /* For Chrome/Safari */
+            print-color-adjust: exact !important;
+            /* Standard property */
+        }
+    </style>
+</head>
+
+<body>
+
+    <body id="ibx8">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Jewelry Collection</title>
+        <div class="cover">
+            <div class="logo"></div><img src="https://i.postimg.cc/TYzxfR0t/logo-trial-removebg-preview.png"
+                alt="Company Logo" id="i1jq" />
+            <div class="main-content">
+                <h1 class="title">Welcome to Meet's Luxury Jewelry Collection</h1>
+                <h2 class="subtitle">Elegance Redefined</h2>
+                <p class="intro-text">
+                    Discover our exquisite collection of handcrafted jewelry, where timeless elegance meets
+                    contemporary design. Each piece tells a story of exceptional craftsmanship and attention
+                    to detail, created to celebrate life's most precious moments.
+                </p>
+                <div id="iem2h">Welcome to my editing mode Checking ,<br />Make no mistake this is editing Mode<br />
+                </div>
+            </div>
+            <div class="background-accent"></div>
+        </div>
+    </body>
+</body>
+
+</html>

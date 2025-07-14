@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Jewelry Collection</title>
+    <style>
+        :root {
+            /* Base Theme Colors */
+            --color-background: #fbf8f2;
+            --color-text: #3f3a33;
+            --color-page-gradient-top: #fffaf1;
+            --color-page-gradient-bottom: #fefdf9;
+
+            --color-product-bg: #ffffff;
+            --color-shadow: rgba(0, 0, 0, 0.08);
+            --color-border: #e7dac2;
+
+            --color-image-bg: #f3ede3;
+            --color-info-bg: #fefbf6;
+
+            --color-table-border: #e3d4b8;
+            --color-table-header-bg: #f9f2e4;
+            --color-table-header-text: #8a6d3b;
+            --color-table-cell-bg: #fefbf6;
+
+            --color-table-bg: #fcf8f3;
+            --color-table-th-text: #8a6d3b;
+            --color-table-td-text: #4f3c28;
+            --color-divider-line: #e9dcc1;
+
+            --header-height: 30mm;
+            --footer-height: 20mm;
+            --content-height: calc(297mm - var(--header-height) - var(--footer-height));
+
+            --header-bg-color: #f9f2e4;
+            --footer-bg-color: #f9f2e4;
+        }
+
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background-color: var(--color-background);
+            color: var(--color-text);
+        }
+
+        .page-container {
+            width: 210mm;
+            height: 297mm;
+            margin: 0 auto;
+            position: relative;
+            background: linear-gradient(to bottom, var(--color-page-gradient-top), var(--color-page-gradient-bottom));
+            overflow: hidden;
+        }
+
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--header-bg-color);
+            border-bottom: 1px solid var(--color-border);
+            padding: 5mm;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: var(--footer-height);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--footer-bg-color);
+            border-top: 1px solid var(--color-border);
+            padding: 5mm;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        #content {
+            position: absolute;
+            top: var(--header-height);
+            bottom: var(--footer-height);
+            left: 0;
+            right: 0;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+            row-gap: 0px;
+            column-gap: 5px;
+            place-items: center;
+            justify-content: center;
+            align-items: center;
+            /* padding: 5mm; */
+            box-sizing: border-box;
+            overflow: hidden;
+            row-gap: 2rem;
+
+            margin: 3rem 0.5rem 3rem 0.5rem;
+        }
+
+        .product {
+
+            width: fit-content;
+            /* margin: 0.5rem; */
+            page-break-inside: avoid;
+            break-inside: avoid;
+            background-color: var(--color-product-bg);
+            border-radius: 4px;
+            box-shadow: 0 3px 12px var(--color-shadow);
+            border: 1px solid var(--color-border);
+        }
+
+        .product-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .product-image {
+            border: solid var(--color-border);
+            aspect-ratio: 1 / 1;
+            /* height: 12rem;
+            width: 12rem; */
+            background-color: var(--color-image-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .image-right .product-image {
+            border-left: 1px solid var(--color-border);
+        }
+
+        .product-info {
+            flex: 1;
+            padding: .5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: var(--color-info-bg);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 12px;
+            background: var(--color-table-bg);
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 3px 6px var(--color-shadow);
+            font-family: 'Georgia', serif;
+        }
+
+        th,
+        td {
+            padding: 8px 12px;
+            text-align: left;
+            vertical-align: middle;
+            border-bottom: 1px solid var(--color-table-border);
+        }
+
+        th {
+            color: var(--color-table-th-text);
+            font-weight: 600;
+            white-space: nowrap;
+            width: 40%;
+        }
+
+        td {
+            color: var(--color-table-td-text);
+        }
+
+        tr:last-child td,
+        tr:last-child th {
+            border-bottom: none;
+        }
+
+        .image-left {
+            flex-direction: row;
+        }
+
+        .image-right {
+            flex-direction: row-reverse;
+        }
+
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            body,
+            html {
+                background-color: var(--color-background);
+                margin: 0;
+                padding: 0;
+            }
+
+            .page-container {
+                page-break-after: always;
+                page-break-before: always;
+                box-shadow: none;
+            }
+
+            .product {
+                box-shadow: none;
+            }
+        }
+
+        /* Empty state styling */
+        .header:empty,
+        .footer:empty {
+            visibility: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-container" object="page">
+        <div class="header" object="header">
+            <!-- Your header content goes here -->
+            <h1>Luxury Jewelry Collection</h1>
+            <img src="https://i.postimg.cc/TYzxfR0t/logo-trial-removebg-preview.png" alt="Company Logo"
+                style="max-height: 100%; padding-bottom: 1rem; margin-left: 4rem;">
+        </div>
+
+        <div id="content" object="page_break" products="20">
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
+            </div>
+
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
+            </div>
+
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
+            </div>
+
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
+            </div>
+
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
+            </div>
+
+
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
+            </div>
+
+
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
+            </div>
+
+
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
+            </div>
+
+
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
+            </div>
+
+
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
+            </div>
+
+
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
+            </div>
+
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
+            </div>
+
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
+            </div>
+
+
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
+            </div>
+
+
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
+            </div>
+
+
+            <!-- product -->
+            <div class="product" object="item">
+                <div class="product-image"><img src="./Gemini_Generated_Image_24qwzk24qwzk24qw.png" alt=""
+                        object="image"></div>
+            </div>
+
+
+        </div>
+
+
+        <div class="footer" object="footer">
+            <!-- Your footer content goes here -->
+            <p>© 2023 Luxury Jewelry Collection. All rights reserved.</p>
+            <!-- <img src="footer-logo.png" alt="Footer Logo" style="max-height: 100%;"> -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Remove borders for single-row tables
+            document.querySelectorAll('table').forEach(table => {
+                const rows = table.querySelectorAll('tr');
+                if (rows.length === 1) {
+                    table.style.border = 'none';
+                    rows[0].querySelectorAll('td, th').forEach(cell => {
+                        cell.style.border = 'none';
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

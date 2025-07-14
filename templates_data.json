@@ -1,0 +1,315 @@
+{
+  "filters": {
+    "products": [
+      2,
+      3,
+      4,
+      6,
+      9,
+      12,
+      16,
+      20
+    ],
+    "theme": [
+      "Modern",
+      "Minimal",
+      "Professional",
+      "Classic"
+    ]
+  },
+  "descKeys": [
+    "products",
+    "grid",
+    "theme",
+    "created_at"
+  ],
+  "links": {
+    "images": {
+      "default": {
+        "first": "/static/assets/images/Default_Templates/First_page",
+        "product": "/static/assets/images/Default_Templates/Product_page",
+        "last": "/static/assets/images/Default_Templates/Last_page"
+      },
+      "edited": {
+        "first": "/static/assets/images/Edited_Templates/First_page",
+        "product": "/static/assets/images/Edited_Templates/Product_page",
+        "last": "/static/assets/images/Edited_Templates/Last_page"
+      }
+    },
+    "pdf": {
+      "default": {
+        "first": "/static/assets/templatesPDF/Default_Templates/First_page",
+        "product": "/static/assets/templatesPDF/Default_Templates/Product_page",
+        "last": "/static/assets/templatesPDF/Default_Templates/Last_page"
+      },
+      "edited": {
+        "first": "/static/assets/templatesPDF/Edited_Templates/First_page",
+        "product": "/static/assets/templatesPDF/Edited_Templates/Product_page",
+        "last": "/static/assets/templatesPDF/Edited_Templates/Last_page"
+      }
+    },
+    "templates": {
+      "default": {
+        "first": "/static/assets/templates/Default_Templates/First_page",
+        "product": "/static/assets/templates/Default_Templates/Product_page",
+        "last": "/static/assets/templates/Default_Templates/Last_page"
+      },
+      "edited": {
+        "first": "/static/assets/templates/Edited_Templates/First_page",
+        "product": "/static/assets/templates/Edited_Templates/Product_page",
+        "last": "/static/assets/templates/Edited_Templates/Last_page"
+      }
+    }
+  },
+  "templates_default": {
+    "first": [
+      {
+        "id": "default_first_1",
+        "html": "first.html",
+        "displayName": "Welcome Page 1",
+        "image": "first.png",
+        "pdf": "first.pdf",
+        "theme": "Modern"
+      }
+    ],
+    "product": [
+      {
+        "id": "default_product_1",
+        "html": "4_2rows_2cols.html",
+        "displayName": "Product Page 1",
+        "image": "4_2rows_2cols.png",
+        "pdf": "4_2rows_2cols.pdf",
+        "products": 4,
+        "theme": "Modern",
+        "grid": "2rows_2cols",
+        "table": 3
+      },
+      {
+        "id": "default_product_2",
+        "html": "6_3rows_2cols.html",
+        "displayName": "Product Page 2",
+        "image": "6_3rows_2cols.png",
+        "pdf": "6_3rows_2cols.pdf",
+        "products": 6,
+        "theme": "Minimal",
+        "grid": "3rows_2cols",
+        "table": 1
+      },
+      {
+        "id": "default_product_3",
+        "html": "9_3rows_3cols.html",
+        "displayName": "Product Page 3",
+        "image": "9_3rows_3cols.png",
+        "pdf": "9_3rows_3cols.pdf",
+        "products": 9,
+        "theme": "Professional",
+        "grid": "3rows_3cols",
+        "table": 1
+      },
+      {
+        "id": "default_product_4",
+        "html": "12_4rows_3cols.html",
+        "displayName": "Product Page 4",
+        "image": "12_4rows_3cols.png",
+        "pdf": "12_4rows_3cols.pdf",
+        "products": 12,
+        "theme": "Modern",
+        "grid": "4rows_3cols",
+        "table": 0
+      },
+      {
+        "id": "default_product_5",
+        "html": "16_4rows_4cols.html",
+        "displayName": "Product Page 5",
+        "image": "16_4rows_4cols.png",
+        "pdf": "16_4rows_4cols.pdf",
+        "products": 16,
+        "theme": "Minimal",
+        "grid": "4rows_4cols",
+        "table": 0
+      },
+      {
+        "id": "default_product_10",
+        "html": "20_5rows_4cols.html",
+        "displayName": "Product Page 6",
+        "image": "20_5rows_4cols.png",
+        "pdf": "20_5rows_4cols.pdf",
+        "products": 20,
+        "theme": "Minimal",
+        "grid": "5rows_4cols",
+        "table": 0
+      }
+    ],
+    "last": [
+      {
+        "id": "default_last_1",
+        "html": "last.html",
+        "displayName": "ThankYou page",
+        "image": "last.png",
+        "pdf": "last.pdf",
+        "theme": "Very Simple"
+      }
+    ]
+  },
+  "templates_edited": {
+    "first": [
+      {
+        "id": "edited_first_3",
+        "html": "dcdcd.html",
+        "displayName": "Welcome Page 1",
+        "image": "dcdcd.png",
+        "pdf": "dcdcd.pdf",
+        "theme": "Modern",
+        "created_at": "10 July 2025, 04:26PM",
+        "original_template_id": "edited_first_1"
+      },
+      {
+        "id": "edited_first_4",
+        "html": "Meet_specialized__.html",
+        "displayName": "Welcome Page 2",
+        "image": "Meet_specialized__.png",
+        "pdf": "Meet_specialized__.pdf",
+        "theme": "Modern",
+        "created_at": "10 July 2025, 04:29PM",
+        "original_template_id": "edited_first_1"
+      },
+      {
+        "id": "edited_first_5",
+        "html": "green_first__.html",
+        "displayName": "Welcome Page 3",
+        "image": "green_first__.png",
+        "pdf": "green_first__.pdf",
+        "theme": "Modern",
+        "created_at": "10 July 2025, 04:30PM",
+        "original_template_id": "edited_first_2"
+      },
+      {
+        "id": "edited_first_41",
+        "html": "Swanam_heritage_first.html",
+        "displayName": "Welcome Page 4",
+        "image": "Swanam_heritage_first.png",
+        "pdf": "Swanam_heritage_first.pdf",
+        "theme": "Modern",
+        "created_at": "11 July 2025, 03:31PM",
+        "original_template_id": "default_first_1"
+      },
+      {
+        "id": "edited_first_d9942378afa0463c9f4c0c9865eb4706",
+        "html": "edited_first_testing_334_2f87d6b3.html",
+        "displayName": "Welcome Page 5",
+        "image": "edited_first_testing_334_2f87d6b3.png",
+        "pdf": "edited_first_testing_334_2f87d6b3.pdf",
+        "theme": "Modern",
+        "created_at": "12 July 2025, 11:35AM",
+        "original_template_id": "edited_first_4"
+      },
+      {
+        "id": "edited_first_d6a006affc35474a9c2ec768caf5a788",
+        "html": "edited_first_erthyjkjhgfdxs_1ce1a0ab.html",
+        "displayName": "Welcome Page 6",
+        "image": "edited_first_erthyjkjhgfdxs_1ce1a0ab.png",
+        "pdf": "edited_first_erthyjkjhgfdxs_1ce1a0ab.pdf",
+        "theme": "Modern",
+        "created_at": "12 July 2025, 11:50AM",
+        "original_template_id": "edited_first_41"
+      }
+    ],
+    "product": [
+      {
+        "id": "edited_product_52ce55750f2c406c93975a2e65c151e4",
+        "html": "swarnam_product_2.html",
+        "displayName": "Product Page",
+        "image": "swarnam_product_2.png",
+        "pdf": "swarnam_product_2.pdf",
+        "created_at": "11 July 2025, 05:15PM",
+        "original_template_id": "edited_product_123",
+        "products": 4,
+        "theme": "Modern",
+        "grid": "2rows_2cols",
+        "table": 3
+      }
+    ],
+    "last": [
+      {
+        "id": "edited_last_2",
+        "html": "ThankYouPage.html",
+        "displayName": "ThankYou page",
+        "image": "ThankYouPage.png",
+        "pdf": "ThankYouPage.pdf",
+        "theme": "Very Simple",
+        "created_at": "10 July 2025, 04:34PM",
+        "original_template_id": "edited_last_1"
+      },
+      {
+        "id": "edited_last_21",
+        "html": "swarnam_heritage_last.html",
+        "displayName": "ThankYou page 2",
+        "image": "swarnam_heritage_last.png",
+        "pdf": "swarnam_heritage_last.pdf",
+        "theme": "Very Simple",
+        "created_at": "11 July 2025, 03:33PM",
+        "original_template_id": "edited_last_2"
+      }
+    ]
+  },
+  "templates_selected": {
+    "first": {
+      "template": {
+        "displayName": "Welcome Page 1",
+        "html": "first.html",
+        "id": "default_first_1",
+        "image": "first.png",
+        "pdf": "first.pdf",
+        "theme": "Modern"
+      },
+      "links": {
+        "pdf": "/static/assets/templatesPDF/Default_Templates/First_page/first.pdf",
+        "images": "/static/assets/images/Default_Templates/First_page/first.png",
+        "html": "/static/assets/templates/Default_Templates/First_page/first.html"
+      },
+      "mode": "default"
+    },
+    "product": {
+      "template": {
+        "created_at": "11 July 2025, 05:15PM",
+        "displayName": "Product Page",
+        "grid": "2rows_2cols",
+        "html": "swarnam_product_2.html",
+        "id": "edited_product_52ce55750f2c406c93975a2e65c151e4",
+        "image": "swarnam_product_2.png",
+        "original_template_id": "edited_product_123",
+        "pdf": "swarnam_product_2.pdf",
+        "products": 4,
+        "table": 3,
+        "theme": "Modern"
+      },
+      "links": {
+        "pdf": "/static/assets/templatesPDF/Edited_Templates/Product_page/swarnam_product_2.pdf",
+        "images": "/static/assets/images/Edited_Templates/Product_page/swarnam_product_2.png",
+        "html": "/static/assets/templates/Edited_Templates/Product_page/swarnam_product_2.html"
+      },
+      "mode": "edited"
+    },
+    "last": {
+      "template": {
+        "displayName": "ThankYou page",
+        "html": "last.html",
+        "id": "default_last_1",
+        "image": "last.png",
+        "pdf": "last.pdf",
+        "theme": "Very Simple"
+      },
+      "links": {
+        "pdf": "/static/assets/templatesPDF/Default_Templates/Last_page/last.pdf",
+        "images": "/static/assets/images/Default_Templates/Last_page/last.png",
+        "html": "/static/assets/templates/Default_Templates/Last_page/last.html"
+      },
+      "mode": "default"
+    },
+    "Selected_list": [
+      "first",
+      "last",
+      "product"
+    ]
+  }
+}

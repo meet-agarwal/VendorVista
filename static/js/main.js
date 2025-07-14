@@ -263,6 +263,7 @@ filtersLoaderOverlay.style.display = 'flex'; // Show the loader
       const dataDict = await get_updated_filter_options(cleanedResult);
 
       console.log('Updated Filter Options:', dataDict);
+      console.log('cleanedresult:', cleanedResult);
 
       updateFilterUI(dataDict, cleanedResult);
       // Update the UI with the new filter options  
@@ -315,6 +316,14 @@ filtersLoaderOverlay.style.display = 'flex'; // Show the loader
     // else 'proceed' → fall through
   }
 
+      const filtersLoaderOverlay = document.getElementById('filters-fullscreen-loader');
+    const loding_msg = document.getElementById('loding_msg');
+    loding_msg.innerHTML = 'Saving...';
+    filtersLoaderOverlay.style.display = 'flex'; // Show the loader
+
+
+
+
     printButton.disabled = true;
     printButton.innerText = 'Wait...';
 
@@ -350,6 +359,7 @@ filtersLoaderOverlay.style.display = 'flex'; // Show the loader
       a.click();
       document.body.removeChild(a);
 
+  filtersLoaderOverlay.style.display = 'none'; // Show the loader
 
       // Show confirmation dialog
       const overlay = document.getElementById('print_dailog_overlay');
@@ -399,6 +409,7 @@ filtersLoaderOverlay.style.display = 'flex'; // Show the loader
     document.getElementById('selectedCount').textContent = '0'; // Reset the counter
     console.log('All selections cleared');
     showProducts(dataPro, settingKeys, imageDict);
+    document.getElementById('AllProductsNavFront')?.click();
   });
 
 });

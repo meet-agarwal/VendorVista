@@ -23,6 +23,12 @@
     .gjs-cv-canvas {
       background-color: #f5f5f5;
     }
+    .gjs-clm-header{
+        display: none;
+    }
+    .gjs-field{
+        display: none !important;
+    }
   </style>
 </head>
 <body class="flex flex-col h-screen overflow-hidden">
@@ -77,6 +83,9 @@
     <!-- Main GrapesJS Canvas -->
     <div id="gjs" class="flex-1"></div>
   </div>
+
+
+{#  loading spinner #}
 <div id="loadingSpinner" class="hidden fixed inset-0 bg-white bg-opacity-70 z-50 flex items-center justify-center text-blue-600">
   <svg class="animate-spin h-6 w-6 mr-2 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
